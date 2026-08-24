@@ -114,7 +114,7 @@ const PilgrimGuide = () => {
       title: 'Shahi Snan (शाही स्नान) - The Celestial Royal Bath',
       eventDate: 'On Major Bathing Dates',
       location: 'Ramkund & Kushavarta Kund',
-      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
+      image: '/shahi.jpg',
       description: 'The supreme ritual of Kumbh Mela. Astrologically, when Jupiter enters Leo (Simha), the waters of Godavari turn into divine nectar (Amrit). Bathing during Shahi Snan is believed to cleanse lifetimes of karma.',
       highlights: [
         'Sequence: Akharas take the royal bath first, followed by general pilgrims',
