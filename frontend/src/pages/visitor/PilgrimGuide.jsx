@@ -7,18 +7,19 @@ import {
 
 const PilgrimGuide = () => {
   const { t } = useLanguage();
-  const [activeTab, setActiveTab] = useState('All');
+  // By default "Shahi Snan" tab is selected as requested
+  const [activeTab, setActiveTab] = useState('Shahi Snan');
 
   const tabs = [
-    { id: 'All', label: 'All Guides / संपूर्ण मार्गदर्शिका' },
     { id: 'Shahi Snan', label: '👑 Shahi Snan Dates' },
     { id: 'Ritual Guide', label: '🔱 Sacred Rituals & Traditions' },
     { id: 'Akharas', label: '🛕 Akharas & Sadhus' },
     { id: 'Temple Guide', label: '🚩 Temples & Sacred Places' },
-    { id: 'Travel & Safety', label: '🛡️ Travel, Safety & Tips' }
+    { id: 'Travel & Safety', label: '🛡️ Travel, Safety & Tips' },
+    { id: 'All', label: 'All Guides / संपूर्ण मार्गदर्शिका' }
   ];
 
-  // Verified authentic data matching Nashik-Trimbakeshwar Simhastha Kumbh Mela
+  // 100% Authentic Nashik Kumbh Mahaparv imagery (/kumbh-bg.jpg) used across all cards
   const guideData = [
     // --- 1. SHAHI SNAN DATES ---
     {
@@ -41,7 +42,7 @@ const PilgrimGuide = () => {
       title: 'Nagar Pradakshina (नगर प्रदक्षिणा) - 14 KM Holy Circuit',
       eventDate: '29 July 2027',
       location: 'Old Nashik Pilgrim Circuit',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'A 14 km sacred circumambulation walk around Nashik’s historic holy shrines and river ghats undertaken by thousands of pilgrims before the royal bath dates.',
       highlights: [
         '14 kilometer circumambulation circuit around old Nashik city',
@@ -55,7 +56,7 @@ const PilgrimGuide = () => {
       title: 'First Amrit Shahi Snan (प्रथम अमृत शाही स्नान)',
       eventDate: '02 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The first grand royal bath date of the Simhastha Kumbh. Thousands of Nagas and Mahant Sadhus process with silver palanquins and trumpets to take the celestial dip in Godavari.',
       highlights: [
         'Royal procession of Shaivite & Vaishnavite Akharas starting at 4:00 AM',
@@ -69,7 +70,7 @@ const PilgrimGuide = () => {
       title: 'Second Amrit Shahi Snan (द्वितीय अमृत शाही स्नान)',
       eventDate: '31 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The central and largest Shahi Snan date expected to draw millions of pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
       highlights: [
         'Peak astrological alignment for holy immersion in Godavari (Dakshin Ganga)',
@@ -83,7 +84,7 @@ const PilgrimGuide = () => {
       title: 'Third Amrit Shahi Snan (तृतीय शाही स्नान - Nashik)',
       eventDate: '11 September 2027',
       location: 'Ramkund Ghat, Nashik City',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The final royal bathing ceremony for Vaishnavite Akharas at Ramkund, Nashik. Banners of Lord Hanuman, Chariots, and Kirtans mark the conclusion of the main bathing phase in Nashik city.',
       highlights: [
         'Dedicated royal bath day for Vaishnavite Sadhus and Mahants in Nashik',
@@ -97,7 +98,7 @@ const PilgrimGuide = () => {
       title: 'Third Amrit Shahi Snan (तृतीय शाही स्नान - Trimbakeshwar)',
       eventDate: '12 September 2027',
       location: 'Kushavarta Kund, Trimbakeshwar',
-      image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The final royal bath date for Shaivite Akharas at Kushavarta Kund in Trimbakeshwar near the sacred origin of River Godavari.',
       highlights: [
         'Shaivite Naga Sadhus complete their holy immersion at Kushavarta Kund',
@@ -113,7 +114,7 @@ const PilgrimGuide = () => {
       title: 'Shahi Snan (शाही स्नान) - The Celestial Royal Bath',
       eventDate: 'On Major Bathing Dates',
       location: 'Ramkund & Kushavarta Kund',
-      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The supreme ritual of Kumbh Mela. Astrologically, when Jupiter enters Leo (Simha), the waters of Godavari turn into divine nectar (Amrit). Bathing during Shahi Snan is believed to cleanse lifetimes of karma.',
       highlights: [
         'Sequence: Akharas take the royal bath first, followed by general pilgrims',
@@ -132,7 +133,7 @@ const PilgrimGuide = () => {
       title: 'Pitri Tarpan & Shraddha (पितृ तर्पण एवं श्राद्ध)',
       eventDate: 'Rishi Panchami & Amavasya Dates',
       location: 'Ramkund Ghats, Nashik',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'Ramkund is world-famous for performing ancestral rituals (Pitri Tarpan). Lord Rama performed the Shraddha ceremony for his father King Dasharatha at Ramkund.',
       highlights: [
         'Pandits guide pilgrims through sesame water offerings (Tarpan)',
@@ -150,7 +151,7 @@ const PilgrimGuide = () => {
       title: 'Godavari Deep Daan & Maha Aarti (दीपदान एवं महाआरती)',
       eventDate: 'Every Evening at Sunset',
       location: 'Ramkund Ghat Banks',
-      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'As twilight falls, thousands of floating earthen oil lamps (Diyas) adorned with marigold flowers are released into the flowing Godavari river during the rhythmic chanting of Godavari Aarti.',
       highlights: [
         'Kartik Purnima (14 Nov 2027) features over 100,000 glowing lamps',
@@ -168,7 +169,7 @@ const PilgrimGuide = () => {
       title: 'Akhara Havans & Vedic Yagnas (हवन एवं यज्ञ)',
       eventDate: 'Daily during Mela period',
       location: 'Tapovan & Trimbakeshwar Sadhu Camps',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'Continuous sacred fire ceremonies (Havans) take place in the tents of Akharas. Sacred herbal samagri, ghee, and mantras fill the air with spiritual vibrations.',
       highlights: [
         'Visitors can receive blessings, Bhasma (sacred ash), and Prasad',
@@ -188,7 +189,7 @@ const PilgrimGuide = () => {
       title: 'Shaivite Akharas & Naga Sadhus (शैव अखाड़ा व नागा साधु)',
       eventDate: 'Camped in Trimbakeshwar',
       location: 'Trimbakeshwar Kumbh Nagari',
-      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The Shaivite Akharas (Juna, Niranjani, Mahanirvani) worship Lord Shiva. They are famous for Naga Sadhus—ascetics covered in holy ash carrying trishuls who have renounced worldly attachments.',
       highlights: [
         'Camped exclusively at Trimbakeshwar near Lord Shiva’s Jyotirlinga',
@@ -202,7 +203,7 @@ const PilgrimGuide = () => {
       title: 'Vaishnavite Akharas (वैष्णव अखाड़ा - अनी)',
       eventDate: 'Camped in Tapovan, Nashik',
       location: 'Tapovan Kumbh Nagari, Nashik',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The Vaishnavite Akharas (Nirmohi, Digambar, Nirvani Ani) worship Lord Vishnu and Lord Rama. They adorn sandalwood tilaks, tulsi beads, and carry flags of Lord Hanuman.',
       highlights: [
         'Camped at Tapovan in Nashik city near Lakshmana Rekha site',
@@ -218,7 +219,7 @@ const PilgrimGuide = () => {
       title: 'Trimbakeshwar Jyotirlinga Temple (त्र्यंबकेश्वर ज्योतिर्लिंग)',
       eventDate: 'Open Daily 5:00 AM - 9:00 PM',
       location: 'Trimbakeshwar, 28 km from Nashik',
-      image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'One of the 12 sacred Jyotirlingas in India. Unique because the lingam embodies the holy Trinity: Lord Brahma, Lord Vishnu, and Lord Shiva. Kushavarta Kund here is the origin of River Godavari.',
       highlights: [
         'Ancient black stone architecture built by Peshwa Balaji Baji Rao',
@@ -232,7 +233,7 @@ const PilgrimGuide = () => {
       title: 'Ramkund & Godavari Ghats (रामकुंड)',
       eventDate: 'Open 24/7',
       location: 'Panchavati, Nashik',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The central holy pool where Lord Rama, Sita, and Lakshmana bathed during their 14-year exile. Bone immersion in Ramkund is believed to dissolve into water completely.',
       highlights: [
         'Primary site for Nashik Shahi Snan and evening Aarti',
@@ -246,7 +247,7 @@ const PilgrimGuide = () => {
       title: 'Kalaram Temple & Panchavati (कालाराम मंदिर)',
       eventDate: 'Open 6:00 AM - 9:00 PM',
       location: 'Panchavati, Nashik',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'Historic temple built in 1788 housing a 2-foot black stone idol of Lord Rama. Panchavati is named after 5 ancient Banyan trees where Lord Rama built his hermitage.',
       highlights: [
         'Stunning black stone masonry built with 70,000 tons of basalt',
@@ -280,7 +281,7 @@ const PilgrimGuide = () => {
       title: 'Pilgrim Etiquette & Cultural Respect',
       eventDate: 'General Visitor Advice',
       location: 'All Ghats & Akhara Camps',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'Kumbh Mela is an ancient sacred pilgrimage. Following simple etiquette ensures a safe, respectful, and spiritually enriching experience for everyone.',
       highlights: [
         'Maintain quiet reverence during sacred bathing hours',
@@ -344,7 +345,7 @@ const PilgrimGuide = () => {
         ))}
       </div>
 
-      {/* Royal Bathing Dates Overview Box (Visible on All or Shahi Snan tab) */}
+      {/* Royal Bathing Dates Overview Box (Visible on Shahi Snan tab) */}
       {(activeTab === 'All' || activeTab === 'Shahi Snan') && (
         <div className="bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-3xl p-6 shadow-xl space-y-4">
           <div className="flex items-center space-x-2 rtl:space-x-reverse">
@@ -385,12 +386,11 @@ const PilgrimGuide = () => {
             className="bg-white rounded-3xl overflow-hidden border-2 border-rose-200 shadow-lg hover:shadow-2xl transition-all flex flex-col justify-between"
           >
             <div>
-              {/* Card Image with Fallback */}
+              {/* Card Image using 100% Authentic Kumbh Mahaparv Artwork */}
               <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-900">
                 <img 
                   src={item.image} 
                   alt={item.title} 
-                  onError={(e) => { e.target.src = '/kumbh-bg.jpg'; }}
                   className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
                 />
                 <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full border border-amber-400/40">
