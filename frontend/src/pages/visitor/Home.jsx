@@ -31,43 +31,43 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // Left column cards (desktop) - Solid white background, vivid colored border, NO card gradient
+  // Left column cards (desktop)
   const leftCards = [
     {
-      title: t('aboutKumbhmela') || 'About Kumbhmela',
-      desc: t('aboutKumbhmelaCardDesc') || 'History, 4 Sacred Locations & Traditions',
+      titleKey: 'aboutKumbhmela',
+      descKey: 'aboutKumbhmelaCardDesc',
       icon: BookOpen,
       path: '/about-kumbhmela',
       color: 'from-orange-600 to-amber-600',
       borderColor: 'border-orange-500'
     },
     {
-      title: t('findPlaces'),
-      desc: t('findPlacesDesc'),
+      titleKey: 'findPlaces',
+      descKey: 'findPlacesDesc',
       icon: MapPin,
       path: '/find-places',
       color: 'from-amber-500 to-orange-600',
       borderColor: 'border-amber-400'
     },
     {
-      title: t('pilgrimGuide'),
-      desc: t('pilgrimGuideDesc'),
+      titleKey: 'pilgrimGuide',
+      descKey: 'pilgrimGuideDesc',
       icon: Compass,
       path: '/pilgrim-guide',
       color: 'from-rose-500 to-red-600',
       borderColor: 'border-rose-400'
     },
     {
-      title: t('nearbyFacilities'),
-      desc: t('nearbyFacilitiesDesc'),
+      titleKey: 'nearbyFacilities',
+      descKey: 'nearbyFacilitiesDesc',
       icon: Building2,
       path: '/nearby-facilities',
       color: 'from-purple-500 to-indigo-600',
       borderColor: 'border-purple-400'
     },
     {
-      title: t('alerts'),
-      desc: t('alertsDesc'),
+      titleKey: 'alerts',
+      descKey: 'alertsDesc',
       icon: Bell,
       path: '/notifications',
       color: 'from-blue-500 to-indigo-600',
@@ -75,43 +75,43 @@ const Home = () => {
     }
   ];
 
-  // Right column cards (desktop) - Solid white background, vivid colored border, NO card gradient
+  // Right column cards (desktop)
   const rightCards = [
     {
-      title: t('aboutKumbh') || 'About Nasik Kumbh',
-      desc: t('aboutKumbhCardDesc') || 'History, Heritage & Spiritual Significance',
+      titleKey: 'aboutKumbh',
+      descKey: 'aboutKumbhCardDesc',
       icon: Scroll,
       path: '/about-kumbh',
       color: 'from-amber-600 to-yellow-600',
       borderColor: 'border-amber-500'
     },
     {
-      title: t('travelParking'),
-      desc: t('travelParkingDesc'),
+      titleKey: 'travelParking',
+      descKey: 'travelParkingDesc',
       icon: Bus,
       path: '/travel-parking',
       color: 'from-blue-600 to-indigo-700',
       borderColor: 'border-blue-400'
     },
     {
-      title: t('todaysKumbh'),
-      desc: t('todaysKumbhDesc'),
+      titleKey: 'todaysKumbh',
+      descKey: 'todaysKumbhDesc',
       icon: Calendar,
       path: '/todays-kumbh',
       color: 'from-emerald-500 to-teal-600',
       borderColor: 'border-emerald-400'
     },
     {
-      title: t('helpSafety'),
-      desc: t('helpSafetyDesc'),
+      titleKey: 'helpSafety',
+      descKey: 'helpSafetyDesc',
       icon: HelpCircle,
       path: '/help-safety',
       color: 'from-red-500 to-orange-600',
       borderColor: 'border-red-400'
     },
     {
-      title: t('familyGroup'),
-      desc: t('familyGroupDesc'),
+      titleKey: 'familyGroup',
+      descKey: 'familyGroupDesc',
       icon: Users,
       path: '/family-group',
       color: 'from-indigo-500 to-purple-600',
@@ -134,8 +134,8 @@ const Home = () => {
             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-sm sm:text-base font-extrabold leading-tight text-slate-950 truncate">{btn.title}</h4>
-            <p className="text-xs text-slate-600 line-clamp-1 mt-0.5">{btn.desc}</p>
+            <h4 className="text-sm sm:text-base font-extrabold leading-tight text-slate-950 truncate">{t(btn.titleKey)}</h4>
+            <p className="text-xs text-slate-600 line-clamp-1 mt-0.5">{t(btn.descKey)}</p>
           </div>
         </div>
         <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 flex-shrink-0 hidden xs:block" />
@@ -178,10 +178,10 @@ const Home = () => {
 
   const todaysSummary = todayInfo && (
     <div className="bg-white hover:bg-slate-200 hover:border-slate-400 transition-all rounded-[28px] p-5 border-2 border-amber-400 shadow-xl space-y-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2 rtl:space-x-reverse text-amber-900">
-          <Calendar className="w-5 h-5 text-amber-600" />
-          <h3 className="font-bold text-base text-slate-900">{t(todayInfo.title)}</h3>
+      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+        <div className="flex items-center space-x-2 text-amber-900 font-bold text-xs sm:text-sm">
+          <Calendar className="w-4 h-4 text-amber-600" />
+          <span>{t(todayInfo.title)}</span>
         </div>
         <span className="text-xs font-mono bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full font-bold">
           {todayInfo.date}
