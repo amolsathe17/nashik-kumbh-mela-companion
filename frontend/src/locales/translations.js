@@ -1,4 +1,4 @@
-export const TRANSLATIONS = {
+const rawTranslations = {
   // 1. English
   en: {
     appName: "Nashik Kumbh Mela Companion",
@@ -223,8 +223,6 @@ export const TRANSLATIONS = {
     whereToGo: "आप कहां जाना चाहते हैं?",
     findRoute: "मार्ग और परिवहन विकल्प देखें",
 
-    createGroup: "यात्रा समूह बनाएं",
-    joinGroup: "समूह में शामिल हों",
     createGroup: "यात्रा समूह बनाएं",
     joinGroup: "समूह में शामिल हों",
     groupCode: "समूह शेयर कोड",
@@ -2480,3 +2478,13 @@ export const TRANSLATIONS = {
     privacyNotice: "Berbagi lokasi 100% bersifat sukarela."
   }
 };
+
+const defaultFallback = { ...rawTranslations.en, ...rawTranslations.mr };
+
+export const TRANSLATIONS = Object.keys(rawTranslations).reduce((acc, lang) => {
+  acc[lang] = {
+    ...defaultFallback,
+    ...rawTranslations[lang]
+  };
+  return acc;
+}, {});
