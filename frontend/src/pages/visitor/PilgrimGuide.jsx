@@ -98,7 +98,7 @@ const PilgrimGuide = () => {
       title: 'Third Amrit Shahi Snan (तृतीय शाही स्नान - Trimbakeshwar)',
       eventDate: '12 September 2027',
       location: 'Kushavarta Kund, Trimbakeshwar',
-      image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80',
+      image: '/shahi-snan-for-kumbh-mela.webp',
       description: 'The final royal bath date for Shaivite Akharas at Kushavarta Kund in Trimbakeshwar near the sacred origin of River Godavari.',
       highlights: [
         'Shaivite Naga Sadhus complete their holy immersion at Kushavarta Kund',
