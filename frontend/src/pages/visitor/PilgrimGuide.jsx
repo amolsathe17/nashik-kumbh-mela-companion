@@ -133,7 +133,7 @@ const PilgrimGuide = () => {
       title: 'Pitri Tarpan & Shraddha (पितृ तर्पण एवं श्राद्ध)',
       eventDate: 'Rishi Panchami & Amavasya Dates',
       location: 'Ramkund Ghats, Nashik',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/68c4435662438-pitru-paksha-120221463-16x9.webp',
       description: 'Ramkund is world-famous for performing ancestral rituals (Pitri Tarpan). Lord Rama performed the Shraddha ceremony for his father King Dasharatha at Ramkund.',
       highlights: [
         'Pandits guide pilgrims through sesame water offerings (Tarpan)',
