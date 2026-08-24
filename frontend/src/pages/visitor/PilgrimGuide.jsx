@@ -169,7 +169,7 @@ const PilgrimGuide = () => {
       title: 'Akhara Havans & Vedic Yagnas (हवन एवं यज्ञ)',
       eventDate: 'Daily during Mela period',
       location: 'Tapovan & Trimbakeshwar Sadhu Camps',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
+      image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
       description: 'Continuous sacred fire ceremonies (Havans) take place in the tents of Akharas. Sacred herbal samagri, ghee, and mantras fill the air with spiritual vibrations.',
       highlights: [
         'Visitors can receive blessings, Bhasma (sacred ash), and Prasad',
