@@ -203,7 +203,7 @@ const PilgrimGuide = () => {
       title: 'Vaishnavite Akharas (वैष्णव अखाड़ा - अनी)',
       eventDate: 'Camped in Tapovan, Nashik',
       location: 'Tapovan Kumbh Nagari, Nashik',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
+      image: '/unnamed-2025-02-03t105950ss_1738561979.jpg',
       description: 'The Vaishnavite Akharas (Nirmohi, Digambar, Nirvani Ani) worship Lord Vishnu and Lord Rama. They adorn sandalwood tilaks, tulsi beads, and carry flags of Lord Hanuman.',
       highlights: [
         'Camped at Tapovan in Nashik city near Lakshmana Rekha site',
