@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   Compass, Calendar, BookOpen, Globe2, Sparkles, CheckCircle2, 
   ShieldCheck, MapPin, ExternalLink, Sun, Flame, Info, Heart, Droplets 
 } from 'lucide-react';
-import api from '../../services/api';
 
 const PilgrimGuide = () => {
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState('All');
-  const [loading, setLoading] = useState(false);
 
   const tabs = [
     { id: 'All', label: 'All Guides / संपूर्ण मार्गदर्शिका' },
@@ -20,7 +18,7 @@ const PilgrimGuide = () => {
     { id: 'Travel & Safety', label: '🛡️ Travel, Safety & Tips' }
   ];
 
-  // Comprehensive static data enriched from SwanTour & official Simhastha Kumbh records
+  // Verified authentic data matching Nashik-Trimbakeshwar Simhastha Kumbh Mela
   const guideData = [
     // --- 1. SHAHI SNAN DATES ---
     {
@@ -29,7 +27,7 @@ const PilgrimGuide = () => {
       title: 'Flag Hoisting (ध्वजारोहण) - Official Commencement',
       eventDate: '31 October 2026',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'The 21-month long Simhastha Kumbh Mela officially commences with the sacred flag hoisting (Dhwajarohan) ceremony performed simultaneously by sadhus and administrators at Ramkund and Kushavarta Kund.',
       highlights: [
         'Sacred flag hoisted at sunrise amidst Vedic chanting',
@@ -43,8 +41,8 @@ const PilgrimGuide = () => {
       title: 'Nagar Pradakshina (नगर प्रदक्षिणा) - 14 KM Holy Circuit',
       eventDate: '29 July 2027',
       location: 'Old Nashik Pilgrim Circuit',
-      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
-      description: 'A 14 km sacred circumambulation walk around Nashik’s historic holy shrines and temples undertaken by thousands of pilgrims before the royal bath dates.',
+      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      description: 'A 14 km sacred circumambulation walk around Nashik’s historic holy shrines and river ghats undertaken by thousands of pilgrims before the royal bath dates.',
       highlights: [
         '14 kilometer circumambulation circuit around old Nashik city',
         'Pilgrims walk barefoot visiting ancient river ghats and temples',
@@ -57,8 +55,8 @@ const PilgrimGuide = () => {
       title: 'First Amrit Shahi Snan (प्रथम अमृत शाही स्नान)',
       eventDate: '02 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-      description: 'The first grand royal bath date of the Simhastha Kumbh. Thousands of Nagas and Mahant Sadhus process with silver palanquins, elephants, and trumpets to take the celestial dip.',
+      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
+      description: 'The first grand royal bath date of the Simhastha Kumbh. Thousands of Nagas and Mahant Sadhus process with silver palanquins and trumpets to take the celestial dip in Godavari.',
       highlights: [
         'Royal procession of Shaivite & Vaishnavite Akharas starting at 4:00 AM',
         'Public bathing permitted after Akhara holy dips conclude',
@@ -71,8 +69,8 @@ const PilgrimGuide = () => {
       title: 'Second Amrit Shahi Snan (द्वितीय अमृत शाही स्नान)',
       eventDate: '31 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80',
-      description: 'The central and largest Shahi Snan date expected to draw over 5 million pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
+      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      description: 'The central and largest Shahi Snan date expected to draw millions of pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
       highlights: [
         'Peak astrological alignment for holy immersion in Godavari (Dakshin Ganga)',
         'Grand floral decorations across Ramkund and Panchavati',
@@ -115,7 +113,7 @@ const PilgrimGuide = () => {
       title: 'Shahi Snan (शाही स्नान) - The Celestial Royal Bath',
       eventDate: 'On Major Bathing Dates',
       location: 'Ramkund & Kushavarta Kund',
-      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
       description: 'The supreme ritual of Kumbh Mela. Astrologically, when Jupiter enters Leo (Simha), the waters of Godavari turn into divine nectar (Amrit). Bathing during Shahi Snan is believed to cleanse lifetimes of karma.',
       highlights: [
         'Sequence: Akharas take the royal bath first, followed by general pilgrims',
@@ -125,7 +123,7 @@ const PilgrimGuide = () => {
       guidelines: [
         'Do not use soap or detergents in the sacred river water',
         'Follow designated entry and exit stairs at Ramkund ghats',
-        'Keep belonging in dry bags and avoid carrying gold jewelry'
+        'Keep belongings in dry bags and avoid carrying gold jewelry'
       ]
     },
     {
@@ -138,7 +136,7 @@ const PilgrimGuide = () => {
       description: 'Ramkund is world-famous for performing ancestral rituals (Pitri Tarpan). Lord Rama performed the Shraddha ceremony for his father King Dasharatha at Ramkund.',
       highlights: [
         'Pandits guide pilgrims through sesame water offerings (Tarpan)',
-        'Perch auspiciously on Rishi Panchami (05 Sep 2027) & Shravan Purnima',
+        'Perform auspiciously on Rishi Panchami (05 Sep 2027) & Shravan Purnima',
         'Brings peace to departed ancestors and ancestral blessings to the family'
       ],
       guidelines: [
@@ -261,10 +259,10 @@ const PilgrimGuide = () => {
     {
       id: 'safety-1',
       category: 'Travel & Safety',
-      title: 'Kumbh Logistics: Shuttle Buses & Outer Parking Outer Hubs',
+      title: 'Kumbh Logistics: Shuttle Buses & Outer Parking Hubs',
       eventDate: 'Active on Peak Bathing Days',
       location: 'Nashik Outer Ring Road',
-      image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
+      image: '/kumbh-bg.jpg',
       description: 'On Shahi Snan dates, private vehicles and taxis are restricted 5-10 km outside the city. Free government electric shuttle buses transport pilgrims from outer parking lots to inner drop zones.',
       highlights: [
         'Park vehicles at satellite hubs: Adgaon, Tapovan, Ambad, Satpur',
@@ -282,7 +280,7 @@ const PilgrimGuide = () => {
       title: 'Pilgrim Etiquette & Cultural Respect',
       eventDate: 'General Visitor Advice',
       location: 'All Ghats & Akhara Camps',
-      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
       description: 'Kumbh Mela is an ancient sacred pilgrimage. Following simple etiquette ensures a safe, respectful, and spiritually enriching experience for everyone.',
       highlights: [
         'Maintain quiet reverence during sacred bathing hours',
@@ -387,12 +385,13 @@ const PilgrimGuide = () => {
             className="bg-white rounded-3xl overflow-hidden border-2 border-rose-200 shadow-lg hover:shadow-2xl transition-all flex flex-col justify-between"
           >
             <div>
-              {/* Card Image */}
-              <div className="relative h-48 sm:h-56 overflow-hidden">
+              {/* Card Image with Fallback */}
+              <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-900">
                 <img 
                   src={item.image} 
                   alt={item.title} 
-                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
+                  onError={(e) => { e.target.src = '/kumbh-bg.jpg'; }}
+                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
                 />
                 <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full border border-amber-400/40">
                   {item.category}
