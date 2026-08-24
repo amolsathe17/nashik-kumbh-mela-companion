@@ -27,7 +27,7 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('kumbh_lang_selected', 'true');
   };
 
-  // Smart translation function with robust fallback and exact dictionary lookups
+  // Smart translation function with multi-tier fallback (Selected Lang -> English -> Marathi -> Key)
   const t = (key) => {
     if (!key) return '';
     const strKey = String(key).trim();
@@ -50,6 +50,16 @@ export const LanguageProvider = ({ children }) => {
     // 3. Fallback to English dictionary match
     if (TRANSLATIONS['en'] && TRANSLATIONS['en'][strKey] !== undefined) {
       return TRANSLATIONS['en'][strKey];
+    }
+
+    // 4. Fallback to Marathi dictionary match
+    if (TRANSLATIONS['mr'] && TRANSLATIONS['mr'][strKey] !== undefined) {
+      return TRANSLATIONS['mr'][strKey];
+    }
+
+    // 5. Fallback to Hindi dictionary match
+    if (TRANSLATIONS['hi'] && TRANSLATIONS['hi'][strKey] !== undefined) {
+      return TRANSLATIONS['hi'][strKey];
     }
 
     return strKey;
