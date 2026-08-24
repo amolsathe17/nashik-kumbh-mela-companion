@@ -230,14 +230,8 @@ const Home = () => {
         {announcementTicker}
         {todaysSummary}
 
-        <div className="space-y-3">
-          <h3 className="text-xs font-bold text-white tracking-wider uppercase px-3.5 py-1 bg-slate-900/80 backdrop-blur-md rounded-xl border border-slate-700 mx-auto text-center w-fit shadow-md">
-            {t('quickAccessServices') || 'Quick Access Services'}
-          </h3>
-
-          <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-            {allCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
-          </div>
+        <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
+          {allCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
         </div>
       </div>
     </div>
