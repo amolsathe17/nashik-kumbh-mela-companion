@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   Compass, Calendar, BookOpen, Globe2, Sparkles, CheckCircle2, 
-  ShieldCheck, MapPin, ExternalLink, Sun, Flame, Info, Heart, Droplets,
-  Flag, Footprints, Waves, Users, Building2, Bus, AlertCircle
+  ShieldCheck, MapPin, ExternalLink, Sun, Flame, Info, Heart, Droplets 
 } from 'lucide-react';
 
 const PilgrimGuide = () => {
   const { t } = useLanguage();
+  // By default "Shahi Snan" tab is selected as requested
   const [activeTab, setActiveTab] = useState('Shahi Snan');
 
   const tabs = [
@@ -19,7 +19,7 @@ const PilgrimGuide = () => {
     { id: 'All', label: 'All Guides / संपूर्ण मार्गदर्शिका' }
   ];
 
-  // Topic-specific distinct images and themes for EVERY subject
+  // Relevant and exact photographic images for every topic/subject
   const guideData = [
     // --- 1. SHAHI SNAN DATES ---
     {
@@ -29,8 +29,6 @@ const PilgrimGuide = () => {
       eventDate: '31 October 2026',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
       image: 'https://images.unsplash.com/photo-1590077428593-a55bb07c4665?auto=format&fit=crop&w=800&q=80',
-      icon: Flag,
-      themeColor: 'from-amber-600 to-orange-700',
       description: 'The 21-month long Simhastha Kumbh Mela officially commences with the sacred flag hoisting (Dhwajarohan) ceremony performed simultaneously by sadhus and administrators at Ramkund and Kushavarta Kund.',
       highlights: [
         'Sacred flag hoisted at sunrise amidst Vedic chanting',
@@ -45,8 +43,6 @@ const PilgrimGuide = () => {
       eventDate: '29 July 2027',
       location: 'Old Nashik Pilgrim Circuit',
       image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
-      icon: Footprints,
-      themeColor: 'from-rose-600 to-red-700',
       description: 'A 14 km sacred circumambulation walk around Nashik’s historic holy shrines and river ghats undertaken by thousands of pilgrims before the royal bath dates.',
       highlights: [
         '14 kilometer circumambulation circuit around old Nashik city',
@@ -61,8 +57,6 @@ const PilgrimGuide = () => {
       eventDate: '02 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
       image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
-      icon: Waves,
-      themeColor: 'from-blue-600 to-indigo-700',
       description: 'The first grand royal bath date of the Simhastha Kumbh. Thousands of Nagas and Mahant Sadhus process with silver palanquins and trumpets to take the celestial dip in Godavari.',
       highlights: [
         'Royal procession of Shaivite & Vaishnavite Akharas starting at 4:00 AM',
@@ -77,8 +71,6 @@ const PilgrimGuide = () => {
       eventDate: '31 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
       image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-      icon: Sun,
-      themeColor: 'from-amber-500 to-red-600',
       description: 'The central and largest Shahi Snan date expected to draw millions of pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
       highlights: [
         'Peak astrological alignment for holy immersion in Godavari (Dakshin Ganga)',
@@ -93,8 +85,6 @@ const PilgrimGuide = () => {
       eventDate: '11 September 2027',
       location: 'Ramkund Ghat, Nashik City',
       image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
-      icon: Sparkles,
-      themeColor: 'from-purple-600 to-indigo-700',
       description: 'The final royal bathing ceremony for Vaishnavite Akharas at Ramkund, Nashik. Banners of Lord Hanuman, Chariots, and Kirtans mark the conclusion of the main bathing phase in Nashik city.',
       highlights: [
         'Dedicated royal bath day for Vaishnavite Sadhus and Mahants in Nashik',
@@ -109,8 +99,6 @@ const PilgrimGuide = () => {
       eventDate: '12 September 2027',
       location: 'Kushavarta Kund, Trimbakeshwar',
       image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80',
-      icon: Flame,
-      themeColor: 'from-emerald-600 to-teal-700',
       description: 'The final royal bath date for Shaivite Akharas at Kushavarta Kund in Trimbakeshwar near the sacred origin of River Godavari.',
       highlights: [
         'Shaivite Naga Sadhus complete their holy immersion at Kushavarta Kund',
@@ -127,8 +115,6 @@ const PilgrimGuide = () => {
       eventDate: 'On Major Bathing Dates',
       location: 'Ramkund & Kushavarta Kund',
       image: 'https://images.unsplash.com/photo-1609137144813-7d9921338f24?auto=format&fit=crop&w=800&q=80',
-      icon: Waves,
-      themeColor: 'from-blue-600 to-cyan-700',
       description: 'The supreme ritual of Kumbh Mela. Astrologically, when Jupiter enters Leo (Simha), the waters of Godavari turn into divine nectar (Amrit). Bathing during Shahi Snan is believed to cleanse lifetimes of karma.',
       highlights: [
         'Sequence: Akharas take the royal bath first, followed by general pilgrims',
@@ -148,8 +134,6 @@ const PilgrimGuide = () => {
       eventDate: 'Rishi Panchami & Amavasya Dates',
       location: 'Ramkund Ghats, Nashik',
       image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
-      icon: Droplets,
-      themeColor: 'from-teal-600 to-emerald-700',
       description: 'Ramkund is world-famous for performing ancestral rituals (Pitri Tarpan). Lord Rama performed the Shraddha ceremony for his father King Dasharatha at Ramkund.',
       highlights: [
         'Pandits guide pilgrims through sesame water offerings (Tarpan)',
@@ -168,8 +152,6 @@ const PilgrimGuide = () => {
       eventDate: 'Every Evening at Sunset',
       location: 'Ramkund Ghat Banks',
       image: 'https://images.unsplash.com/photo-1514222709107-a180c68d72b4?auto=format&fit=crop&w=800&q=80',
-      icon: Flame,
-      themeColor: 'from-amber-600 to-rose-700',
       description: 'As twilight falls, thousands of floating earthen oil lamps (Diyas) adorned with marigold flowers are released into the flowing Godavari river during the rhythmic chanting of Godavari Aarti.',
       highlights: [
         'Kartik Purnima (14 Nov 2027) features over 100,000 glowing lamps',
@@ -188,8 +170,6 @@ const PilgrimGuide = () => {
       eventDate: 'Daily during Mela period',
       location: 'Tapovan & Trimbakeshwar Sadhu Camps',
       image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
-      icon: Sun,
-      themeColor: 'from-orange-600 to-red-700',
       description: 'Continuous sacred fire ceremonies (Havans) take place in the tents of Akharas. Sacred herbal samagri, ghee, and mantras fill the air with spiritual vibrations.',
       highlights: [
         'Visitors can receive blessings, Bhasma (sacred ash), and Prasad',
@@ -210,8 +190,6 @@ const PilgrimGuide = () => {
       eventDate: 'Camped in Trimbakeshwar',
       location: 'Trimbakeshwar Kumbh Nagari',
       image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-      icon: Flame,
-      themeColor: 'from-slate-700 to-slate-900',
       description: 'The Shaivite Akharas (Juna, Niranjani, Mahanirvani) worship Lord Shiva. They are famous for Naga Sadhus—ascetics covered in holy ash carrying trishuls who have renounced worldly attachments.',
       highlights: [
         'Camped exclusively at Trimbakeshwar near Lord Shiva’s Jyotirlinga',
@@ -226,8 +204,6 @@ const PilgrimGuide = () => {
       eventDate: 'Camped in Tapovan, Nashik',
       location: 'Tapovan Kumbh Nagari, Nashik',
       image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
-      icon: Users,
-      themeColor: 'from-amber-600 to-yellow-700',
       description: 'The Vaishnavite Akharas (Nirmohi, Digambar, Nirvani Ani) worship Lord Vishnu and Lord Rama. They adorn sandalwood tilaks, tulsi beads, and carry flags of Lord Hanuman.',
       highlights: [
         'Camped at Tapovan in Nashik city near Lakshmana Rekha site',
@@ -244,8 +220,6 @@ const PilgrimGuide = () => {
       eventDate: 'Open Daily 5:00 AM - 9:00 PM',
       location: 'Trimbakeshwar, 28 km from Nashik',
       image: 'https://images.unsplash.com/photo-1627894483216-2138af692e32?auto=format&fit=crop&w=800&q=80',
-      icon: Building2,
-      themeColor: 'from-emerald-600 to-teal-800',
       description: 'One of the 12 sacred Jyotirlingas in India. Unique because the lingam embodies the holy Trinity: Lord Brahma, Lord Vishnu, and Lord Shiva. Kushavarta Kund here is the origin of River Godavari.',
       highlights: [
         'Ancient black stone architecture built by Peshwa Balaji Baji Rao',
@@ -260,8 +234,6 @@ const PilgrimGuide = () => {
       eventDate: 'Open 24/7',
       location: 'Panchavati, Nashik',
       image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
-      icon: Waves,
-      themeColor: 'from-blue-600 to-indigo-800',
       description: 'The central holy pool where Lord Rama, Sita, and Lakshmana bathed during their 14-year exile. Bone immersion in Ramkund is believed to dissolve into water completely.',
       highlights: [
         'Primary site for Nashik Shahi Snan and evening Aarti',
@@ -276,8 +248,6 @@ const PilgrimGuide = () => {
       eventDate: 'Open 6:00 AM - 9:00 PM',
       location: 'Panchavati, Nashik',
       image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
-      icon: Building2,
-      themeColor: 'from-rose-600 to-red-800',
       description: 'Historic temple built in 1788 housing a 2-foot black stone idol of Lord Rama. Panchavati is named after 5 ancient Banyan trees where Lord Rama built his hermitage.',
       highlights: [
         'Stunning black stone masonry built with 70,000 tons of basalt',
@@ -294,8 +264,6 @@ const PilgrimGuide = () => {
       eventDate: 'Active on Peak Bathing Days',
       location: 'Nashik Outer Ring Road',
       image: 'https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&w=800&q=80',
-      icon: Bus,
-      themeColor: 'from-indigo-600 to-purple-800',
       description: 'On Shahi Snan dates, private vehicles and taxis are restricted 5-10 km outside the city. Free government electric shuttle buses transport pilgrims from outer parking lots to inner drop zones.',
       highlights: [
         'Park vehicles at satellite hubs: Adgaon, Tapovan, Ambad, Satpur',
@@ -314,8 +282,6 @@ const PilgrimGuide = () => {
       eventDate: 'General Visitor Advice',
       location: 'All Ghats & Akhara Camps',
       image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
-      icon: ShieldCheck,
-      themeColor: 'from-emerald-600 to-green-800',
       description: 'Kumbh Mela is an ancient sacred pilgrimage. Following simple etiquette ensures a safe, respectful, and spiritually enriching experience for everyone.',
       highlights: [
         'Maintain quiet reverence during sacred bathing hours',
@@ -414,107 +380,100 @@ const PilgrimGuide = () => {
 
       {/* Main Cards List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-        {filteredData.map((item) => {
-          const IconComp = item.icon || Sparkles;
-          return (
-            <div 
-              key={item.id} 
-              className="bg-white rounded-3xl overflow-hidden border-2 border-rose-200 shadow-lg hover:shadow-2xl transition-all flex flex-col justify-between"
-            >
-              <div>
-                {/* Topic Specific Rich Header */}
-                <div className={`relative h-44 sm:h-48 overflow-hidden bg-gradient-to-br ${item.themeColor} text-white p-5 flex flex-col justify-between shadow-inner`}>
-                  <div className="flex items-center justify-between z-10">
-                    <div className="inline-flex items-center space-x-1.5 bg-slate-900/60 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-extrabold uppercase text-amber-300 border border-amber-300/30">
-                      <IconComp className="w-3.5 h-3.5 text-amber-300" />
-                      <span>{item.category}</span>
-                    </div>
-                    {item.eventDate && (
-                      <div className="bg-amber-500 text-slate-950 text-[11px] font-black px-3 py-1 rounded-xl shadow-md">
-                        📅 {item.eventDate}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="z-10 mt-auto">
-                    <h3 className="text-lg sm:text-xl font-black leading-snug drop-shadow-md text-white">
-                      {item.title}
-                    </h3>
-                  </div>
-
-                  {/* Spiritual Background Graphic Accent */}
-                  <div className="absolute -right-6 -bottom-6 opacity-20 pointer-events-none text-white">
-                    <IconComp className="w-36 h-36" />
-                  </div>
+        {filteredData.map((item) => (
+          <div 
+            key={item.id} 
+            className="bg-white rounded-3xl overflow-hidden border-2 border-rose-200 shadow-lg hover:shadow-2xl transition-all flex flex-col justify-between"
+          >
+            <div>
+              {/* Card Photographic Image matching the exact subject */}
+              <div className="relative h-48 sm:h-56 overflow-hidden bg-slate-900">
+                <img 
+                  src={item.image} 
+                  alt={item.title} 
+                  onError={(e) => { e.target.src = '/kumbh-bg.jpg'; }}
+                  className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
+                />
+                <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-extrabold uppercase px-3 py-1 rounded-full border border-amber-400/40">
+                  {item.category}
                 </div>
-
-                {/* Card Body */}
-                <div className="p-5 space-y-3">
-                  {item.location && (
-                    <div className="flex items-center space-x-1.5 text-xs text-rose-700 font-bold">
-                      <MapPin className="w-4 h-4 flex-shrink-0" />
-                      <span>{item.location}</span>
-                    </div>
-                  )}
-
-                  <p className="text-xs text-slate-700 leading-relaxed">
-                    {item.description}
-                  </p>
-
-                  {/* Highlights Bullet List */}
-                  {item.highlights && item.highlights.length > 0 && (
-                    <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                      <h5 className="text-[11px] font-black uppercase tracking-wider text-slate-900 flex items-center gap-1">
-                        <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Key Features & Significance:
-                      </h5>
-                      <ul className="space-y-1 text-xs text-slate-600">
-                        {item.highlights.map((h, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <span className="text-rose-500 font-bold">•</span>
-                            <span>{h}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Guidelines List */}
-                  {item.guidelines && item.guidelines.length > 0 && (
-                    <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                      <h5 className="text-[11px] font-black uppercase tracking-wider text-emerald-800 flex items-center gap-1">
-                        <ShieldCheck className="w-4 h-4 text-emerald-600" /> Important Guidelines:
-                      </h5>
-                      <ul className="space-y-1 text-xs text-slate-600">
-                        {item.guidelines.map((g, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
-                            <span>{g}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+                {item.eventDate && (
+                  <div className="absolute bottom-3 right-3 bg-amber-500 text-slate-950 text-xs font-black px-3 py-1 rounded-xl shadow-md">
+                    📅 {item.eventDate}
+                  </div>
+                )}
               </div>
 
-              {/* Bottom Footer Actions */}
-              <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                <span className="text-[11px] font-bold text-slate-500">
-                  Official Simhastha Pilgrim Guide
-                </span>
-                <a 
-                  href="https://nashik.gov.in" 
-                  target="_blank" 
-                  rel="noreferrer"
-                  className="text-xs font-bold text-rose-700 hover:text-rose-800 flex items-center space-x-1"
-                >
-                  <span>Official Portal</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+              {/* Card Body */}
+              <div className="p-5 space-y-3">
+                <h4 className="text-base sm:text-lg font-black text-slate-950 leading-tight">
+                  {item.title}
+                </h4>
+
+                {item.location && (
+                  <div className="flex items-center space-x-1.5 text-xs text-rose-700 font-bold">
+                    <MapPin className="w-4 h-4 flex-shrink-0" />
+                    <span>{item.location}</span>
+                  </div>
+                )}
+
+                <p className="text-xs text-slate-700 leading-relaxed">
+                  {item.description}
+                </p>
+
+                {/* Highlights Bullet List */}
+                {item.highlights && item.highlights.length > 0 && (
+                  <div className="pt-2 border-t border-slate-100 space-y-1.5">
+                    <h5 className="text-[11px] font-black uppercase tracking-wider text-slate-900 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-amber-600" /> Key Features & Significance:
+                    </h5>
+                    <ul className="space-y-1 text-xs text-slate-600">
+                      {item.highlights.map((h, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-rose-500 font-bold">•</span>
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Guidelines List */}
+                {item.guidelines && item.guidelines.length > 0 && (
+                  <div className="pt-2 border-t border-slate-100 space-y-1.5">
+                    <h5 className="text-[11px] font-black uppercase tracking-wider text-emerald-800 flex items-center gap-1">
+                      <ShieldCheck className="w-4 h-4 text-emerald-600" /> Important Guidelines:
+                    </h5>
+                    <ul className="space-y-1 text-xs text-slate-600">
+                      {item.guidelines.map((g, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                          <span>{g}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             </div>
-          );
-        })}
+
+            {/* Bottom Footer Actions */}
+            <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
+              <span className="text-[11px] font-bold text-slate-500">
+                Official Simhastha Pilgrim Guide
+              </span>
+              <a 
+                href="https://nashik.gov.in" 
+                target="_blank" 
+                rel="noreferrer"
+                className="text-xs font-bold text-rose-700 hover:text-rose-800 flex items-center space-x-1"
+              >
+                <span>Official Portal</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
