@@ -56,7 +56,7 @@ const PilgrimGuide = () => {
       title: 'First Amrit Shahi Snan (प्रथम अमृत शाही स्नान)',
       eventDate: '02 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: '/shahi-snan.jpg',
+      image: '/shahi-snan-for-kumbh-mela.webp',
       description: 'The first grand royal bath date of the Simhastha Kumbh. Thousands of Nagas and Mahant Sadhus process with silver palanquins and trumpets to take the celestial dip in Godavari.',
       highlights: [
         'Royal procession of Shaivite & Vaishnavite Akharas starting at 4:00 AM',
@@ -70,7 +70,7 @@ const PilgrimGuide = () => {
       title: 'Second Amrit Shahi Snan (द्वितीय अमृत शाही स्नान)',
       eventDate: '31 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: '/shahi-snan.jpg',
+      image: '/shahi-snan-for-kumbh-mela.webp',
       description: 'The central and largest Shahi Snan date expected to draw millions of pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
       highlights: [
         'Peak astrological alignment for holy immersion in Godavari (Dakshin Ganga)',
