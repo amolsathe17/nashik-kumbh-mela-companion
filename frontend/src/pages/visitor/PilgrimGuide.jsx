@@ -70,7 +70,7 @@ const PilgrimGuide = () => {
       title: 'Second Amrit Shahi Snan (द्वितीय अमृत शाही स्नान)',
       eventDate: '31 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: '/shahi-snan-for-kumbh-mela.webp',
+      image: '/unnamed-2025-02-03t105950ss_1738561979.jpg',
       description: 'The central and largest Shahi Snan date expected to draw millions of pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
       highlights: [
         'Peak astrological alignment for holy immersion in Godavari (Dakshin Ganga)',
