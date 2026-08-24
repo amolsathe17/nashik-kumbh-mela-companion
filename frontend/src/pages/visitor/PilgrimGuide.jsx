@@ -151,7 +151,7 @@ const PilgrimGuide = () => {
       title: 'Godavari Deep Daan & Maha Aarti (दीपदान एवं महाआरती)',
       eventDate: 'Every Evening at Sunset',
       location: 'Ramkund Ghat Banks',
-      image: 'https://images.unsplash.com/photo-1514222709107-a180c68d72b4?auto=format&fit=crop&w=800&q=80',
+      image: '/goda-aarti-chatg.webp',
       description: 'As twilight falls, thousands of floating earthen oil lamps (Diyas) adorned with marigold flowers are released into the flowing Godavari river during the rhythmic chanting of Godavari Aarti.',
       highlights: [
         'Kartik Purnima (14 Nov 2027) features over 100,000 glowing lamps',
