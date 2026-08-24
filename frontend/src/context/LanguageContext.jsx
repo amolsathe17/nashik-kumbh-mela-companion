@@ -6,7 +6,8 @@ const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
   const [langCode, setLangCode] = useState(() => {
-    return localStorage.getItem('kumbh_lang') || 'en';
+    const saved = localStorage.getItem('kumbh_lang');
+    return saved && getLanguageByCode(saved) ? saved : 'en';
   });
 
   const [hasChosenLang, setHasChosenLang] = useState(() => {
@@ -27,7 +28,7 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('kumbh_lang_selected', 'true');
   };
 
-  // Smart translation function with multi-tier fallback (Selected Lang -> English -> Marathi -> Key)
+  // Smart translation function with multi-tier fallback (Selected Lang -> English -> Key)
   const t = (key) => {
     if (!key) return '';
     const strKey = String(key).trim();
@@ -50,16 +51,6 @@ export const LanguageProvider = ({ children }) => {
     // 3. Fallback to English dictionary match
     if (TRANSLATIONS['en'] && TRANSLATIONS['en'][strKey] !== undefined) {
       return TRANSLATIONS['en'][strKey];
-    }
-
-    // 4. Fallback to Marathi dictionary match
-    if (TRANSLATIONS['mr'] && TRANSLATIONS['mr'][strKey] !== undefined) {
-      return TRANSLATIONS['mr'][strKey];
-    }
-
-    // 5. Fallback to Hindi dictionary match
-    if (TRANSLATIONS['hi'] && TRANSLATIONS['hi'][strKey] !== undefined) {
-      return TRANSLATIONS['hi'][strKey];
     }
 
     return strKey;
