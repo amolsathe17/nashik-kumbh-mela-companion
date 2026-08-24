@@ -84,7 +84,7 @@ const PilgrimGuide = () => {
       title: 'Third Amrit Shahi Snan (तृतीय शाही स्नान - Nashik)',
       eventDate: '11 September 2027',
       location: 'Ramkund Ghat, Nashik City',
-      image: 'https://images.unsplash.com/photo-1600100397608-f010e423b971?auto=format&fit=crop&w=800&q=80',
+      image: '/shahi.jpg',
       description: 'The final royal bathing ceremony for Vaishnavite Akharas at Ramkund, Nashik. Banners of Lord Hanuman, Chariots, and Kirtans mark the conclusion of the main bathing phase in Nashik city.',
       highlights: [
         'Dedicated royal bath day for Vaishnavite Sadhus and Mahants in Nashik',
