@@ -28,7 +28,7 @@ const PilgrimGuide = () => {
       title: 'Flag Hoisting (ध्वजारोहण) - Official Commencement',
       eventDate: '31 October 2026',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
-      image: 'https://images.unsplash.com/photo-1590077428593-a55bb07c4665?auto=format&fit=crop&w=800&q=80',
+      image: '/dhwajarohan.webp',
       description: 'The 21-month long Simhastha Kumbh Mela officially commences with the sacred flag hoisting (Dhwajarohan) ceremony performed simultaneously by sadhus and administrators at Ramkund and Kushavarta Kund.',
       highlights: [
         'Sacred flag hoisted at sunrise amidst Vedic chanting',
