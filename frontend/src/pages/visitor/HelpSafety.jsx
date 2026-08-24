@@ -31,7 +31,7 @@ const HelpSafety = () => {
         });
       }
     } catch (err) {
-      alert('Error submitting request. Please try calling emergency numbers below if urgent.');
+      alert(t('submitError') || 'Error submitting request. Please try calling emergency numbers below if urgent.');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,9 @@ const HelpSafety = () => {
         </div>
         <div>
           <h2 className="text-2xl font-black">{t('helpSafety')}</h2>
-          <p className="text-xs text-red-100 font-medium">Lost & Found, Pilgrim Support & Official Helplines</p>
+          <p className="text-xs text-red-100 font-medium">
+            {t('helpSafetyDesc') || 'Lost & Found, Pilgrim Support & Official Helplines'}
+          </p>
         </div>
       </div>
 
@@ -62,13 +64,13 @@ const HelpSafety = () => {
             <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
             <h4 className="font-bold text-base">{t('requestSuccess')}</h4>
             <p className="text-xs text-emerald-700">
-              Our volunteer desk and police helpline officers at Panchavati HQ have received your inquiry.
+              {t('requestSuccessDesc') || 'Our volunteer desk and police helpline officers at Panchavati HQ have received your inquiry.'}
             </p>
             <button
               onClick={() => setSubmitted(false)}
               className="mt-2 text-xs font-bold text-emerald-800 underline"
             >
-              Submit another request
+              {t('submitAnother') || 'Submit another request'}
             </button>
           </div>
         ) : (
@@ -81,12 +83,12 @@ const HelpSafety = () => {
                   onChange={(e) => setFormData({ ...formData, requestType: e.target.value })}
                   className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-semibold outline-none focus:ring-2 focus:ring-red-500"
                 >
-                  <option>General Assistance</option>
-                  <option>Lost & Found</option>
-                  <option>Medical Support</option>
-                  <option>Senior Citizen Support</option>
-                  <option>Directions Help</option>
-                  <option>Other</option>
+                  <option value="General Assistance">{t('General Assistance') || 'General Assistance'}</option>
+                  <option value="Lost & Found">{t('Lost & Found') || 'Lost & Found'}</option>
+                  <option value="Medical Support">{t('Medical Support') || 'Medical Support'}</option>
+                  <option value="Senior Citizen Support">{t('Senior Citizen Support') || 'Senior Citizen Support'}</option>
+                  <option value="Directions Help">{t('Directions Help') || 'Directions Help'}</option>
+                  <option value="Other">{t('Other') || 'Other'}</option>
                 </select>
               </div>
 
@@ -98,7 +100,7 @@ const HelpSafety = () => {
                   value={formData.requesterName}
                   onChange={(e) => setFormData({ ...formData, requesterName: e.target.value })}
                   placeholder="e.g. Ramesh Kumar"
-                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500 font-medium"
                 />
               </div>
 
@@ -109,8 +111,8 @@ const HelpSafety = () => {
                   required
                   value={formData.contactInfo}
                   onChange={(e) => setFormData({ ...formData, contactInfo: e.target.value })}
-                  placeholder="Mobile number or WhatsApp"
-                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500"
+                  placeholder="e.g. +91 9876543210"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500 font-medium"
                 />
               </div>
 
@@ -118,10 +120,11 @@ const HelpSafety = () => {
                 <label className="block font-bold text-gray-700 mb-1">{t('locationDesc')}</label>
                 <input
                   type="text"
+                  required
                   value={formData.locationDescription}
                   onChange={(e) => setFormData({ ...formData, locationDescription: e.target.value })}
-                  placeholder="e.g. Gate 3, Ramkund Ghat"
-                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500"
+                  placeholder="e.g. Near Gate 3, Ramkund"
+                  className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500 font-medium"
                 />
               </div>
             </div>
@@ -129,54 +132,66 @@ const HelpSafety = () => {
             <div>
               <label className="block font-bold text-gray-700 mb-1">{t('problemDesc')}</label>
               <textarea
+                rows="3"
                 required
-                rows={3}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Describe your question, lost item, or assistance needed..."
-                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500"
-              />
+                placeholder="Describe your situation in detail..."
+                className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-red-500 font-medium"
+              ></textarea>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold text-sm rounded-xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-101"
+              className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-101 disabled:opacity-50"
             >
               <Send className="w-4 h-4" />
-              <span>{loading ? 'Submitting...' : t('submitRequest')}</span>
+              <span>{loading ? (t('submitting') || 'Submitting...') : t('submitRequest')}</span>
             </button>
           </form>
         )}
       </div>
 
-      {/* Emergency Helplines Direct Dial Box */}
-      <div className="bg-red-50 border-2 border-red-300 rounded-3xl p-6 shadow-sm space-y-4">
-        <h4 className="font-bold text-red-950 text-base flex items-center gap-2">
-          <PhoneCall className="w-5 h-5 text-red-600" /> Immediate Emergency Direct Dial
-        </h4>
+      {/* Emergency Phone Helplines Section */}
+      <div className="bg-red-50 border-2 border-red-200 rounded-3xl p-6 space-y-4">
+        <h3 className="font-extrabold text-lg text-red-950 flex items-center gap-2">
+          <PhoneCall className="w-5 h-5 text-red-600" />
+          <span>{t('emergencyHelpline')}</span>
+        </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <a
             href="tel:112"
-            className="p-4 rounded-2xl bg-blue-600 text-white font-bold text-center shadow-md hover:bg-blue-700"
+            className="p-4 bg-white rounded-2xl border border-red-200 shadow-sm flex items-center justify-between hover:bg-red-100/50 transition-colors"
           >
-            <div className="text-xs font-normal opacity-90">Police Control</div>
-            <div className="text-xl font-mono">112</div>
+            <div>
+              <span className="text-xs text-slate-500 font-bold block">{t('policeControlRoom')}</span>
+              <span className="text-base font-black text-red-700">{t('callPolice')}</span>
+            </div>
+            <span className="text-xl">👮</span>
           </a>
+
           <a
             href="tel:108"
-            className="p-4 rounded-2xl bg-red-600 text-white font-bold text-center shadow-md hover:bg-red-700"
+            className="p-4 bg-white rounded-2xl border border-red-200 shadow-sm flex items-center justify-between hover:bg-red-100/50 transition-colors"
           >
-            <div className="text-xs font-normal opacity-90">Medical Ambulance</div>
-            <div className="text-xl font-mono">108</div>
+            <div>
+              <span className="text-xs text-slate-500 font-bold block">{t('medicalAmbulance')}</span>
+              <span className="text-base font-black text-red-700">{t('callAmbulance')}</span>
+            </div>
+            <span className="text-xl">🚑</span>
           </a>
+
           <a
             href="tel:02532575555"
-            className="p-4 rounded-2xl bg-amber-600 text-white font-bold text-center shadow-md hover:bg-amber-700"
+            className="p-4 bg-white rounded-2xl border border-red-200 shadow-sm flex items-center justify-between hover:bg-red-100/50 transition-colors"
           >
-            <div className="text-xs font-normal opacity-90">Kumbh Help Desk</div>
-            <div className="text-sm font-mono mt-1">0253-2575555</div>
+            <div>
+              <span className="text-xs text-slate-500 font-bold block">{t('pilgrimHelpCentre')}</span>
+              <span className="text-base font-black text-red-700">0253-2575555</span>
+            </div>
+            <span className="text-xl">📞</span>
           </a>
         </div>
       </div>

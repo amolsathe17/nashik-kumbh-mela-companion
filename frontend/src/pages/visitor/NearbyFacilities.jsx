@@ -42,7 +42,9 @@ const NearbyFacilities = () => {
         </div>
         <div>
           <h2 className="text-2xl font-black">{t('nearbyFacilities')}</h2>
-          <p className="text-xs text-purple-100 font-medium">Verified Pilgrim Camps, Food Counters & Aid Posts</p>
+          <p className="text-xs text-purple-100 font-medium">
+            {t('nearbyFacilitiesSub') || 'Verified Pilgrim Camps, Food Counters & Aid Posts'}
+          </p>
         </div>
       </div>
 
@@ -54,7 +56,7 @@ const NearbyFacilities = () => {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search facility name or location..."
+            placeholder={t('searchFacilityPlaceholder') || "Search facility name or location..."}
             className="w-full pl-11 pr-4 py-3 bg-white border border-purple-200 rounded-2xl shadow-sm text-sm focus:ring-2 focus:ring-purple-500 outline-none rtl:pr-11 rtl:pl-4"
           />
         </div>
@@ -70,7 +72,7 @@ const NearbyFacilities = () => {
                   : 'bg-white text-gray-700 border border-purple-200 hover:bg-purple-50'
               }`}
             >
-              {cat === 'All' ? t('allCategories') : cat}
+              {cat === 'All' ? t('allCategories') : (t(cat) || cat)}
             </button>
           ))}
         </div>
@@ -78,7 +80,7 @@ const NearbyFacilities = () => {
 
       {/* Facility Grid */}
       {loading ? (
-        <div className="p-8 text-center text-gray-500 font-medium">Searching facilities...</div>
+        <div className="p-8 text-center text-gray-500 font-medium">{t('searchingFacilities') || 'Searching facilities...'}</div>
       ) : filtered.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {filtered.map((item) => (
@@ -86,9 +88,9 @@ const NearbyFacilities = () => {
               <div className="space-y-2">
                 <div className="flex items-start justify-between">
                   <div>
-                    <h4 className="font-bold text-base text-gray-900">{item.name}</h4>
+                    <h4 className="font-bold text-base text-gray-900">{t(item.name)}</h4>
                     <span className="inline-block text-[10px] font-bold uppercase tracking-wider bg-purple-100 text-purple-900 px-2.5 py-0.5 rounded-full mt-0.5">
-                      {item.category}
+                      {t(item.category) || item.category}
                     </span>
                   </div>
 
@@ -99,31 +101,31 @@ const NearbyFacilities = () => {
                   )}
                 </div>
 
-                <p className="text-xs text-gray-600 flex items-center gap-1 font-medium">
-                  <MapPin className="w-3.5 h-3.5 text-purple-600" /> {item.location}
-                </p>
+                <div className="flex items-center gap-1.5 text-xs text-purple-900 font-semibold">
+                  <MapPin className="w-4 h-4 text-purple-600 flex-shrink-0" />
+                  <span>{t(item.location)}</span>
+                </div>
 
-                {item.capacityNotes && (
-                  <p className="text-xs text-gray-500 bg-purple-50/60 p-2 rounded-xl border border-purple-100">
-                    {item.capacityNotes}
-                  </p>
-                )}
+                <p className="text-xs text-gray-600 leading-relaxed">{t(item.description)}</p>
               </div>
 
-              <div className="pt-3 border-t border-gray-100 flex items-center justify-between text-xs">
-                <span className="font-semibold text-emerald-600">Status: {item.status}</span>
-                {item.contactPhone && (
-                  <a href={`tel:${item.contactPhone}`} className="font-bold text-purple-700 hover:underline flex items-center gap-1">
-                    <Phone className="w-3.5 h-3.5" /> Call Facility
+              {item.contactNumber && (
+                <div className="pt-2 border-t border-purple-50">
+                  <a
+                    href={`tel:${item.contactNumber}`}
+                    className="inline-flex items-center gap-1 text-xs text-purple-700 font-bold hover:underline"
+                  >
+                    <Phone className="w-3.5 h-3.5 text-purple-600" />
+                    <span>{t('call')} {item.contactNumber}</span>
                   </a>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           ))}
         </div>
       ) : (
-        <div className="p-8 text-center bg-white rounded-3xl border border-dashed text-gray-500">
-          No facility records matching your selection.
+        <div className="p-8 bg-white rounded-3xl border border-purple-200 text-center text-gray-500 text-xs font-medium">
+          No facilities match your search filter.
         </div>
       )}
     </div>

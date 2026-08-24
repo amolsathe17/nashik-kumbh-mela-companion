@@ -33,9 +33,9 @@ const TravelParking = () => {
     setJourneyResult({
       from: fromLoc,
       to: toLoc,
-      recommended: "Take Eco Shuttle Bus B3 from " + fromLoc + " to " + toLoc + ". Frequency: Every 5 minutes.",
-      walkingCorridor: "Pedestrian green route available with water stations and rest tents along Godavari promenade.",
-      parkingNote: "Nearest recommended parking is Parking Complex A (Agra Highway Exit)."
+      recommended: t('recommendedShuttle') || ("Take Eco Shuttle Bus B3 from " + fromLoc + " to " + toLoc + ". Frequency: Every 5 minutes."),
+      walkingCorridor: t('pedestrianGreenRoute') || "Pedestrian green route available with water stations and rest tents along Godavari promenade.",
+      parkingNote: t('nearestParkingNote') || "Nearest recommended parking is Parking Complex A (Agra Highway Exit)."
     });
   };
 
@@ -48,7 +48,9 @@ const TravelParking = () => {
         </div>
         <div>
           <h2 className="text-2xl font-black">{t('travelParking')}</h2>
-          <p className="text-xs text-blue-100 font-medium">Shuttle Services, Parking Occupancy & Route Advisories</p>
+          <p className="text-xs text-blue-100 font-medium">
+            {t('travelParkingDesc') || 'Shuttle Services, Parking Occupancy & Route Advisories'}
+          </p>
         </div>
       </div>
 
@@ -66,7 +68,7 @@ const TravelParking = () => {
               type="text"
               value={fromLoc}
               onChange={(e) => setFromLoc(e.target.value)}
-              placeholder="e.g. Tapovan Parking / CBS Bus Stand"
+              placeholder={t('fromPlaceholder') || "e.g. Tapovan Parking / CBS Bus Stand"}
               className="w-full p-3 bg-blue-50/50 border border-blue-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
               required
             />
@@ -78,7 +80,7 @@ const TravelParking = () => {
               type="text"
               value={toLoc}
               onChange={(e) => setToLoc(e.target.value)}
-              placeholder="e.g. Ramkund Ghat / Trimbakeshwar"
+              placeholder={t('toPlaceholder') || "e.g. Ramkund Ghat / Trimbakeshwar"}
               className="w-full p-3 bg-blue-50/50 border border-blue-200 rounded-2xl text-sm focus:ring-2 focus:ring-blue-500 outline-none"
               required
             />
@@ -98,59 +100,54 @@ const TravelParking = () => {
         {journeyResult && (
           <div className="mt-4 p-4 rounded-2xl bg-blue-50 border border-blue-300 space-y-2 text-xs text-blue-950 animate-fade-in">
             <h4 className="font-bold text-sm text-blue-900 flex items-center gap-1">
-              <Navigation className="w-4 h-4 text-blue-600" /> Journey Guidance ({journeyResult.from} → {journeyResult.to})
+              <Navigation className="w-4 h-4 text-blue-600" />
+              <span>{t('recommendedRoute') || 'Recommended Route'}</span>
             </h4>
-            <p className="font-semibold text-emerald-800">🚌 {journeyResult.recommended}</p>
-            <p>🚶 {journeyResult.walkingCorridor}</p>
-            <p>🅿️ {journeyResult.parkingNote}</p>
+            <p><strong>{t('shuttleBus') || 'Shuttle Bus'}:</strong> {journeyResult.recommended}</p>
+            <p><strong>{t('walkingPath') || 'Walking Path'}:</strong> {journeyResult.walkingCorridor}</p>
+            <p><strong>{t('parkingInfo') || 'Parking Info'}:</strong> {journeyResult.parkingNote}</p>
           </div>
         )}
       </div>
 
-      {/* Travel Updates List */}
+      {/* Live Route & Transport Updates */}
       <div className="space-y-4">
-        <h3 className="text-sm font-bold text-gray-700 uppercase tracking-wider px-1">
-          Live Transport & Parking Status
+        <h3 className="font-bold text-lg text-gray-900 flex items-center gap-2">
+          <Bus className="w-5 h-5 text-blue-600" />
+          <span>{t('liveRouteUpdates') || 'Live Shuttle & Route Advisories'}</span>
         </h3>
 
         {loading ? (
           <div className="p-8 text-center text-gray-500 font-medium">Loading transport updates...</div>
         ) : updates.length > 0 ? (
-          <div className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {updates.map((item) => (
-              <div key={item._id} className="bg-white rounded-3xl p-5 border border-gray-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-start space-x-3 rtl:space-x-reverse">
-                  <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl flex-shrink-0">
-                    {item.type === 'Shuttle' ? '🚌' : item.type === 'Parking' ? '🅿️' : '🚶'}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-base text-gray-900">{item.title}</h4>
-                    <p className="text-xs text-gray-600 mt-1">{item.description}</p>
-                    {item.routeFrom && item.routeTo && (
-                      <p className="text-xs font-semibold text-blue-700 mt-1">
-                        Route: {item.routeFrom} ➔ {item.routeTo}
-                      </p>
-                    )}
-                  </div>
+              <div key={item._id} className="bg-white rounded-3xl p-5 border border-blue-200 shadow-md space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-900 rounded-full">
+                    {t(item.routeType) || item.routeType}
+                  </span>
+                  <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full ${
+                    item.status === 'Clear' ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'
+                  }`}>
+                    {t(item.status) || item.status}
+                  </span>
                 </div>
 
-                {item.occupancyPercentage !== undefined && (
-                  <div className="flex items-center gap-3 bg-gray-50 p-3 rounded-2xl border border-gray-100">
-                    <Car className="w-5 h-5 text-gray-500" />
-                    <div>
-                      <div className="text-xs text-gray-500">Parking Capacity</div>
-                      <div className="font-mono font-bold text-sm text-blue-800">
-                        {item.occupancyPercentage}% Filled
-                      </div>
-                    </div>
+                <h4 className="font-bold text-base text-gray-900">{t(item.title)}</h4>
+                <p className="text-xs text-gray-600 leading-relaxed">{t(item.description)}</p>
+
+                {item.frequency && (
+                  <div className="text-[11px] font-bold text-blue-800 bg-blue-50 p-2 rounded-xl border border-blue-100">
+                    ⏱️ {t('frequency') || 'Frequency'}: {t(item.frequency)}
                   </div>
                 )}
               </div>
             ))}
           </div>
         ) : (
-          <div className="p-8 text-center bg-white rounded-3xl border border-dashed text-gray-500">
-            No live travel updates posted yet.
+          <div className="p-6 bg-white rounded-3xl border border-blue-100 text-slate-600 text-xs font-medium">
+            No active road blockages reported. Electric shuttle buses are running continuously between Outer Parking Satellite Hubs and Panchavati Ghats every 3 to 5 minutes.
           </div>
         )}
       </div>

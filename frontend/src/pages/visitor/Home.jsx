@@ -132,7 +132,7 @@ const Home = () => {
       <div className="relative z-10 space-y-13 flex flex-col items-center justify-center text-center mx-auto">
         <div className="inline-flex items-center justify-center space-x-2 bg-amber-600/85 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-amber-50 shadow-md border border-amber-300/40 mx-auto">
           <Sparkles className="w-4 h-4 text-amber-200" />
-          <span>Official Pilgrim Companion • कुंभ महापर्व</span>
+          <span>{t('officialCompanion') || 'Official Pilgrim Companion • कुंभ महापर्व'}</span>
         </div>
         <h2 className="text-xl sm:text-3xl font-black leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-amber-100 text-center mx-auto max-w-xl">
           {t('welcome')}
@@ -148,14 +148,14 @@ const Home = () => {
       </div>
       <div className="flex-1 overflow-hidden">
         <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
-          Latest Official Notice
+          {t('latestNotice') || 'Latest Official Notice'}
         </span>
         <p className="text-xs sm:text-sm font-bold text-slate-900 truncate mt-0.5">
-          {announcements[0].title}: {announcements[0].message}
+          {t(announcements[0].title)}: {t(announcements[0].message)}
         </p>
       </div>
       <Link to="/notifications" className="text-xs font-bold text-amber-700 hover:underline flex items-center">
-        View <ChevronRight className="w-4 h-4" />
+        {t('view') || 'View'} <ChevronRight className="w-4 h-4" />
       </Link>
     </div>
   );
@@ -165,21 +165,21 @@ const Home = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2 rtl:space-x-reverse text-amber-900">
           <Calendar className="w-5 h-5 text-amber-600" />
-          <h3 className="font-bold text-base text-slate-900">{todayInfo.title}</h3>
+          <h3 className="font-bold text-base text-slate-900">{t(todayInfo.title)}</h3>
         </div>
         <span className="text-xs font-mono bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full font-bold">
           {todayInfo.date}
         </span>
       </div>
       <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-        {todayInfo.description}
+        {t(todayInfo.description)}
       </p>
       <div className="pt-2 flex justify-end">
         <Link
           to="/todays-kumbh"
           className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center space-x-1"
         >
-          <span>Explore Today's Schedule</span>
+          <span>{t('exploreTodaysSchedule') || "Explore Today's Schedule"}</span>
           <ChevronRight className="w-4 h-4" />
         </Link>
       </div>
@@ -193,7 +193,7 @@ const Home = () => {
         {/* Left Column (4 Cards) */}
         <div className="lg:col-span-3 space-y-4">
           <div className="bg-slate-900/80 backdrop-blur-md text-amber-300 text-xs font-bold uppercase tracking-wider py-2 px-3 rounded-2xl text-center shadow border border-slate-700">
-            Quick Services
+            {t('quickServices') || 'Quick Services'}
           </div>
           {leftCards.map((btn, idx) => renderCard(btn, `left-${idx}`))}
         </div>
@@ -208,7 +208,7 @@ const Home = () => {
         {/* Right Column (4 Cards) */}
         <div className="lg:col-span-3 space-y-4">
           <div className="bg-slate-900/80 backdrop-blur-md text-amber-300 text-xs font-bold uppercase tracking-wider py-2 px-3 rounded-2xl text-center shadow border border-slate-700">
-            Essential Guides
+            {t('essentialGuides') || 'Essential Guides'}
           </div>
           {rightCards.map((btn, idx) => renderCard(btn, `right-${idx}`))}
         </div>
@@ -222,7 +222,7 @@ const Home = () => {
 
         <div className="space-y-3">
           <h3 className="text-xs font-bold text-white tracking-wider uppercase px-3.5 py-1 bg-slate-900/80 backdrop-blur-md rounded-xl border border-slate-700 mx-auto text-center w-fit shadow-md">
-            Quick Access Services / सेवाएं
+            {t('quickAccessServices') || 'Quick Access Services'}
           </h3>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3.5">

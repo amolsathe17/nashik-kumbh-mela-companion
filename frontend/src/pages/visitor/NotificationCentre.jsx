@@ -31,12 +31,14 @@ const NotificationCentre = () => {
         </div>
         <div>
           <h2 className="text-2xl font-black">{t('alerts')}</h2>
-          <p className="text-xs text-cyan-100 font-medium">In-App Notification Centre & Live Broadcast Advisories</p>
+          <p className="text-xs text-cyan-100 font-medium">
+            {t('alertsDesc') || 'In-App Notification Centre & Live Broadcast Advisories'}
+          </p>
         </div>
       </div>
 
       {loading ? (
-        <div className="p-8 text-center text-gray-500 font-medium">Loading notifications...</div>
+        <div className="p-8 text-center text-gray-500 font-medium">{t('loadingNotifications') || 'Loading notifications...'}</div>
       ) : notifications.length > 0 ? (
         <div className="space-y-3">
           {notifications.map((n) => (
@@ -50,21 +52,21 @@ const NotificationCentre = () => {
               <div className="flex-1 space-y-1">
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider bg-cyan-100 text-cyan-900 px-2.5 py-0.5 rounded-full">
-                    {n.category}
+                    {t(n.category) || n.category}
                   </span>
                   <span className="text-[11px] text-gray-400 font-mono flex items-center gap-1">
                     <Clock className="w-3 h-3" /> {new Date(n.sentAt || n.createdAt).toLocaleDateString()}
                   </span>
                 </div>
-                <h4 className="font-bold text-base text-gray-900">{n.title}</h4>
-                <p className="text-xs text-gray-600 leading-relaxed">{n.message}</p>
+                <h4 className="font-bold text-base text-gray-900">{t(n.title)}</h4>
+                <p className="text-xs text-gray-600 leading-relaxed">{t(n.message)}</p>
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div className="p-8 text-center bg-white rounded-3xl border border-dashed text-gray-500">
-          No notifications broadcasted yet today.
+        <div className="p-8 text-center bg-white rounded-3xl border border-dashed text-gray-500 text-xs font-medium">
+          {t('noNotificationsYet') || 'No notifications broadcasted yet today.'}
         </div>
       )}
     </div>

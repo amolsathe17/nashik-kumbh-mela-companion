@@ -27,15 +27,32 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('kumbh_lang_selected', 'true');
   };
 
-  // Translation function with English fallback
+  // Smart translation function with robust fallback and exact dictionary lookups
   const t = (key) => {
-    if (TRANSLATIONS[langCode] && TRANSLATIONS[langCode][key]) {
-      return TRANSLATIONS[langCode][key];
+    if (!key) return '';
+    const strKey = String(key).trim();
+
+    // 1. Direct match in selected language
+    if (TRANSLATIONS[langCode] && TRANSLATIONS[langCode][strKey] !== undefined) {
+      return TRANSLATIONS[langCode][strKey];
     }
-    if (TRANSLATIONS['en'] && TRANSLATIONS['en'][key]) {
-      return TRANSLATIONS['en'][key];
+
+    // 2. Case-insensitive / trimmed match in selected language
+    if (TRANSLATIONS[langCode]) {
+      const foundKey = Object.keys(TRANSLATIONS[langCode]).find(
+        k => k.toLowerCase() === strKey.toLowerCase()
+      );
+      if (foundKey) {
+        return TRANSLATIONS[langCode][foundKey];
+      }
     }
-    return key;
+
+    // 3. Fallback to English dictionary match
+    if (TRANSLATIONS['en'] && TRANSLATIONS['en'][strKey] !== undefined) {
+      return TRANSLATIONS['en'][strKey];
+    }
+
+    return strKey;
   };
 
   return (

@@ -15,25 +15,25 @@ const Footer = () => {
               <h3 className="text-lg font-bold text-white">{t('appName')}</h3>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Official Digital Companion platform for pilgrims and international visitors attending Nashik Kumbh Mela 2026. Designed for accessibility, simplicity, and speed.
+              {t('footerDesc')}
             </p>
           </div>
 
           <div>
             <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-1.5">
-              <Phone className="w-4 h-4" /> Official Helplines
+              <Phone className="w-4 h-4" /> {t('officialHelplines')}
             </h4>
             <ul className="space-y-2 text-xs">
               <li className="flex justify-between border-b border-slate-800 pb-1">
-                <span>Police Control Room:</span>
+                <span>{t('policeControlRoom')}</span>
                 <a href="tel:112" className="text-amber-300 font-mono hover:underline">112</a>
               </li>
               <li className="flex justify-between border-b border-slate-800 pb-1">
-                <span>Medical Ambulance:</span>
+                <span>{t('medicalAmbulance')}</span>
                 <a href="tel:108" className="text-amber-300 font-mono hover:underline">108</a>
               </li>
               <li className="flex justify-between border-b border-slate-800 pb-1">
-                <span>Pilgrim Help Centre:</span>
+                <span>{t('pilgrimHelpCentre')}</span>
                 <a href="tel:02532575555" className="text-amber-300 font-mono hover:underline">0253-2575555</a>
               </li>
             </ul>
@@ -41,19 +41,16 @@ const Footer = () => {
 
           <div>
             <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4" /> Trust & Security
+              <ShieldCheck className="w-4 h-4" /> {t('trustSecurity')}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Maintained by Nashik District Administration and Municipal Corporation. No mandatory registration for public information.
+              {t('trustDesc')}
             </p>
           </div>
         </div>
 
         <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
-          <p>© 2026 Nashik Kumbh Mela Authority. All rights reserved.</p>
-          {/* <p className="flex items-center gap-1">
-            Made with <Heart className="w-3.5 h-3.5 text-red-500 fill-current" /> for Pilgrims Worldwide
-          </p> */}
+          <p>{t('copyright')}</p>
         </div>
       </div>
     </footer>

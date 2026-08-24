@@ -28,7 +28,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
         </div>
 
         <h2 className="text-2xl font-bold text-gray-900 mb-1">{t('emergencyHelpline')}</h2>
-        <p className="text-xs text-gray-500 mb-5">Tap any helpline to call immediately</p>
+        <p className="text-xs text-gray-500 mb-5">{t('tapToCallImmediate') || 'Tap any helpline to call immediately'}</p>
 
         <div className="space-y-3">
           {helplines.map((item, idx) => {
@@ -50,7 +50,7 @@ const EmergencyModal = ({ isOpen, onClose }) => {
         </div>
 
         <p className="text-xs text-gray-400 mt-5 leading-relaxed">
-          Official Nashik Police & Medical Emergency Control Desk. Available 24 hours.
+          {t('officialControlDeskDesc') || 'Official Nashik Police & Medical Emergency Control Desk. Available 24 hours.'}
         </p>
       </div>
     </div>
