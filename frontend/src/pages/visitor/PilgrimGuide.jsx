@@ -42,7 +42,7 @@ const PilgrimGuide = () => {
       title: 'Nagar Pradakshina (नगर प्रदक्षिणा) - 14 KM Holy Circuit',
       eventDate: '29 July 2027',
       location: 'Old Nashik Pilgrim Circuit',
-      image: 'https://images.unsplash.com/photo-1561361513-2d000a50f0dc?auto=format&fit=crop&w=800&q=80',
+      image: '/nagarpradakshina.webp',
       description: 'A 14 km sacred circumambulation walk around Nashik’s historic holy shrines and river ghats undertaken by thousands of pilgrims before the royal bath dates.',
       highlights: [
         '14 kilometer circumambulation circuit around old Nashik city',
