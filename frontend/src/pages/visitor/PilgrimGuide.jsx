@@ -189,7 +189,7 @@ const PilgrimGuide = () => {
       title: 'Shaivite Akharas & Naga Sadhus (शैव अखाड़ा व नागा साधु)',
       eventDate: 'Camped in Trimbakeshwar',
       location: 'Trimbakeshwar Kumbh Nagari',
-      image: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
+      image: '/img_20250206_1205497474678292145460306.webp',
       description: 'The Shaivite Akharas (Juna, Niranjani, Mahanirvani) worship Lord Shiva. They are famous for Naga Sadhus—ascetics covered in holy ash carrying trishuls who have renounced worldly attachments.',
       highlights: [
         'Camped exclusively at Trimbakeshwar near Lord Shiva’s Jyotirlinga',
