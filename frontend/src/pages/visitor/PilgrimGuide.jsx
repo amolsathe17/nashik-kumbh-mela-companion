@@ -11,12 +11,12 @@ const PilgrimGuide = () => {
   const [activeTab, setActiveTab] = useState('Shahi Snan');
 
   const tabs = [
-    { id: 'Shahi Snan', label: `👑 ${t('shahiSnanTab') || 'Shahi Snan Dates'}` },
-    { id: 'Ritual Guide', label: `🔱 ${t('sacredRitualsTab') || 'Sacred Rituals & Traditions'}` },
-    { id: 'Akharas', label: `🛕 ${t('akharasTab') || 'Akharas & Sadhus'}` },
-    { id: 'Temple Guide', label: `🚩 ${t('templeGuideTab') || 'Temples & Sacred Places'}` },
-    { id: 'Travel & Safety', label: `🛡️ ${t('travelSafetyTab') || 'Travel, Safety & Tips'}` },
-    { id: 'All', label: `✨ ${t('allCategories') || 'All Guides'}` }
+    { id: 'Shahi Snan', label: `👑 ${t('shahiSnan')}` },
+    { id: 'Ritual Guide', label: `🔱 ${t('sacredRituals')}` },
+    { id: 'Akharas', label: `🛕 ${t('akharas')}` },
+    { id: 'Temple Guide', label: `🚩 ${t('templeGuide')}` },
+    { id: 'Travel & Safety', label: `🛡️ ${t('travelSafety')}` },
+    { id: 'All', label: `✨ ${t('allCategories')}` }
   ];
 
   // Relevant and exact photographic images for every topic/subject

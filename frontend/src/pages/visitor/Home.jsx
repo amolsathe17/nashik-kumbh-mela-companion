@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   MapPin, Bus, Compass, Calendar, Building2, HelpCircle, 
-  Bell, Users, Sparkles, ChevronRight, AlertTriangle 
+  Bell, Users, Sparkles, ChevronRight, AlertTriangle, Scroll, BookOpen
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -17,13 +17,13 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const [annRes, todayRes] = await Promise.all([
-          api.get('/announcements'),
-          api.get('/daily-information/today')
+          api.get('/announcements').catch(() => null),
+          api.get('/daily-information/today').catch(() => null)
         ]);
-        if (annRes.data.success) setAnnouncements(annRes.data.data);
-        if (todayRes.data.success) setTodayInfo(todayRes.data.data);
+        if (annRes?.data?.success) setAnnouncements(annRes.data.data);
+        if (todayRes?.data?.success) setTodayInfo(todayRes.data.data);
       } catch (err) {
-        console.log('Using static fallback for Home');
+        // Silent local fallback
       } finally {
         setLoading(false);
       }
@@ -31,8 +31,16 @@ const Home = () => {
     fetchData();
   }, []);
 
-  // Left column 4 cards (desktop) - Solid white background, vivid colored border, NO card gradient
+  // Left column cards (desktop) - Solid white background, vivid colored border, NO card gradient
   const leftCards = [
+    {
+      title: t('aboutKumbhmela') || 'About Kumbhmela',
+      desc: t('aboutKumbhmelaCardDesc') || 'History, 4 Sacred Locations & Traditions',
+      icon: BookOpen,
+      path: '/about-kumbhmela',
+      color: 'from-orange-600 to-amber-600',
+      borderColor: 'border-orange-500'
+    },
     {
       title: t('findPlaces'),
       desc: t('findPlacesDesc'),
@@ -67,8 +75,16 @@ const Home = () => {
     }
   ];
 
-  // Right column 4 cards (desktop) - Solid white background, vivid colored border, NO card gradient
+  // Right column cards (desktop) - Solid white background, vivid colored border, NO card gradient
   const rightCards = [
+    {
+      title: t('aboutKumbh') || 'About Nasik Kumbh',
+      desc: t('aboutKumbhCardDesc') || 'History, Heritage & Spiritual Significance',
+      icon: Scroll,
+      path: '/about-kumbh',
+      color: 'from-amber-600 to-yellow-600',
+      borderColor: 'border-amber-500'
+    },
     {
       title: t('travelParking'),
       desc: t('travelParkingDesc'),
@@ -188,13 +204,10 @@ const Home = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6">
-      {/* DESKTOP LAYOUT (lg:): 4 Cards Left | Center Content | 4 Cards Right */}
+      {/* DESKTOP LAYOUT (lg:): Cards Left | Center Content | Cards Right */}
       <div className="hidden lg:grid lg:grid-cols-12 lg:gap-6 lg:items-start">
-        {/* Left Column (4 Cards) */}
+        {/* Left Column */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-slate-900/80 backdrop-blur-md text-amber-300 text-xs font-bold uppercase tracking-wider py-2 px-3 rounded-2xl text-center shadow border border-slate-700">
-            {t('quickServices') || 'Quick Services'}
-          </div>
           {leftCards.map((btn, idx) => renderCard(btn, `left-${idx}`))}
         </div>
 
@@ -205,11 +218,8 @@ const Home = () => {
           {todaysSummary}
         </div>
 
-        {/* Right Column (4 Cards) */}
+        {/* Right Column */}
         <div className="lg:col-span-3 space-y-4">
-          <div className="bg-slate-900/80 backdrop-blur-md text-amber-300 text-xs font-bold uppercase tracking-wider py-2 px-3 rounded-2xl text-center shadow border border-slate-700">
-            {t('essentialGuides') || 'Essential Guides'}
-          </div>
           {rightCards.map((btn, idx) => renderCard(btn, `right-${idx}`))}
         </div>
       </div>

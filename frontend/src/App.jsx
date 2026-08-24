@@ -9,6 +9,8 @@ import { useAuth } from './context/AuthContext';
 // Visitor Pages
 import LanguageSelect from './pages/visitor/LanguageSelect';
 import Home from './pages/visitor/Home';
+import AboutKumbh from './pages/visitor/AboutKumbh';
+import AboutKumbhmela from './pages/visitor/AboutKumbhmela';
 import TodaysKumbh from './pages/visitor/TodaysKumbh';
 import FindPlaces from './pages/visitor/FindPlaces';
 import TravelParking from './pages/visitor/TravelParking';
@@ -75,6 +77,8 @@ const App = () => {
         <Routes>
           {/* Visitor Routes */}
           <Route path="/" element={<Home />} />
+          <Route path="/about-kumbhmela" element={<AboutKumbhmela />} />
+          <Route path="/about-kumbh" element={<AboutKumbh />} />
           <Route path="/language" element={<LanguageSelect />} />
           <Route path="/todays-kumbh" element={<TodaysKumbh />} />
           <Route path="/find-places" element={<FindPlaces />} />

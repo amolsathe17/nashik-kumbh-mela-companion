@@ -281,14 +281,13 @@ const FindPlaces = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const res = await api.get('/locations');
-        if (res.data.success && res.data.data.length > 0) {
+        const res = await api.get('/locations').catch(() => null);
+        if (res?.data?.success && res.data.data.length > 0) {
           setLocations(res.data.data);
         } else {
           setLocations(defaultLocations);
         }
       } catch (err) {
-        console.log('Using authentic local fallback locations');
         setLocations(defaultLocations);
       } finally {
         setLoading(false);

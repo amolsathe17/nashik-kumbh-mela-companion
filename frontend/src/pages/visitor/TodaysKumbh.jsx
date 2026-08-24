@@ -11,12 +11,12 @@ const TodaysKumbh = () => {
   useEffect(() => {
     const fetchToday = async () => {
       try {
-        const res = await api.get('/daily-information/today');
-        if (res.data.success) {
+        const res = await api.get('/daily-information/today').catch(() => null);
+        if (res?.data?.success) {
           setData(res.data.data);
         }
       } catch (err) {
-        console.log('Error loading today info');
+        // Silent fallback
       } finally {
         setLoading(false);
       }
