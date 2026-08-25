@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Bus, Car, Footprints, Plus } from 'lucide-react';
 import api from '../../services/api';
 
@@ -38,7 +38,7 @@ const TravelMgmt = () => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-black text-slate-900">Travel & Parking Management</h2>
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Travel & Parking Management</h2>
           <p className="text-xs text-slate-500">Update Shuttle Services, Parking Occupancy & Diversions</p>
         </div>
         <button

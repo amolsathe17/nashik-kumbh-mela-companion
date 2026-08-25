@@ -47,7 +47,7 @@ const TravelParking = () => {
           🚌
         </div>
         <div>
-          <h2 className="text-2xl font-black">{t('travelParking')}</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t('travelParking')}</h2>
           <p className="text-xs text-blue-100 font-medium">
             {t('travelParkingDesc') || 'Shuttle Services, Parking Occupancy & Route Advisories'}
           </p>

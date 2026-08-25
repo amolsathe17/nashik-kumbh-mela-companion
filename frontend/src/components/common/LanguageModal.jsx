@@ -87,7 +87,7 @@ const LanguageModal = ({ isOpen, onClose }) => {
               >
                 <div className="rtl:text-right">
                   <div className="text-base font-semibold">{lang.nativeName}</div>
-                  <div className="text-xs text-gray-500 font-normal">{lang.name}</div>
+                  <div className="text-xs text-gray-500 font-bold">{lang.name}</div>
                 </div>
                 {isSelected && (
                   <div className="w-6 h-6 rounded-full bg-amber-600 text-white flex items-center justify-center flex-shrink-0">

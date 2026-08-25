@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   MapPin, Bus, Compass, Calendar, Building2, HelpCircle, 
-  Bell, Users, Sparkles, ChevronRight, AlertTriangle, Scroll, BookOpen
+  Bell, Users, Sparkles, ChevronRight, AlertTriangle, Scroll, BookOpen, X, Trash2
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -12,6 +12,22 @@ const Home = () => {
   const [announcements, setAnnouncements] = useState([]);
   const [todayInfo, setTodayInfo] = useState(null);
   const [loading, setLoading] = useState(true);
+  
+  // Center Modal Popup state with localStorage persistence so viewed/dismissed alerts don't show again in popup
+  const [showNoticeModal, setShowNoticeModal] = useState(true);
+
+  const [dismissedAnnounceIds, setDismissedAnnounceIds] = useState(() => {
+    try {
+      const saved = localStorage.getItem('kumbh_dismissed_modal_announcements');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [isTodayInfoDismissed, setIsTodayInfoDismissed] = useState(() => {
+    return localStorage.getItem('kumbh_dismissed_modal_todayinfo') === 'true';
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +46,39 @@ const Home = () => {
     };
     fetchData();
   }, []);
+
+  const activeAnnouncements = announcements.filter(a => !dismissedAnnounceIds.includes(a._id));
+  const hasActiveModalContent = activeAnnouncements.length > 0 || (todayInfo && !isTodayInfoDismissed);
+
+  // When pilgrim views or deletes a notice, remove from center modal popup permanently while keeping in dropdown
+  const handleDeleteSingleAnnouncement = (id) => {
+    setDismissedAnnounceIds(prev => {
+      const updated = [...prev, id];
+      try {
+        localStorage.setItem('kumbh_dismissed_modal_announcements', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  };
+
+  // When pilgrim views or deletes Today's Kumbh schedule alert
+  const handleDeleteTodayInfo = () => {
+    setIsTodayInfoDismissed(true);
+    try {
+      localStorage.setItem('kumbh_dismissed_modal_todayinfo', 'true');
+    } catch (e) {}
+  };
+
+  const handleDeleteAllNotices = () => {
+    const allIds = announcements.map(a => a._id);
+    setDismissedAnnounceIds(allIds);
+    setIsTodayInfoDismissed(true);
+    try {
+      localStorage.setItem('kumbh_dismissed_modal_announcements', JSON.stringify(allIds));
+      localStorage.setItem('kumbh_dismissed_modal_todayinfo', 'true');
+    } catch (e) {}
+    setShowNoticeModal(false);
+  };
 
   // Left column cards (desktop)
   const leftCards = [
@@ -119,7 +168,18 @@ const Home = () => {
     }
   ];
 
-  const allCards = [...leftCards, ...rightCards];
+  const mobileCards = [
+    leftCards[0],  // About Kumbhmela
+    rightCards[0], // About Nasik Kumbh (Right side of About Kumbhmela)
+    leftCards[1],  // Find Places
+    rightCards[1], // Travel & Parking
+    leftCards[2],  // Pilgrim Guide
+    rightCards[2], // Today's Kumbh
+    leftCards[3],  // Nearby Facilities
+    rightCards[3], // Help & Safety
+    leftCards[4],  // Alerts & News
+    rightCards[4]  // Travel Group
+  ];
 
   const renderCard = (btn, idx) => {
     const Icon = btn.icon;
@@ -134,7 +194,7 @@ const Home = () => {
             <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-sm sm:text-base font-extrabold leading-tight text-slate-950 truncate">{t(btn.titleKey)}</h4>
+            <h4 className="text-sm sm:text-base font-bold leading-tight text-slate-950 truncate tracking-tight">{t(btn.titleKey)}</h4>
             <p className="text-xs text-slate-600 line-clamp-1 mt-0.5">{t(btn.descKey)}</p>
           </div>
         </div>
@@ -143,67 +203,26 @@ const Home = () => {
     );
   };
 
-  const heroSection = (
+  const desktopHeroSection = (
     <div className="relative rounded-3xl px-4 py-8 sm:py-12 border-0 bg-transparent text-white flex flex-col items-center justify-center text-center shadow-none mx-auto w-full min-h-[160px] sm:min-h-[820px]">
-      <div className="relative z-10 space-y-13 flex flex-col items-center justify-center text-center mx-auto">
-        <div className="inline-flex items-center justify-center space-x-2 bg-amber-600/85 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold text-amber-50 shadow-md border border-amber-300/40 mx-auto">
-          <Sparkles className="w-4 h-4 text-amber-200" />
-          <span>{t('officialCompanion') || 'Official Pilgrim Companion • कुंभ महापर्व'}</span>
-        </div>
-        <h2 className="text-xl sm:text-3xl font-black leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-amber-100 text-center mx-auto max-w-xl">
+      <div className="relative z-10 flex flex-col items-center justify-center text-center mx-auto">
+        <h2 className="text-xl sm:text-3xl font-bold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-amber-100 text-center mx-auto max-w-xl">
           {t('welcome')}
         </h2>
       </div>
     </div>
   );
 
-  const announcementTicker = announcements.length > 0 && (
-    <div className="bg-white border-2 border-amber-400 rounded-2xl p-4 flex items-center space-x-3 rtl:space-x-reverse shadow-xl">
-      <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0">
-        <AlertTriangle className="w-5 h-5 animate-pulse" />
-      </div>
-      <div className="flex-1 overflow-hidden">
-        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2 py-0.5 rounded">
-          {t('latestNotice') || 'Latest Official Notice'}
-        </span>
-        <p className="text-xs sm:text-sm font-bold text-slate-900 truncate mt-0.5">
-          {t(announcements[0].title)}: {t(announcements[0].message)}
-        </p>
-      </div>
-      <Link to="/notifications" className="text-xs font-bold text-amber-700 hover:underline flex items-center">
-        {t('view') || 'View'} <ChevronRight className="w-4 h-4" />
-      </Link>
-    </div>
-  );
-
-  const todaysSummary = todayInfo && (
-    <div className="bg-white hover:bg-slate-200 hover:border-slate-400 transition-all rounded-[28px] p-5 border-2 border-amber-400 shadow-xl space-y-3">
-      <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-        <div className="flex items-center space-x-2 text-amber-900 font-bold text-xs sm:text-sm">
-          <Calendar className="w-4 h-4 text-amber-600" />
-          <span>{t(todayInfo.title)}</span>
-        </div>
-        <span className="text-xs font-mono bg-amber-100 text-amber-900 px-2.5 py-1 rounded-full font-bold">
-          {todayInfo.date}
-        </span>
-      </div>
-      <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
-        {t(todayInfo.description)}
-      </p>
-      <div className="pt-2 flex justify-end">
-        <Link
-          to="/todays-kumbh"
-          className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center space-x-1"
-        >
-          <span>{t('exploreTodaysSchedule') || "Explore Today's Schedule"}</span>
-          <ChevronRight className="w-4 h-4" />
-        </Link>
-      </div>
+  const mobileWelcomeHeader = (
+    <div className="text-center pt-1 pb-12">
+      <h2 className="text-lg sm:text-2xl font-bold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] text-amber-100 tracking-tight">
+        {t('welcome')}
+      </h2>
     </div>
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="max-w-7xl mx-auto px-4 py-3 sm:py-6">
       {/* DESKTOP LAYOUT (lg:): Cards Left | Center Content | Cards Right */}
       <div className="hidden lg:grid lg:grid-cols-12 lg:gap-6 lg:items-start">
         {/* Left Column */}
@@ -211,11 +230,9 @@ const Home = () => {
           {leftCards.map((btn, idx) => renderCard(btn, `left-${idx}`))}
         </div>
 
-        {/* Center Column (Hero Header + Announcements + Today's Summary) */}
+        {/* Center Column */}
         <div className="lg:col-span-6 space-y-6">
-          {heroSection}
-          {announcementTicker}
-          {todaysSummary}
+          {desktopHeroSection}
         </div>
 
         {/* Right Column */}
@@ -225,15 +242,165 @@ const Home = () => {
       </div>
 
       {/* MOBILE & TABLET LAYOUT (< lg): Stacked View */}
-      <div className="lg:hidden space-y-6 max-w-xl mx-auto">
-        {heroSection}
-        {announcementTicker}
-        {todaysSummary}
-
+      <div className="lg:hidden space-y-4 max-w-xl mx-auto">
         <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-          {allCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
+          {mobileCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
         </div>
+
+        {mobileWelcomeHeader}
       </div>
+
+      {/* CENTER MODAL POPUP FOR NOTICE & ALERTS */}
+      {showNoticeModal && hasActiveModalContent && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 animate-fade-in">
+          {/* Backdrop dismiss */}
+          <div className="absolute inset-0" onClick={() => setShowNoticeModal(false)} />
+
+          {/* Center Modal Container */}
+          <div className="relative w-full max-w-lg bg-gradient-to-b from-amber-500 via-orange-500 to-amber-700 p-1 rounded-[32px] shadow-2xl z-10 my-auto">
+            <div className="bg-slate-950 text-white rounded-[28px] p-5 sm:p-6 space-y-4 max-h-[85vh] overflow-y-auto">
+              
+              {/* Modal Header */}
+              <div className="flex items-center justify-between border-b border-amber-500/30 pb-3">
+                <div className="flex items-center space-x-2.5 rtl:space-x-reverse">
+                  <div className="w-9 h-9 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center text-xl font-bold shadow">
+                    🛕
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-base text-amber-100 leading-tight">
+                      Official Kumbh Notice & Alerts
+                    </h3>
+                    <p className="text-[10px] text-amber-300/80 font-medium">
+                      Nashik Simhastha 2026 Direct Updates
+                    </p>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setShowNoticeModal(false)}
+                  className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                  aria-label="Close Notice Popup"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body: Cards with View and Delete actions */}
+              <div className="space-y-4 py-1">
+                
+                {/* LATEST OFFICIAL NOTICES LIST */}
+                {activeAnnouncements.map((ann, idx) => (
+                  <div 
+                    key={ann._id || idx} 
+                    className="bg-white border-2 border-amber-400 rounded-[24px] p-4 text-slate-900 shadow-xl space-y-2 relative group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2.5 rtl:space-x-reverse">
+                        <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center flex-shrink-0 shadow">
+                          <AlertTriangle className="w-5 h-5 animate-pulse" />
+                        </div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800 bg-amber-100 px-2.5 py-0.5 rounded-full border border-amber-300">
+                          {t('latestNotice') || 'Latest Notice'}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                        <Link 
+                          to="/notifications" 
+                          onClick={() => {
+                            handleDeleteSingleAnnouncement(ann._id);
+                            setShowNoticeModal(false);
+                          }}
+                          className="text-xs font-bold text-amber-700 hover:underline flex items-center gap-0.5"
+                        >
+                          <span>{t('view') || 'View'}</span>
+                          <ChevronRight className="w-4 h-4" />
+                        </Link>
+
+                        <button
+                          onClick={() => handleDeleteSingleAnnouncement(ann._id)}
+                          className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 border border-red-200 transition-colors"
+                          title="Dismiss from center modal popup"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="text-xs sm:text-sm font-bold text-slate-950 leading-snug pt-1">
+                      {t(ann.title)}: {t(ann.message)}
+                    </p>
+                  </div>
+                ))}
+
+                {/* TODAY'S KUMBH SCHEDULE CARD */}
+                {todayInfo && !isTodayInfoDismissed && (
+                  <div className="bg-white hover:bg-slate-100 transition-colors rounded-[24px] p-5 border-2 border-amber-400 text-slate-900 shadow-xl space-y-3 relative">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                      <div className="flex items-center space-x-2 text-amber-900 font-bold text-sm">
+                        <Calendar className="w-4 h-4 text-amber-600" />
+                        <span>{t(todayInfo.title)}</span>
+                      </div>
+
+                      <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                        <span className="text-[11px] font-mono font-bold bg-amber-100 text-amber-900 px-2.5 py-0.5 rounded-full border border-amber-300">
+                          {todayInfo.date}
+                        </span>
+
+                        <button
+                          onClick={handleDeleteTodayInfo}
+                          className="p-1.5 rounded-lg text-red-600 hover:bg-red-50 border border-red-200 transition-colors"
+                          title="Dismiss today's schedule from center modal popup"
+                        >
+                          <Trash2 className="w-3.5 h-3.5 text-red-500" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                      {t(todayInfo.description)}
+                    </p>
+
+                    <div className="pt-1 flex justify-end">
+                      <Link
+                        to="/todays-kumbh"
+                        onClick={() => {
+                          handleDeleteTodayInfo();
+                          setShowNoticeModal(false);
+                        }}
+                        className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center space-x-1"
+                      >
+                        <span>{t('exploreTodaysSchedule') || "Explore Today's Schedule"}</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer Controls */}
+              <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
+                <button
+                  onClick={handleDeleteAllNotices}
+                  className="px-4 py-2 rounded-xl bg-red-600/20 hover:bg-red-600/30 text-red-300 hover:text-red-200 border border-red-500/40 font-bold flex items-center gap-1.5 transition-colors"
+                  title="Dismiss all modal notices permanently for this session"
+                >
+                  <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                  <span>Delete All Notices</span>
+                </button>
+
+                <button
+                  onClick={() => setShowNoticeModal(false)}
+                  className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-transform hover:scale-102"
+                >
+                  Close Window
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

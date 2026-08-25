@@ -252,7 +252,7 @@ const FamilyGroup = () => {
               <Sparkles className="w-3.5 h-3.5" />
               <span>Opt-In Encrypted Family Safety Hub</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black">{t('familyGroup')}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('familyGroup')}</h2>
             <p className="text-xs sm:text-sm text-indigo-100 font-medium mt-0.5">
               {t('familyGroupDesc') || 'Real-time Opt-In Family Coordination, Emergency Meeting Point & SOS Broadcasts'}
             </p>
@@ -262,7 +262,7 @@ const FamilyGroup = () => {
         {group && (
           <button
             onClick={handleLeaveGroup}
-            className="px-4 py-2 bg-red-600/80 hover:bg-red-700 text-white font-extrabold text-xs rounded-xl shadow border border-red-400/40 flex items-center space-x-1.5 self-start sm:self-auto transition-transform hover:scale-102 z-10"
+            className="px-4 py-2 bg-red-600/80 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow border border-red-400/40 flex items-center space-x-1.5 self-start sm:self-auto transition-transform hover:scale-102 z-10"
           >
             <LogOut className="w-4 h-4" />
             <span>Leave Group</span>
@@ -290,7 +290,7 @@ const FamilyGroup = () => {
               <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center text-2xl font-bold">
                 ➕
               </div>
-              <h3 className="text-xl font-black text-slate-950">{t('createGroup')}</h3>
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">{t('createGroup')}</h3>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 Create a new private family group for Nashik Kumbh Mela. Get a unique 6-digit share code to invite family, elderly relatives, and companions.
               </p>
@@ -298,7 +298,7 @@ const FamilyGroup = () => {
 
             <button
               onClick={() => setActiveView('create')}
-              className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-extrabold text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-102"
+              className="w-full py-3.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-102"
             >
               <UserPlus className="w-4 h-4" />
               <span>Create New Family Group</span>
@@ -311,7 +311,7 @@ const FamilyGroup = () => {
               <div className="w-12 h-12 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center text-2xl font-bold">
                 🔑
               </div>
-              <h3 className="text-xl font-black text-slate-950">{t('joinGroup')}</h3>
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">{t('joinGroup')}</h3>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
                 Have a 6-digit share code (e.g. KUMBH-784921) from your family host? Enter the code to join their private group instantly.
               </p>
@@ -319,7 +319,7 @@ const FamilyGroup = () => {
 
             <button
               onClick={() => setActiveView('join')}
-              className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-extrabold text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-102"
+              className="w-full py-3.5 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-102"
             >
               <Users className="w-4 h-4" />
               <span>Join Group With Code</span>
@@ -333,7 +333,7 @@ const FamilyGroup = () => {
         <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border-2 border-indigo-200 shadow-xl space-y-5 animate-fade-in">
           <div className="flex items-center space-x-2 rtl:space-x-reverse text-indigo-900 border-b border-slate-100 pb-3">
             <UserPlus className="w-6 h-6 text-indigo-600" />
-            <h3 className="text-xl font-black">{t('createGroup')}</h3>
+            <h3 className="text-xl font-bold tracking-tight">{t('createGroup')}</h3>
           </div>
 
           <form onSubmit={handleCreateGroupSubmit} className="space-y-4 text-xs">
@@ -370,7 +370,7 @@ const FamilyGroup = () => {
               </button>
               <button
                 type="submit"
-                className="w-2/3 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-2xl shadow-md transition-transform hover:scale-101"
+                className="w-2/3 py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-md transition-transform hover:scale-101"
               >
                 Generate Code & Start Group
               </button>
@@ -384,7 +384,7 @@ const FamilyGroup = () => {
         <div className="max-w-xl mx-auto bg-white rounded-3xl p-6 sm:p-8 border-2 border-purple-200 shadow-xl space-y-5 animate-fade-in">
           <div className="flex items-center space-x-2 rtl:space-x-reverse text-purple-900 border-b border-slate-100 pb-3">
             <Users className="w-6 h-6 text-purple-600" />
-            <h3 className="text-xl font-black">{t('joinGroup')}</h3>
+            <h3 className="text-xl font-bold tracking-tight">{t('joinGroup')}</h3>
           </div>
 
           <form onSubmit={handleJoinGroupSubmit} className="space-y-4 text-xs">
@@ -396,7 +396,7 @@ const FamilyGroup = () => {
                 value={joinCodeInput}
                 onChange={(e) => setJoinCodeInput(e.target.value)}
                 placeholder="e.g. KUMBH-784921"
-                className="w-full p-3.5 bg-purple-50/60 border border-purple-300 rounded-2xl text-base font-mono font-black uppercase text-purple-950 outline-none focus:ring-2 focus:ring-purple-500"
+                className="w-full p-3.5 bg-purple-50/60 border border-purple-300 rounded-2xl text-base font-mono font-bold uppercase text-purple-950 outline-none focus:ring-2 focus:ring-purple-500"
               />
             </div>
 
@@ -422,7 +422,7 @@ const FamilyGroup = () => {
               </button>
               <button
                 type="submit"
-                className="w-2/3 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-2xl shadow-md transition-transform hover:scale-101"
+                className="w-2/3 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-2xl shadow-md transition-transform hover:scale-101"
               >
                 Join Family Group
               </button>
@@ -438,17 +438,17 @@ const FamilyGroup = () => {
           <div className="bg-white rounded-3xl p-6 border-2 border-indigo-200 shadow-md space-y-4">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
               <div>
-                <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full">
+                <span className="text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full">
                   Active Travel Group
                 </span>
-                <h3 className="text-xl font-black text-slate-950 mt-1">{group.name}</h3>
+                <h3 className="text-xl font-bold text-slate-950 mt-1">{group.name}</h3>
                 <p className="text-xs text-slate-500 font-medium">Host: <strong>{group.host}</strong></p>
               </div>
 
               <div className="flex items-center gap-2">
                 <div className="bg-indigo-50 border-2 border-indigo-300 px-4 py-2 rounded-2xl text-center">
                   <span className="text-[10px] font-bold text-slate-500 block uppercase">Group Code</span>
-                  <span className="text-base font-mono font-black text-indigo-700">{group.code}</span>
+                  <span className="text-base font-mono font-bold text-indigo-700">{group.code}</span>
                 </div>
 
                 <button
@@ -476,7 +476,7 @@ const FamilyGroup = () => {
               <div className="flex items-center space-x-2 rtl:space-x-reverse">
                 <Radio className={`w-5 h-5 ${isSharingLoc ? 'text-emerald-600 animate-pulse' : 'text-slate-400'}`} />
                 <div>
-                  <span className="font-extrabold text-slate-900 block">
+                  <span className="font-bold text-slate-900 block">
                     My Location Sharing: {isSharingLoc ? '🟢 ACTIVE (Sharing with Family)' : '🔴 PAUSED (Private)'}
                   </span>
                   <span className="text-[11px] text-slate-500 font-medium">
@@ -487,7 +487,7 @@ const FamilyGroup = () => {
 
               <button
                 onClick={() => setIsSharingLoc(!isSharingLoc)}
-                className={`px-4 py-2 rounded-xl font-black text-xs transition-all shadow ${
+                className={`px-4 py-2 rounded-xl font-bold text-xs transition-all shadow ${
                   isSharingLoc 
                     ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
                     : 'bg-slate-300 text-slate-800 hover:bg-slate-400'
@@ -504,7 +504,7 @@ const FamilyGroup = () => {
               <div className="flex items-center space-x-2 rtl:space-x-reverse">
                 <MapPin className="w-6 h-6 text-amber-200" />
                 <div>
-                  <h4 className="font-black text-lg">Designated Family Rendezvous / Meeting Point</h4>
+                  <h4 className="font-bold text-lg">Designated Family Rendezvous / Meeting Point</h4>
                   <p className="text-xs text-amber-100 font-medium">Agree on a safe landmark to assemble if separated in crowds</p>
                 </div>
               </div>
@@ -513,7 +513,7 @@ const FamilyGroup = () => {
                 href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(meetingPoint + ', Nashik')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-4 py-2.5 bg-white text-amber-950 hover:bg-amber-100 font-black text-xs rounded-xl shadow-md flex items-center space-x-1.5 self-start sm:self-auto transition-transform hover:scale-102"
+                className="px-4 py-2.5 bg-white text-amber-950 hover:bg-amber-100 font-bold text-xs rounded-xl shadow-md flex items-center space-x-1.5 self-start sm:self-auto transition-transform hover:scale-102"
               >
                 <Compass className="w-4 h-4 text-amber-700" />
                 <span>Navigate To Meeting Point</span>
@@ -538,7 +538,7 @@ const FamilyGroup = () => {
           {/* Group Roster & Live Status Grid */}
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-lg text-slate-950 flex items-center gap-2">
+              <h3 className="font-bold text-lg text-slate-950 flex items-center gap-2">
                 <Users className="w-5 h-5 text-indigo-600" />
                 <span>Family Members ({group.members.length})</span>
               </h3>
@@ -590,11 +590,11 @@ const FamilyGroup = () => {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2 rtl:space-x-reverse">
-                        <div className={`w-9 h-9 rounded-2xl ${mem.color} text-white font-black flex items-center justify-center text-sm shadow`}>
+                        <div className={`w-9 h-9 rounded-2xl ${mem.color} text-white font-bold flex items-center justify-center text-sm shadow`}>
                           {mem.name.charAt(0)}
                         </div>
                         <div>
-                          <h4 className="font-extrabold text-sm text-slate-950 leading-tight">{mem.name}</h4>
+                          <h4 className="font-bold text-sm text-slate-950 leading-tight">{mem.name}</h4>
                           <span className="text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md">
                             {mem.role}
                           </span>
@@ -634,7 +634,7 @@ const FamilyGroup = () => {
 
                     <button
                       onClick={() => handleSendBroadcast(`🚨 Pinging ${mem.name}: Please check in with family!`)}
-                      className="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 font-extrabold text-[11px] rounded-lg flex items-center gap-1"
+                      className="px-3 py-1 bg-amber-50 text-amber-800 border border-amber-300 hover:bg-amber-100 font-bold text-[11px] rounded-lg flex items-center gap-1"
                     >
                       <span>Ping / Ring</span>
                     </button>
@@ -646,7 +646,7 @@ const FamilyGroup = () => {
 
           {/* Quick Emergency Broadcasts & Group Feed */}
           <div className="bg-white rounded-3xl p-6 border-2 border-indigo-200 shadow-md space-y-4">
-            <h3 className="font-extrabold text-lg text-slate-950 flex items-center gap-2">
+            <h3 className="font-bold text-lg text-slate-950 flex items-center gap-2">
               <MessageSquare className="w-5 h-5 text-indigo-600" />
               <span>Family Quick Broadcast & Status Updates</span>
             </h3>
@@ -710,7 +710,7 @@ const FamilyGroup = () => {
                     }`}
                   >
                     <div>
-                      <span className="font-extrabold text-indigo-900 block">{m.sender}:</span>
+                      <span className="font-bold text-indigo-900 block">{m.sender}:</span>
                       <span>{m.text}</span>
                     </div>
                     <span className="text-[10px] text-slate-400 font-mono ml-2">{m.time}</span>

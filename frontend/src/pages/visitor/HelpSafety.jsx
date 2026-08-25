@@ -45,7 +45,7 @@ const HelpSafety = () => {
           🆘
         </div>
         <div>
-          <h2 className="text-2xl font-black">{t('helpSafety')}</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t('helpSafety')}</h2>
           <p className="text-xs text-red-100 font-medium">
             {t('helpSafetyDesc') || 'Lost & Found, Pilgrim Support & Official Helplines'}
           </p>
@@ -63,8 +63,8 @@ const HelpSafety = () => {
           <div className="p-5 rounded-2xl bg-emerald-50 border border-emerald-300 text-emerald-900 text-center space-y-2 animate-fade-in">
             <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto" />
             <h4 className="font-bold text-base">{t('requestSuccess')}</h4>
-            <p className="text-xs text-emerald-700">
-              {t('requestSuccessDesc') || 'Our volunteer desk and police helpline officers at Panchavati HQ have received your inquiry.'}
+            <p className="text-xs text-emerald-700 font-medium">
+              {t('requestSuccessDesc') || 'Your request has been received with care. Our dedicated Kumbh volunteers and control room team are attending to your request immediately. Stay safe and blessed.'}
             </p>
             <button
               onClick={() => setSubmitted(false)}
@@ -155,7 +155,7 @@ const HelpSafety = () => {
 
       {/* Emergency Phone Helplines Section */}
       <div className="bg-red-50 border-2 border-red-200 rounded-3xl p-6 space-y-4">
-        <h3 className="font-extrabold text-lg text-red-950 flex items-center gap-2">
+        <h3 className="font-bold text-lg text-red-950 flex items-center gap-2">
           <PhoneCall className="w-5 h-5 text-red-600" />
           <span>{t('emergencyHelpline')}</span>
         </h3>
@@ -167,7 +167,7 @@ const HelpSafety = () => {
           >
             <div>
               <span className="text-xs text-slate-500 font-bold block">{t('policeControlRoom')}</span>
-              <span className="text-base font-black text-red-700">{t('callPolice')}</span>
+              <span className="text-base font-bold text-red-700">{t('callPolice')}</span>
             </div>
             <span className="text-xl">👮</span>
           </a>
@@ -178,7 +178,7 @@ const HelpSafety = () => {
           >
             <div>
               <span className="text-xs text-slate-500 font-bold block">{t('medicalAmbulance')}</span>
-              <span className="text-base font-black text-red-700">{t('callAmbulance')}</span>
+              <span className="text-base font-bold text-red-700">{t('callAmbulance')}</span>
             </div>
             <span className="text-xl">🚑</span>
           </a>
@@ -189,7 +189,7 @@ const HelpSafety = () => {
           >
             <div>
               <span className="text-xs text-slate-500 font-bold block">{t('pilgrimHelpCentre')}</span>
-              <span className="text-base font-black text-red-700">0253-2575555</span>
+              <span className="text-base font-bold text-red-700">0253-2575555</span>
             </div>
             <span className="text-xl">📞</span>
           </a>

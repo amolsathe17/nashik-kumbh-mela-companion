@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Bell, Send, AlertTriangle, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -44,7 +44,7 @@ const AnnouncementsMgmt = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-black text-slate-900">Announcements & Push Notifications</h2>
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Announcements & Push Notifications</h2>
         <p className="text-xs text-slate-500">Send Language-Aware Push Notifications to Mobile Devices</p>
       </div>
 

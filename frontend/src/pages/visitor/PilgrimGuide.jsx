@@ -1,14 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   Compass, Calendar, BookOpen, Globe2, Sparkles, CheckCircle2, 
   ShieldCheck, MapPin, ExternalLink, Sun, Flame, Info, Heart, Droplets 
 } from 'lucide-react';
+import api from '../../services/api';
 
 const PilgrimGuide = () => {
   const { t } = useLanguage();
-  // By default "Shahi Snan" tab is selected as requested
   const [activeTab, setActiveTab] = useState('Shahi Snan');
+  const [dynamicGuides, setDynamicGuides] = useState([]);
+
+  useEffect(() => {
+    const fetchDynamicGuides = async () => {
+      try {
+        const res = await api.get('/pilgrim-guide');
+        if (res?.data?.success && Array.isArray(res.data.data)) {
+          setDynamicGuides(res.data.data);
+        }
+      } catch (err) {}
+    };
+    fetchDynamicGuides();
+  }, []);
 
   const tabs = [
     { id: 'Shahi Snan', label: `👑 ${t('shahiSnan')}` },
@@ -296,7 +309,10 @@ const PilgrimGuide = () => {
     }
   ];
 
-  const filteredData = guideData.filter(item => activeTab === 'All' || item.category === activeTab);
+  const allGuideData = [...dynamicGuides, ...guideData];
+  const filteredData = activeTab === 'All' 
+    ? allGuideData 
+    : allGuideData.filter(item => item.category === activeTab);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
@@ -311,7 +327,7 @@ const PilgrimGuide = () => {
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t('pilgrimGuide')} • Simhastha 2026-2027</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black">{t('pilgrimGuide')}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('pilgrimGuide')}</h2>
             <p className="text-xs sm:text-sm text-rose-100 font-medium mt-0.5">
               {t('guideHeaderSub') || 'Comprehensive Shahi Snan Schedule, Akharas, Sacred Rituals & Visitor Guidelines'}
             </p>
@@ -325,7 +341,7 @@ const PilgrimGuide = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 rounded-2xl font-black whitespace-nowrap transition-all shadow-sm flex items-center space-x-1.5 ${
+            className={`px-4 py-3 rounded-2xl font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-1.5 ${
               activeTab === tab.id
                 ? 'bg-rose-700 text-white ring-2 ring-rose-400 scale-102'
                 : 'bg-white text-slate-700 border border-slate-300 hover:bg-rose-50'
@@ -352,12 +368,12 @@ const PilgrimGuide = () => {
                   onError={(e) => { e.target.src = '/kumbh-bg.jpg'; }}
                   className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
                 />
-                <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-black uppercase px-3 py-1 rounded-full border border-amber-400/40">
+                <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-amber-400/40">
                   {t(item.category)}
                 </div>
 
                 {item.eventDate && (
-                  <div className="absolute bottom-3 left-3 bg-rose-950/90 backdrop-blur-md text-rose-100 text-[11px] font-extrabold px-3 py-1 rounded-xl border border-rose-400/40 flex items-center space-x-1">
+                  <div className="absolute bottom-3 left-3 bg-rose-950/90 backdrop-blur-md text-rose-100 text-[11px] font-bold px-3 py-1 rounded-xl border border-rose-400/40 flex items-center space-x-1">
                     <Calendar className="w-3.5 h-3.5 text-amber-400" />
                     <span>{t('eventDate') || 'Date'}: {t(item.eventDate)}</span>
                   </div>
@@ -366,7 +382,7 @@ const PilgrimGuide = () => {
 
               {/* Content Body */}
               <div className="p-6 space-y-4">
-                <h3 className="font-black text-lg text-slate-950 leading-snug">
+                <h3 className="font-bold text-lg text-slate-950 leading-snug">
                   {t(item.title)}
                 </h3>
 
@@ -382,7 +398,7 @@ const PilgrimGuide = () => {
                 {/* Highlights */}
                 {item.highlights && item.highlights.length > 0 && (
                   <div className="space-y-2 pt-2 border-t border-slate-100">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-rose-800 flex items-center gap-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-rose-800 flex items-center gap-1">
                       <Sparkles className="w-3 h-3 text-amber-500" />
                       {t('keyHighlights') || 'Key Highlights'}:
                     </span>
@@ -400,7 +416,7 @@ const PilgrimGuide = () => {
                 {/* Guidelines */}
                 {item.guidelines && item.guidelines.length > 0 && (
                   <div className="space-y-2 pt-2 border-t border-slate-100 bg-amber-50/60 p-3 rounded-2xl border border-amber-200">
-                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-900 flex items-center gap-1">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5 text-amber-600" />
                       {t('pilgrimGuidelines') || 'Pilgrim Guidelines'}:
                     </span>

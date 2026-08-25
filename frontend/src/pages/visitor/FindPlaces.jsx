@@ -338,9 +338,9 @@ const FindPlaces = () => {
               <Sparkles className="w-3.5 h-3.5" />
               <span>{t('smartGpsDesc')}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black">{t('findPlaces')}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('findPlaces')}</h2>
             <p className="text-xs sm:text-sm text-amber-100 font-medium mt-0.5">
-              {t('locatePlacesSub')}
+              {t('locatePlacesSub') || 'Interactive Map, Ghats, Temples & Emergency Shrines'}
             </p>
           </div>
         </div>
@@ -349,13 +349,13 @@ const FindPlaces = () => {
         <div className="flex bg-amber-950/60 p-1.5 rounded-2xl border border-amber-400/40 text-xs self-start sm:self-auto z-10">
           <button
             onClick={() => setViewMode('list')}
-            className={`px-4 py-2 rounded-xl font-extrabold transition-all ${viewMode === 'list' ? 'bg-white text-amber-950 shadow-md' : 'text-amber-100 hover:text-white'}`}
+            className={`px-4 py-2 rounded-xl font-bold transition-all ${viewMode === 'list' ? 'bg-white text-amber-950 shadow-md' : 'text-amber-100 hover:text-white'}`}
           >
             📋 {t('listView')} ({filteredLocations.length})
           </button>
           <button
             onClick={() => setViewMode('map')}
-            className={`px-4 py-2 rounded-xl font-extrabold transition-all ${viewMode === 'map' ? 'bg-white text-amber-950 shadow-md' : 'text-amber-100 hover:text-white'}`}
+            className={`px-4 py-2 rounded-xl font-bold transition-all ${viewMode === 'map' ? 'bg-white text-amber-950 shadow-md' : 'text-amber-100 hover:text-white'}`}
           >
             🗺️ {t('mapView')}
           </button>
@@ -384,7 +384,7 @@ const FindPlaces = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2.5 rounded-2xl font-black whitespace-nowrap transition-all shadow-sm flex items-center space-x-1.5 rtl:space-x-reverse ${
+                className={`px-4 py-2.5 rounded-2xl font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-1.5 rtl:space-x-reverse ${
                   selectedCategory === cat
                     ? 'bg-amber-600 text-white ring-2 ring-amber-400 scale-102'
                     : 'bg-white text-slate-700 border border-slate-300 hover:bg-amber-50'
@@ -407,11 +407,11 @@ const FindPlaces = () => {
           <div className="w-16 h-16 rounded-2xl bg-amber-500/20 flex items-center justify-center text-amber-700 mb-1 animate-bounce">
             <MapIcon className="w-10 h-10" />
           </div>
-          <h3 className="text-xl font-black text-amber-950">{t('mapView')} Active</h3>
+          <h3 className="text-xl font-bold text-amber-950">{t('mapView')} Active</h3>
           <p className="text-xs text-slate-700 max-w-md leading-relaxed font-medium">
             {t('gpsActiveDesc')}
           </p>
-          <div className="flex flex-wrap justify-center gap-2 text-[11px] font-extrabold pt-2">
+          <div className="flex flex-wrap justify-center gap-2 text-[11px] font-bold pt-2">
             <span className="bg-cyan-100 text-cyan-900 px-3 py-1 rounded-full border border-cyan-300">🌊 {t('Ramkund Holy Ghat (रामकुंड पवित्र घाट)')}</span>
             <span className="bg-amber-100 text-amber-900 px-3 py-1 rounded-full border border-amber-300">🛕 {t('Trimbakeshwar Jyotirlinga Temple (त्र्यंबकेश्वर ज्योतिर्लिंग)')}</span>
             <span className="bg-indigo-100 text-indigo-900 px-3 py-1 rounded-full border border-indigo-300">🅿️ Tapovan Shuttle</span>
@@ -442,13 +442,13 @@ const FindPlaces = () => {
                       onError={(e) => { e.target.src = '/kumbh-bg.jpg'; }}
                       className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
                     />
-                    <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-black uppercase px-3 py-1 rounded-full border border-amber-400/40 flex items-center space-x-1">
+                    <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-amber-400/40 flex items-center space-x-1">
                       <span>{getCategoryEmoji(loc.category)}</span>
                       <span>{categoryLabel}</span>
                     </div>
 
                     {loc.verified && (
-                      <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
+                      <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
                         <CheckCircle className="w-3 h-3 text-white" />
                         <span>{t('verified')}</span>
                       </div>
@@ -464,7 +464,7 @@ const FindPlaces = () => {
 
                   {/* Card Content Body */}
                   <div className="p-5 space-y-3">
-                    <h3 className="font-black text-base text-slate-950 leading-snug">
+                    <h3 className="font-bold text-base text-slate-950 leading-snug">
                       {t(loc.name)}
                     </h3>
 
@@ -487,7 +487,7 @@ const FindPlaces = () => {
                     {/* Facilities Badges */}
                     {loc.facilities && loc.facilities.length > 0 && (
                       <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                        <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                        <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">
                           {t('keyFacilities')}:
                         </span>
                         <div className="flex flex-wrap gap-1">
@@ -510,7 +510,7 @@ const FindPlaces = () => {
                   {loc.contactNumber ? (
                     <a
                       href={`tel:${loc.contactNumber}`}
-                      className="px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-extrabold text-xs rounded-xl flex items-center space-x-1.5 transition-colors"
+                      className="px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold text-xs rounded-xl flex items-center space-x-1.5 transition-colors"
                     >
                       <Phone className="w-3.5 h-3.5 text-blue-600" />
                       <span>{t('call')} {loc.contactNumber}</span>
@@ -526,7 +526,7 @@ const FindPlaces = () => {
                     href={getGoogleMapsDirectionsUrl(loc)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-black text-xs rounded-xl shadow-md flex items-center space-x-1.5 transition-transform hover:scale-102"
+                    className="px-4 py-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center space-x-1.5 transition-transform hover:scale-102"
                   >
                     <Navigation className="w-4 h-4" />
                     <span>{t('takeMeThere')}</span>

@@ -3,6 +3,7 @@ import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import AdminSidebar from './components/layout/AdminSidebar';
+import AdminHeader from './components/layout/AdminHeader';
 import ScrollToTop from './components/common/ScrollToTop';
 import { useAuth } from './context/AuthContext';
 
@@ -27,6 +28,7 @@ import DailyInfoMgmt from './pages/admin/DailyInfoMgmt';
 import AnnouncementsMgmt from './pages/admin/AnnouncementsMgmt';
 import LocationsMgmt from './pages/admin/LocationsMgmt';
 import TravelMgmt from './pages/admin/TravelMgmt';
+import PilgrimGuideMgmt from './pages/admin/PilgrimGuideMgmt';
 import FacilitiesMgmt from './pages/admin/FacilitiesMgmt';
 import AssistanceMgmt from './pages/admin/AssistanceMgmt';
 import LanguagesMgmt from './pages/admin/LanguagesMgmt';
@@ -40,11 +42,14 @@ const ProtectedAdminRoute = ({ children }) => {
     return <Navigate to="/admin/login" replace />;
   }
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-slate-100">
+    <div className="min-h-screen bg-[#f8fafc] flex">
       <AdminSidebar />
-      <main className="flex-1 p-6 overflow-y-auto">
-        {children}
-      </main>
+      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
+        <AdminHeader />
+        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+          {children}
+        </main>
+      </div>
     </div>
   );
 };
@@ -61,18 +66,7 @@ const App = () => {
       {!isSplashLanguagePage && !isAdminArea && <Navbar />}
 
       <div 
-        className="flex-1 min-h-[calc(100vh-70px)] relative"
-        style={
-          isHomePage ? {
-            backgroundImage: "linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), url('/kumbh-bg.jpg')",
-            backgroundSize: '100% 100%',
-            backgroundPosition: 'center top',
-            backgroundAttachment: 'fixed',
-            backgroundRepeat: 'no-repeat'
-          } : {
-            backgroundColor: '#e5ecf6'
-          }
-        }
+        className={`flex-1 min-h-[calc(100vh-70px)] relative ${isHomePage ? 'kumbh-landing-bg' : 'bg-[#e5ecf6]'}`}
       >
         <Routes>
           {/* Visitor Routes */}
@@ -98,7 +92,7 @@ const App = () => {
           <Route path="/admin/announcements" element={<ProtectedAdminRoute><AnnouncementsMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/locations" element={<ProtectedAdminRoute><LocationsMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/travel" element={<ProtectedAdminRoute><TravelMgmt /></ProtectedAdminRoute>} />
-          <Route path="/admin/guide" element={<ProtectedAdminRoute><PilgrimGuide /></ProtectedAdminRoute>} />
+          <Route path="/admin/guide" element={<ProtectedAdminRoute><PilgrimGuideMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/facilities" element={<ProtectedAdminRoute><FacilitiesMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/assistance" element={<ProtectedAdminRoute><AssistanceMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/languages" element={<ProtectedAdminRoute><LanguagesMgmt /></ProtectedAdminRoute>} />

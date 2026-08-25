@@ -43,33 +43,13 @@ const AdminSidebar = () => {
         </button>
       </div>
 
-      {/* Sidebar Container */}
+      {/* Sidebar Container: Permanently Fixed on Left */}
       <aside className={`
-        fixed inset-y-0 left-0 z-30 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform transform
-        lg:static lg:translate-x-0 border-r border-slate-800 shadow-xl
+        fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform transform
+        border-r border-slate-800 shadow-xl h-screen
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center text-white font-bold text-lg">
-            🛕
-          </div>
-          <div>
-            <h2 className="text-sm font-bold text-white tracking-wide">Kumbh Admin</h2>
-            <p className="text-[11px] text-amber-400 font-mono">Nashik Control Hub</p>
-          </div>
-        </div>
 
-        {/* User Info Card */}
-        {adminUser && (
-          <div className="mx-4 mt-4 p-3 rounded-xl bg-slate-800/80 border border-slate-700/50 text-xs">
-            <div className="font-semibold text-white truncate">{adminUser.name}</div>
-            <div className="text-slate-400 text-[10px] truncate">{adminUser.email}</div>
-            <span className="inline-block mt-1 px-2 py-0.5 bg-amber-500/20 text-amber-300 rounded text-[10px] font-mono">
-              {adminUser.role}
-            </span>
-          </div>
-        )}
 
         {/* Navigation Items */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">

@@ -30,3 +30,23 @@
   background: #f97316;
   border-radius: 4px;
 }
+
+/* Responsive Landing Page Background */
+@media (max-width: 767px) {
+  .kumbh-landing-bg {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), url('/kumbh-bg1.jpg') !important;
+    background-size: cover !important;
+    background-position: center top !important;
+    background-repeat: no-repeat !important;
+    background-attachment: fixed !important;
+  }
+}
+@media (min-width: 768px) {
+  .kumbh-landing-bg {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), url('/kumbh-bg.jpg') !important;
+    background-size: 100% 100% !important;
+    background-position: center top !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+  }
+}

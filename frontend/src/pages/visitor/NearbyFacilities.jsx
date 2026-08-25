@@ -303,7 +303,7 @@ const NearbyFacilities = () => {
               <Sparkles className="w-3.5 h-3.5" />
               <span>Verified Pilgrim Infrastructure Directory</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-black">{t('nearbyFacilities')}</h2>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('nearbyFacilities')}</h2>
             <p className="text-xs sm:text-sm text-purple-100 font-medium mt-0.5">
               {t('nearbyFacilitiesSub') || 'Verified Pilgrim Camps, Food Counters, RO Water Kiosks & Aid Posts'}
             </p>
@@ -335,7 +335,7 @@ const NearbyFacilities = () => {
               <button
                 key={cat}
                 onClick={() => setSelectedCat(cat)}
-                className={`px-4 py-2.5 rounded-2xl font-black whitespace-nowrap transition-all shadow-sm flex items-center space-x-1.5 rtl:space-x-reverse ${
+                className={`px-4 py-2.5 rounded-2xl font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-1.5 rtl:space-x-reverse ${
                   selectedCat === cat
                     ? 'bg-purple-700 text-white ring-2 ring-purple-400 scale-102'
                     : 'bg-white text-slate-700 border border-slate-300 hover:bg-purple-50'
@@ -373,13 +373,13 @@ const NearbyFacilities = () => {
                     onError={(e) => { e.target.src = '/kumbh-bg.jpg'; }}
                     className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
                   />
-                  <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-black uppercase px-3 py-1 rounded-full border border-amber-400/40 flex items-center space-x-1">
+                  <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-amber-400/40 flex items-center space-x-1">
                     <span>{getCategoryEmoji(item.category)}</span>
                     <span>{t(item.category) || item.category}</span>
                   </div>
 
                   {item.verified && (
-                    <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-black px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
+                    <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
                       <CheckCircle className="w-3 h-3 text-white" />
                       <span>{t('verified')}</span>
                     </div>
@@ -395,7 +395,7 @@ const NearbyFacilities = () => {
 
                 {/* Content Body */}
                 <div className="p-5 space-y-3">
-                  <h3 className="font-black text-base text-slate-950 leading-snug">
+                  <h3 className="font-bold text-base text-slate-950 leading-snug">
                     {t(item.name)}
                   </h3>
 
@@ -418,7 +418,7 @@ const NearbyFacilities = () => {
                   {/* Facilities Badges */}
                   {item.facilities && item.facilities.length > 0 && (
                     <div className="pt-2 border-t border-slate-100 space-y-1.5">
-                      <span className="text-[10px] font-black uppercase text-slate-500 tracking-wider">
+                      <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wider">
                         {t('keyFacilities')}:
                       </span>
                       <div className="flex flex-wrap gap-1">
@@ -441,7 +441,7 @@ const NearbyFacilities = () => {
                 {item.contactNumber ? (
                   <a
                     href={`tel:${item.contactNumber}`}
-                    className="px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-extrabold text-xs rounded-xl flex items-center space-x-1.5 transition-colors"
+                    className="px-3 py-2 bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 font-bold text-xs rounded-xl flex items-center space-x-1.5 transition-colors"
                   >
                     <Phone className="w-3.5 h-3.5 text-blue-600" />
                     <span>{t('call')} {item.contactNumber}</span>
@@ -457,7 +457,7 @@ const NearbyFacilities = () => {
                   href={getGoogleMapsDirectionsUrl(item)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-black text-xs rounded-xl shadow-md flex items-center space-x-1.5 transition-transform hover:scale-102"
+                  className="px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-bold text-xs rounded-xl shadow-md flex items-center space-x-1.5 transition-transform hover:scale-102"
                 >
                   <Navigation className="w-4 h-4" />
                   <span>{t('takeMeThere')}</span>

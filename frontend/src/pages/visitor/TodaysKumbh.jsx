@@ -32,9 +32,9 @@ const TodaysKumbh = () => {
           📅
         </div>
         <div>
-          <h2 className="text-2xl font-black">{t('todaysKumbh')}</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t('todaysKumbh')}</h2>
           <p className="text-xs text-emerald-100 font-medium">
-            {t('todaysKumbhSub') || 'Daily Programmes, Snan Timings & Visitor Advisories'}
+            {t('todaysKumbhSub') || 'Daily Official Schedule, Bathing Timings & Events'}
           </p>
         </div>
       </div>

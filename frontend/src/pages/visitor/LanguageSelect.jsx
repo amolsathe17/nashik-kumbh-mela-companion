@@ -19,7 +19,7 @@ const LanguageSelect = () => {
         <div className="w-20 h-20 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center mx-auto mb-4 text-4xl shadow-xl border border-white/30 animate-bounce">
           🌐
         </div>
-        <h1 className="text-3xl font-black tracking-tight mb-2">Choose Your Language</h1>
+        <h1 className="text-3xl font-bold tracking-tight mb-2">Choose Your Language</h1>
         <h2 className="text-xl font-semibold text-amber-100">अपनी भाषा का चयन करें</h2>
         <p className="text-xs text-amber-200 mt-2">
           Nashik Kumbh Mela Digital Companion • Nashik District Administration
@@ -53,7 +53,7 @@ const LanguageSelect = () => {
       <div className="w-full max-w-md pb-6 text-center">
         <button
           onClick={() => navigate('/')}
-          className="w-full py-4 bg-amber-400 hover:bg-amber-300 text-amber-950 font-black text-lg rounded-2xl shadow-xl flex items-center justify-center space-x-2 transition-transform hover:scale-102"
+          className="w-full py-4 bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold text-lg rounded-2xl shadow-xl flex items-center justify-center space-x-2 transition-transform hover:scale-102"
         >
           <span>{t('continueBtn')}</span>
           <ArrowRight className="w-6 h-6" />

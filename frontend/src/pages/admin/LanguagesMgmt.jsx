@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { SUPPORTED_LANGUAGES } from '../../locales/languages';
 import { Globe, CheckCircle, Clock } from 'lucide-react';
 
@@ -6,7 +6,7 @@ const LanguagesMgmt = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-black text-slate-900">Languages & Translation Matrix</h2>
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Languages & Translation Matrix</h2>
         <p className="text-xs text-slate-500">25+ Indian and International Languages Supported with Unicode & RTL</p>
       </div>
 

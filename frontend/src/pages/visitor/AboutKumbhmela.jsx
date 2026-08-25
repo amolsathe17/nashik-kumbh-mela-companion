@@ -26,12 +26,12 @@ const AboutKumbhmela = () => {
         </div>
 
         <div className="relative z-10 space-y-4 max-w-3xl">
-          <div className="inline-flex items-center space-x-2 bg-amber-500/80 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-black text-amber-50 shadow border border-amber-300/40">
+          <div className="inline-flex items-center space-x-2 bg-amber-500/80 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-bold text-amber-50 shadow border border-amber-300/40">
             <Sparkles className="w-4 h-4 text-amber-200" />
             <span>{t('unescoHeritageBadge')}</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight text-amber-100 drop-shadow">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-amber-100 drop-shadow">
             {t('aboutKumbhmela')}
           </h1>
 
@@ -48,11 +48,8 @@ const AboutKumbhmela = () => {
 
           {/* Section 1: What is Kumbh Mela? */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-200 shadow-md space-y-4">
-            <div className="flex items-center space-x-3 rtl:space-x-reverse text-amber-900 border-b border-amber-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-black">
-                1️⃣
-              </div>
-              <h3 className="text-xl font-black text-slate-950">
+            <div className="text-amber-900 border-b border-amber-100 pb-3">
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">
                 {t('whatIsKumbhTitle')}
               </h3>
             </div>
@@ -75,11 +72,8 @@ const AboutKumbhmela = () => {
 
           {/* Section 2: Where is Kumbh Held? (Table) */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-blue-200 shadow-md space-y-4">
-            <div className="flex items-center space-x-3 rtl:space-x-reverse text-blue-900 border-b border-blue-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-blue-100 text-blue-800 flex items-center justify-center text-xl font-black">
-                2️⃣
-              </div>
-              <h3 className="text-xl font-black text-slate-950">
+            <div className="text-blue-900 border-b border-blue-100 pb-3">
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">
                 {t('whereIsKumbhTitle')}
               </h3>
             </div>
@@ -108,11 +102,8 @@ const AboutKumbhmela = () => {
 
           {/* Section 3: History & Speciality of Nashik-Trimbakeshwar Kumbh */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-purple-200 shadow-md space-y-4">
-            <div className="flex items-center space-x-3 rtl:space-x-reverse text-purple-900 border-b border-purple-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl font-black">
-                3️⃣
-              </div>
-              <h3 className="text-xl font-black text-slate-950">
+            <div className="text-purple-900 border-b border-purple-100 pb-3">
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">
                 {t('kumbhHistoryTitle')}
               </h3>
             </div>
@@ -123,11 +114,11 @@ const AboutKumbhmela = () => {
               <p>• {t('kumbhHistoryPoint3')}</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <div className="p-3.5 bg-amber-50 rounded-2xl border border-amber-200">
-                  <span className="font-black text-amber-900 block text-xs">{t('vaishnavAkharas')}</span>
+                  <span className="font-bold text-amber-900 block text-xs">{t('vaishnavAkharas')}</span>
                   <span className="text-xs text-slate-700 font-semibold">{t('nashikRamkund')}</span>
                 </div>
                 <div className="p-3.5 bg-purple-50 rounded-2xl border border-purple-200">
-                  <span className="font-black text-purple-900 block text-xs">{t('shaivaAkharas')}</span>
+                  <span className="font-bold text-purple-900 block text-xs">{t('shaivaAkharas')}</span>
                   <span className="text-xs text-slate-700 font-semibold">{t('trimbakKushavart')}</span>
                 </div>
               </div>
@@ -136,11 +127,8 @@ const AboutKumbhmela = () => {
 
           {/* Section 4: Shahi Snan / Amrit Snan */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-md space-y-4">
-            <div className="flex items-center space-x-3 rtl:space-x-reverse text-rose-900 border-b border-rose-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center text-xl font-black">
-                4️⃣
-              </div>
-              <h3 className="text-xl font-black text-slate-950">
+            <div className="text-rose-900 border-b border-rose-100 pb-3">
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">
                 {t('shahiSnanTitle')}
               </h3>
             </div>
@@ -153,11 +141,8 @@ const AboutKumbhmela = () => {
 
           {/* Section 5: Schedule & Simhastha Name */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-emerald-200 shadow-md space-y-4">
-            <div className="flex items-center space-x-3 rtl:space-x-reverse text-emerald-900 border-b border-emerald-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-800 flex items-center justify-center text-xl font-black">
-                5️⃣
-              </div>
-              <h3 className="text-xl font-black text-slate-950">
+            <div className="text-emerald-900 border-b border-emerald-100 pb-3">
+              <h3 className="text-xl font-bold text-slate-950 tracking-tight">
                 {t('astrologyTitle')}
               </h3>
             </div>
@@ -176,24 +161,24 @@ const AboutKumbhmela = () => {
 
           {/* Pilgrim Benefits Summary Card */}
           <div className="bg-gradient-to-br from-amber-500 to-orange-600 text-white rounded-3xl p-6 shadow-xl space-y-4">
-            <h3 className="font-black text-lg flex items-center space-x-2 border-b border-amber-300/40 pb-2">
+            <h3 className="font-bold text-lg flex items-center space-x-2 border-b border-amber-300/40 pb-2 tracking-tight">
               <Sparkles className="w-5 h-5 text-amber-200" />
               <span>{t('pilgrimBenefitsTitle')}</span>
             </h3>
 
             <div className="space-y-3 text-xs">
               <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/20">
-                <strong className="block text-amber-100 text-sm">{t('religious')}</strong>
+                <strong className="block text-amber-100 text-sm font-semibold">{t('religious')}</strong>
                 <span>{t('religiousBenefit')}</span>
               </div>
 
               <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/20">
-                <strong className="block text-amber-100 text-sm">{t('personal')}</strong>
+                <strong className="block text-amber-100 text-sm font-semibold">{t('personal')}</strong>
                 <span>{t('personalBenefit')}</span>
               </div>
 
               <div className="p-3 bg-white/20 backdrop-blur-md rounded-2xl border border-white/20">
-                <strong className="block text-amber-100 text-sm">{t('socialCultural')}</strong>
+                <strong className="block text-amber-100 text-sm font-semibold">{t('socialCultural')}</strong>
                 <span>{t('socialBenefit')}</span>
               </div>
             </div>
@@ -201,7 +186,7 @@ const AboutKumbhmela = () => {
 
           {/* Quick Page Links */}
           <div className="bg-white border-2 border-slate-200 rounded-3xl p-6 space-y-4 shadow-md text-xs">
-            <h3 className="font-black text-base text-slate-950 flex items-center space-x-2">
+            <h3 className="font-bold text-base text-slate-950 flex items-center space-x-2 tracking-tight">
               <Compass className="w-5 h-5 text-indigo-600" />
               <span>{t('exploreRelatedPages') || 'Explore Related Pages'}</span>
             </h3>
@@ -209,7 +194,7 @@ const AboutKumbhmela = () => {
             <div className="space-y-2">
               <Link 
                 to="/about-kumbh" 
-                className="p-3 bg-amber-50 hover:bg-amber-100 rounded-2xl border border-amber-200 flex items-center justify-between font-bold text-amber-900 transition-all"
+                className="p-3 bg-amber-50 hover:bg-amber-100 rounded-2xl border border-amber-200 flex items-center justify-between font-medium text-amber-900 transition-all"
               >
                 <span>🏛️ {t('aboutKumbh')}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -217,7 +202,7 @@ const AboutKumbhmela = () => {
 
               <Link 
                 to="/pilgrim-guide" 
-                className="p-3 bg-rose-50 hover:bg-rose-100 rounded-2xl border border-rose-200 flex items-center justify-between font-bold text-rose-900 transition-all"
+                className="p-3 bg-rose-50 hover:bg-rose-100 rounded-2xl border border-rose-200 flex items-center justify-between font-medium text-rose-900 transition-all"
               >
                 <span>👑 {t('pilgrimGuide')}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -225,7 +210,7 @@ const AboutKumbhmela = () => {
 
               <Link 
                 to="/find-places" 
-                className="p-3 bg-indigo-50 hover:bg-indigo-100 rounded-2xl border border-indigo-200 flex items-center justify-between font-bold text-indigo-900 transition-all"
+                className="p-3 bg-indigo-50 hover:bg-indigo-100 rounded-2xl border border-indigo-200 flex items-center justify-between font-medium text-indigo-900 transition-all"
               >
                 <span>📍 {t('findPlaces')}</span>
                 <ArrowRight className="w-4 h-4" />
@@ -236,7 +221,7 @@ const AboutKumbhmela = () => {
           {/* Verified Reference Footer */}
           <div className="p-4 bg-slate-900 text-white rounded-3xl text-center space-y-1.5 border border-slate-800 shadow text-xs">
             <div className="text-xl">📜</div>
-            <h4 className="font-extrabold text-xs">{t('verifiedReferenceSource')}</h4>
+            <h4 className="font-bold text-xs">{t('verifiedReferenceSource')}</h4>
             <p className="text-[11px] text-slate-400">
               {t('verifiedReferenceText')}
             </p>

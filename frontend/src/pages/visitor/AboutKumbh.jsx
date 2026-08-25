@@ -19,17 +19,17 @@ const AboutKumbh = () => {
         </div>
 
         <div className="relative z-10 space-y-4 max-w-3xl">
-          <div className="inline-flex items-center space-x-2 bg-amber-500/80 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-black text-amber-50 shadow border border-amber-300/40">
+          <div className="inline-flex items-center space-x-2 bg-amber-500/80 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-bold text-amber-50 shadow border border-amber-300/40">
             <Sparkles className="w-4 h-4 text-amber-200" />
             <span>Official Government Tourism & Heritage Directory • nashik.gov.in</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black leading-tight text-amber-100 drop-shadow">
+          <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-amber-100 drop-shadow">
             {t('aboutKumbhHeader')}
           </h1>
 
           <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-medium">
-            {t('aboutKumbhSub')}
+            {t('aboutKumbhSub') || 'History, Myths, Sacred Ghats & Trimbakeshwar Legacy'}
           </p>
         </div>
       </div>
@@ -42,26 +42,22 @@ const AboutKumbh = () => {
           {/* Section 1: Mythological Roots & Samudra Manthan */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-amber-200 shadow-md space-y-4">
             <div className="flex items-center space-x-3 rtl:space-x-reverse text-amber-900 border-b border-amber-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-black">
+              <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-800 flex items-center justify-center text-xl font-bold">
                 🏺
               </div>
               <div>
-                <span className="text-[10px] font-black uppercase text-amber-700 tracking-wider">Ancient Mythology</span>
-                <h3 className="text-xl font-black text-slate-950">
+                <span className="text-[10px] font-bold uppercase text-amber-700 tracking-wider">Ancient Mythology</span>
+                <h3 className="text-xl font-bold text-slate-950">
                   {t('samudraManthan')}
                 </h3>
               </div>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-              <p>
-                The word <strong>"Kumbha"</strong> is Sanskrit for pitcher or kalasha. According to ancient Vedic scriptural traditions, during the cosmic churning of the ocean (<em>Samudra Manthan</em>) by Devas and Asuras, a golden pitcher carrying the nectar of immortality (<em>Amrit</em>) emerged.
-              </p>
-              <p>
-                While carrying the divine pitcher across the universe, drops of the celestial nectar fell at four sacred places on Earth: <strong>Nashik-Trimbakeshwar (Godavari)</strong>, <strong>Prayagraj (Triveni Sangam)</strong>, <strong>Haridwar (Ganga)</strong>, and <strong>Ujjain (Shipra)</strong>.
-              </p>
+              <p>{t('samudraManthanP1')}</p>
+              <p>{t('samudraManthanP2')}</p>
               <div className="p-4 bg-amber-50 rounded-2xl border-l-4 border-amber-500 text-amber-950 italic text-xs font-semibold">
-                "Bathing in the holy Godavari during Simhastha Kumbha purifies past karmas and bestows spiritual liberation (Moksha)." — Ancient Vedic Tradition
+                "{t('samudraManthanQuote')}"
               </div>
             </div>
           </div>
@@ -69,56 +65,48 @@ const AboutKumbh = () => {
           {/* Section 2: Astrological Significance of Simhastha */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-rose-200 shadow-md space-y-4">
             <div className="flex items-center space-x-3 rtl:space-x-reverse text-rose-900 border-b border-rose-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center text-xl font-black">
+              <div className="w-10 h-10 rounded-2xl bg-rose-100 text-rose-800 flex items-center justify-center text-xl font-bold">
                 ♌
               </div>
               <div>
-                <span className="text-[10px] font-black uppercase text-rose-700 tracking-wider">Celestial Alignment</span>
-                <h3 className="text-xl font-black text-slate-950">
+                <span className="text-[10px] font-bold uppercase text-rose-700 tracking-wider">Celestial Alignment</span>
+                <h3 className="text-xl font-bold text-slate-950">
                   {t('simhasthaSignificance')}
                 </h3>
               </div>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-              <p>
-                The term <strong>"Simhastha"</strong> is derived from the zodiac sign <em>Simha</em> (Leo). The Kumbh Mela takes place at Nashik-Trimbakeshwar every 12 years specifically when Jupiter (<em>Guru</em>) enters the constellation of Leo.
-              </p>
-              <p>
-                This rare cosmic alignment creates a powerful spiritual vortex where planetary vibrations enhance the spiritual merit of sacred bathing, meditation, and devotional discourses conducted along the Godavari promenade.
-              </p>
+              <p>{t('simhasthaP1')}</p>
+              <p>{t('simhasthaP2')}</p>
             </div>
           </div>
 
           {/* Section 3: Akharas, Sadhus & Living Heritage */}
           <div className="bg-white rounded-3xl p-6 sm:p-8 border-2 border-purple-200 shadow-md space-y-4">
             <div className="flex items-center space-x-3 rtl:space-x-reverse text-purple-900 border-b border-purple-100 pb-3">
-              <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl font-black">
+              <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-800 flex items-center justify-center text-xl font-bold">
                 🚩
               </div>
               <div>
-                <span className="text-[10px] font-black uppercase text-purple-700 tracking-wider">Monastic Traditions</span>
-                <h3 className="text-xl font-black text-slate-950">
+                <span className="text-[10px] font-bold uppercase text-purple-700 tracking-wider">Monastic Traditions</span>
+                <h3 className="text-xl font-bold text-slate-950">
                   {t('akharasHeritage')}
                 </h3>
               </div>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm text-slate-700 leading-relaxed font-medium">
-              <p>
-                A hallmark of the Simhastha Kumbh Mela is the participation of ancient <strong>Akharas</strong>—the monastic orders of Hindu ascetics established by Adi Shankaracharya.
-              </p>
-              <p>
-                During the grand <em>Shahi Snan</em> (Royal Bathing Days), thousands of Naga Sadhus, Mahants, and spiritual leaders march in royal processions accompanied by traditional trumpets, silver palanquins, and orange flags to take the first holy dip in Ramkund and Kushavarta Kund.
-              </p>
+              <p>{t('akharasP1')}</p>
+              <p>{t('akharasP2')}</p>
             </div>
           </div>
 
           {/* Photographic Highlight Card */}
           <div className="bg-white rounded-3xl p-4 sm:p-6 border-2 border-slate-200 shadow-md space-y-4">
-            <h4 className="font-extrabold text-base text-slate-950 flex items-center space-x-2">
+            <h4 className="font-bold text-base text-slate-950 flex items-center space-x-2">
               <Scroll className="w-5 h-5 text-amber-600" />
-              <span>Historic Heritage of Nashik District</span>
+              <span>{t('historicHeritageTitle')}</span>
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -129,7 +117,7 @@ const AboutKumbh = () => {
                   className="w-full h-40 object-cover"
                 />
                 <div className="p-3 bg-slate-50 text-xs font-bold text-slate-800">
-                  Ramkund Holy Ghat & Godavari Evening Aarti
+                  {t('ramkundAartiCap')}
                 </div>
               </div>
 
@@ -140,7 +128,7 @@ const AboutKumbh = () => {
                   className="w-full h-40 object-cover"
                 />
                 <div className="p-3 bg-slate-50 text-xs font-bold text-slate-800">
-                  Trimbakeshwar Jyotirlinga & Kushavarta Kund
+                  {t('trimbakeshwarCap')}
                 </div>
               </div>
             </div>
@@ -152,7 +140,7 @@ const AboutKumbh = () => {
           
           {/* Quick Facts Box */}
           <div className="bg-amber-50 border-2 border-amber-300 rounded-3xl p-6 space-y-4 text-xs">
-            <h3 className="font-black text-base text-amber-950 flex items-center space-x-2">
+            <h3 className="font-bold text-base text-amber-950 flex items-center space-x-2">
               <Calendar className="w-5 h-5 text-amber-700" />
               <span>Simhastha At A Glance</span>
             </h3>
@@ -183,7 +171,7 @@ const AboutKumbh = () => {
 
           {/* Quick Service Links */}
           <div className="bg-white border-2 border-indigo-200 rounded-3xl p-6 space-y-4 shadow-md text-xs">
-            <h3 className="font-black text-base text-slate-950 flex items-center space-x-2">
+            <h3 className="font-bold text-base text-slate-950 flex items-center space-x-2">
               <Compass className="w-5 h-5 text-indigo-600" />
               <span>Explore Visitor Services</span>
             </h3>
@@ -218,7 +206,7 @@ const AboutKumbh = () => {
           {/* Official Source Banner */}
           <div className="p-4 bg-slate-900 text-white rounded-3xl text-center space-y-2 border border-slate-800 shadow">
             <div className="text-2xl">🏛️</div>
-            <h4 className="font-extrabold text-xs">Official Heritage Source</h4>
+            <h4 className="font-bold text-xs">Official Heritage Source</h4>
             <p className="text-[11px] text-slate-400 leading-normal">
               Reference: Nashik District Administration, Government of Maharashtra.
             </p>
