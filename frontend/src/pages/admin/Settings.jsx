@@ -6,8 +6,17 @@ const Settings = () => {
   const { adminUser, updateAdminProfile } = useAuth();
   const [saved, setSaved] = useState(false);
 
-  const [adminName, setAdminName] = useState(adminUser?.name || 'Amol Sathe');
-  const [adminEmail, setAdminEmail] = useState(adminUser?.email || 'amolsathe11@gmail.com');
+  const getInitialAdminCreds = () => {
+    try {
+      const saved = localStorage.getItem('kumbh_admin_credentials');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return { name: 'Amol Sathe', email: 'amolsathe11@gmail.com' };
+  };
+
+  const initialCreds = getInitialAdminCreds();
+  const [adminName, setAdminName] = useState(adminUser?.name || initialCreds.name || 'Amol Sathe');
+  const [adminEmail, setAdminEmail] = useState(adminUser?.email || initialCreds.email || 'amolsathe11@gmail.com');
   const [adminPassword, setAdminPassword] = useState('');
 
   const [settings, setSettings] = useState({
@@ -27,27 +36,19 @@ const Settings = () => {
     await updateAdminProfile({
       name: adminName,
       email: adminEmail,
-      password: adminPassword || undefined
+      password: adminPassword ? adminPassword : undefined
     });
-    if (adminPassword) {
-      setAdminPassword('');
-    }
     setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+    setTimeout(() => setSaved(false), 4000);
   };
 
   return (
     <div className="space-y-6 max-w-5xl">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Admin Control Settings</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Admin Control Settings</h2>
           <p className="text-xs text-slate-500">Configure Event Information, Emergency Helplines, SMS Gateways & Security Preferences</p>
         </div>
-        {saved && (
-          <div className="px-4 py-2 bg-emerald-100 border border-emerald-300 text-emerald-900 text-xs font-bold rounded-xl flex items-center gap-1.5 animate-fade-in">
-            <CheckCircle className="w-4 h-4 text-emerald-600" /> Settings Saved Successfully
-          </div>
-        )}
       </div>
 
       <form onSubmit={handleSave} className="space-y-6 text-xs">
@@ -223,7 +224,7 @@ const Settings = () => {
           </div>
         </div>
 
-        <div className="flex justify-end pt-2">
+        <div className="flex justify-left pt-2">
           <button
             type="submit"
             className="px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm rounded-2xl shadow-lg flex items-center gap-2 transition-transform hover:scale-101"
@@ -232,6 +233,31 @@ const Settings = () => {
           </button>
         </div>
       </form>
+
+      {/* Centered Modal Popup for Successful Settings Save */}
+      {saved && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-emerald-500/30 space-y-4">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner border border-emerald-200">
+              <CheckCircle className="w-9 h-9 text-emerald-600" />
+            </div>
+            
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-bold text-slate-900">Settings Saved Successfully!</h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Admin profile credentials and system configurations have been updated.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setSaved(false)}
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition-all hover:scale-102"
+            >
+              OK, Got it!
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

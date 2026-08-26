@@ -71,14 +71,14 @@ const LocationsMgmt = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Map & Location Management</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Map & Location Management</h2>
           <p className="text-xs text-slate-500">Create & Manage Map Pins for Ghats, Temples, Toilets, Water & Emergency Centers</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 transition-all hover:scale-102"
+          className="self-start sm:self-auto px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 transition-all hover:scale-102"
         >
           <Plus className="w-4 h-4" /> Add New Location
         </button>
@@ -120,7 +120,7 @@ const LocationsMgmt = () => {
               </div>
 
               <p className="text-xs text-slate-600 leading-relaxed">{loc.description || loc.address}</p>
-              <div className="text-[11px] text-slate-400 font-mono flex items-center justify-between border-t pt-2 mt-2">
+              <div className="text-[11px] text-slate-400 font-mono flex flex-wrap items-center justify-between gap-1 border-t pt-2 mt-2">
                 <span>Address: {loc.address || 'Nashik'}</span>
                 <span>Coords: {loc.coordinates?.lat}, {loc.coordinates?.lng}</span>
               </div>
@@ -131,7 +131,7 @@ const LocationsMgmt = () => {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-amber-500/30">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-amber-500/30">
             <div className="flex items-center justify-between border-b pb-3">
               <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-amber-600" /> Add Map Location Pin

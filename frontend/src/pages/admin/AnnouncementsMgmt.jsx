@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bell, Send, AlertTriangle, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -44,12 +44,12 @@ const AnnouncementsMgmt = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Announcements & Push Notifications</h2>
+        <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Announcements & Push Notifications</h2>
         <p className="text-xs text-slate-500">Send Language-Aware Push Notifications to Mobile Devices</p>
       </div>
 
       {/* Broadcast Form */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 max-w-2xl">
+      <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4 max-w-2xl">
         <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
           <Bell className="w-5 h-5 text-amber-600" /> Create Broadcast Announcement
         </h3>
@@ -77,7 +77,7 @@ const AnnouncementsMgmt = () => {
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
               <label className="block font-bold text-slate-700 mb-1">Category</label>
               <select

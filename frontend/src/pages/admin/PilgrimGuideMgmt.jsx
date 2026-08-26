@@ -79,14 +79,14 @@ const PilgrimGuideMgmt = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Pilgrim Guide Management</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Pilgrim Guide Management</h2>
           <p className="text-xs text-slate-500">Create & Manage Cards for Shahi Snan Dates, Rituals, Akharas & Guidelines</p>
         </div>
         <button
           onClick={() => setShowModal(true)}
-          className="px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 transition-all hover:scale-102"
+          className="self-start sm:self-auto px-4 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow flex items-center gap-1.5 transition-all hover:scale-102"
         >
           <Plus className="w-4 h-4" /> Add Guide Card
         </button>
@@ -138,7 +138,7 @@ const PilgrimGuideMgmt = () => {
 
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-rose-500/30">
+          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-rose-500/30">
             <div className="flex items-center justify-between border-b pb-3">
               <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <Compass className="w-5 h-5 text-rose-600" /> Create Pilgrim Guide Card

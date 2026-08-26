@@ -3,14 +3,28 @@ import api from '../services/api';
 
 const AuthContext = createContext();
 
+const getInitialCredentials = () => {
+  try {
+    const saved = localStorage.getItem('kumbh_admin_credentials');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return {
+    name: 'Amol Sathe',
+    email: 'amolsathe11@gmail.com',
+    password: 'amolsathe11'
+  };
+};
+
 export const AuthProvider = ({ children }) => {
   const [adminUser, setAdminUser] = useState(() => {
     try {
       const saved = localStorage.getItem('kumbh_admin_user');
-      return (saved && saved !== 'undefined' && saved !== 'null') ? JSON.parse(saved) : null;
-    } catch (err) {
-      return null;
-    }
+      if (saved && saved !== 'undefined' && saved !== 'null') {
+        return JSON.parse(saved);
+      }
+    } catch (err) {}
+    const initial = getInitialCredentials();
+    return { id: 'admin-1', name: initial.name, email: initial.email, role: 'SuperAdmin' };
   });
 
   const [token, setToken] = useState(() => {
@@ -22,10 +36,17 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     setLoading(true);
+    const savedCreds = getInitialCredentials();
+
     try {
       const res = await api.post('/auth/login', { email, password });
       if (res?.data?.success && res.data.token) {
-        const userObj = res.data.user || { id: 'admin-1', name: 'Kumbh Administrator', email, role: 'SuperAdmin' };
+        const userObj = res.data.user || { 
+          id: 'admin-1', 
+          name: savedCreds.name, 
+          email: email, 
+          role: 'SuperAdmin' 
+        };
         const tokenVal = res.data.token;
         setToken(tokenVal);
         setAdminUser(userObj);
@@ -33,54 +54,70 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem('kumbh_admin_user', JSON.stringify(userObj));
         return { success: true };
       }
-      // Demo credentials fallback
-      if (email.toLowerCase() === 'amolsathe11@gmail.com' || email.toLowerCase() === 'admin@kumbhmela.gov.in' || (email && password)) {
-        const mockUser = { id: 'admin-1', name: 'Amol Sathe', email: email || 'amolsathe11@gmail.com', role: 'SuperAdmin' };
-        const mockToken = 'mock-jwt-token-kumbh-2026';
-        setToken(mockToken);
-        setAdminUser(mockUser);
-        localStorage.setItem('kumbh_admin_token', mockToken);
-        localStorage.setItem('kumbh_admin_user', JSON.stringify(mockUser));
-        return { success: true };
-      }
-      return { success: false, message: res?.data?.message || 'Login failed' };
     } catch (err) {
-      // Fallback for offline preview login
-      if (email.toLowerCase() === 'amolsathe11@gmail.com' || email.toLowerCase() === 'admin@kumbhmela.gov.in' || (email && password)) {
-        const mockUser = { id: 'admin-1', name: 'Amol Sathe', email: email || 'amolsathe11@gmail.com', role: 'SuperAdmin' };
-        const mockToken = 'mock-jwt-token-kumbh-2026';
-        setToken(mockToken);
-        setAdminUser(mockUser);
-        localStorage.setItem('kumbh_admin_token', mockToken);
-        localStorage.setItem('kumbh_admin_user', JSON.stringify(mockUser));
-        return { success: true };
-      }
-      return { 
-        success: false, 
-        message: err.response?.data?.message || 'Server connection failed. Try admin credentials: amolsathe11@gmail.com / amolsathe11' 
-      };
-    } finally {
-      setLoading(false);
+      console.warn('Backend login fallback active:', err.message);
     }
+
+    // Verify against saved credentials or initial defaults
+    const inputEmail = (email || '').trim().toLowerCase();
+    const inputPass = (password || '').trim();
+
+    const validEmail = (savedCreds.email || 'amolsathe11@gmail.com').trim().toLowerCase();
+    const validPass = (savedCreds.password || 'amolsathe11').trim();
+
+    if (inputEmail === validEmail && inputPass === validPass) {
+      const mockUser = { 
+        id: 'admin-1', 
+        name: savedCreds.name || 'Amol Sathe', 
+        email: validEmail, 
+        role: 'SuperAdmin' 
+      };
+      const mockToken = 'mock-jwt-token-kumbh-2026';
+      setToken(mockToken);
+      setAdminUser(mockUser);
+      localStorage.setItem('kumbh_admin_token', mockToken);
+      localStorage.setItem('kumbh_admin_user', JSON.stringify(mockUser));
+      setLoading(false);
+      return { success: true };
+    }
+
+    setLoading(false);
+    return { 
+      success: false, 
+      message: `Invalid email or password. Please use your updated credentials (${validEmail}).` 
+    };
   };
 
   const updateAdminProfile = async ({ name, email, password }) => {
+    const currentCreds = getInitialCredentials();
+    const newCreds = {
+      name: name?.trim() || currentCreds.name || 'Amol Sathe',
+      email: email?.trim() || currentCreds.email || 'amolsathe11@gmail.com',
+      password: password?.trim() ? password.trim() : currentCreds.password
+    };
+
+    // Save updated credentials to localStorage
+    localStorage.setItem('kumbh_admin_credentials', JSON.stringify(newCreds));
+
     const updatedUser = {
-      ...adminUser,
-      name: name || adminUser?.name || 'Amol Sathe',
-      email: email || adminUser?.email || 'amolsathe11@gmail.com',
-      role: adminUser?.role || 'SuperAdmin'
+      id: adminUser?.id || 'admin-1',
+      name: newCreds.name,
+      email: newCreds.email,
+      role: 'SuperAdmin'
     };
 
     setAdminUser(updatedUser);
     localStorage.setItem('kumbh_admin_user', JSON.stringify(updatedUser));
-    if (password) {
-      localStorage.setItem('kumbh_admin_custom_password', password);
-    }
 
     try {
-      await api.put('/auth/profile', { name, email, password });
-    } catch (err) {}
+      await api.put('/auth/profile', { 
+        name: newCreds.name, 
+        email: newCreds.email, 
+        password: newCreds.password 
+      });
+    } catch (err) {
+      console.warn('Backend sync failed, updated locally:', err.message);
+    }
 
     return { success: true };
   };

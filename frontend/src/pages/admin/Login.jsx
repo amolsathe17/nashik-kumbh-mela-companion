@@ -3,9 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Lock, Mail, ShieldCheck, AlertCircle } from 'lucide-react';
 
+const getStoredCreds = () => {
+  try {
+    const saved = localStorage.getItem('kumbh_admin_credentials');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return { email: 'amolsathe11@gmail.com', password: 'amolsathe11' };
+};
+
 const Login = () => {
-  const [email, setEmail] = useState('amolsathe11@gmail.com');
-  const [password, setPassword] = useState('amolsathe11');
+  const stored = getStoredCreds();
+  const [email, setEmail] = useState(stored.email || 'amolsathe11@gmail.com');
+  const [password, setPassword] = useState(stored.password || 'amolsathe11');
   const [errorMsg, setErrorMsg] = useState('');
   const { login, loading } = useAuth();
   const navigate = useNavigate();

@@ -1,58 +1,48 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
-import { ShieldCheck, Phone, Heart, Globe } from 'lucide-react';
+import { PhoneCall, Phone } from 'lucide-react';
+import EmergencyModal from '../common/EmergencyModal';
 
 const Footer = () => {
   const { t } = useLanguage();
+  const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
 
   return (
-    <footer className="bg-slate-900 text-slate-300 mt-0 border-t-4 border-amber-500">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
-          <div>
-            <div className="flex items-center space-x-2 rtl:space-x-reverse mb-3">
-              <span className="text-2xl">🛕</span>
-              <h3 className="text-lg font-bold text-white">{t('appName')}</h3>
-            </div>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              {t('footerDesc')}
-            </p>
+    <footer className="bg-slate-900 text-slate-300 mt-0 border-t-4 border-amber-500 text-center">
+      <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
+        {/* App Title & Description Centered */}
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <div className="flex items-center justify-center space-x-2 rtl:space-x-reverse">
+            {/* <span className="text-2xl">🛕</span> */}
+            <h3 className="text-xl font-bold text-white tracking-tight">{t('appName')}</h3>
           </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-1.5">
-              <Phone className="w-4 h-4" /> {t('officialHelplines')}
-            </h4>
-            <ul className="space-y-2 text-xs">
-              <li className="flex justify-between border-b border-slate-800 pb-1">
-                <span>{t('policeControlRoom')}</span>
-                <a href="tel:112" className="text-amber-300 font-mono hover:underline">112</a>
-              </li>
-              <li className="flex justify-between border-b border-slate-800 pb-1">
-                <span>{t('medicalAmbulance')}</span>
-                <a href="tel:108" className="text-amber-300 font-mono hover:underline">108</a>
-              </li>
-              <li className="flex justify-between border-b border-slate-800 pb-1">
-                <span>{t('pilgrimHelpCentre')}</span>
-                <a href="tel:02532575555" className="text-amber-300 font-mono hover:underline">0253-2575555</a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-sm font-semibold text-amber-400 mb-3 flex items-center gap-1.5">
-              <ShieldCheck className="w-4 h-4" /> {t('trustSecurity')}
-            </h4>
-            <p className="text-xs text-slate-400 leading-relaxed">
-              {t('trustDesc')}
-            </p>
-          </div>
+          <p className="text-xs text-slate-400 leading-relaxed max-w-5xl mx-auto">
+            {t('footerDesc')}
+          </p>
         </div>
 
-        <div className="pt-6 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-2">
+        {/* Official Helplines Button (Mobile Only - Hidden on Desktop/Laptop) */}
+        <div className="pt-2 flex sm:hidden flex-col items-center justify-center gap-3 max-w-md mx-auto">
+          <button
+            onClick={() => setIsEmergencyOpen(true)}
+            className="flex items-center justify-center gap-1.5 bg-red-600 hover:bg-red-700 text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-lg hover:scale-105 transition-all animate-pulse border border-red-400/50"
+            title="Emergency Helpline"
+          >
+            <PhoneCall className="w-3.5 h-3.5" />
+            <span>Official Helplines</span>
+          </button>
+        </div>
+
+        {/* Copyright Centered */}
+        <div className="pt-2 text-sm text-slate-500 text-center">
           <p>{t('copyright')}</p>
         </div>
       </div>
+
+      {/* Emergency Call Modal */}
+      {isEmergencyOpen && (
+        <EmergencyModal isOpen={true} onClose={() => setIsEmergencyOpen(false)} />
+      )}
     </footer>
   );
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
@@ -38,15 +38,18 @@ import Settings from './pages/admin/Settings';
 // Protected Route Component
 const ProtectedAdminRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;
   }
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex">
-      <AdminSidebar />
-      <div className="flex-1 lg:ml-64 flex flex-col min-h-screen">
-        <AdminHeader />
-        <main className="flex-1 p-4 sm:p-6 overflow-y-auto">
+    <div className="h-screen w-screen bg-[#e6ebf5] flex overflow-hidden">
+      <AdminSidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
+      <div className="flex-1 lg:ml-64 flex flex-col h-screen overflow-hidden min-w-0">
+        <AdminHeader isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
+        <main className="flex-1 p-3 sm:p-6 overflow-y-auto min-w-0">
           {children}
         </main>
       </div>

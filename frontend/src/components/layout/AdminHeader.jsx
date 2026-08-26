@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Search, Settings, X, ChevronRight } from 'lucide-react';
+import { Search, Settings, X, ChevronRight, Menu } from 'lucide-react';
 
-const AdminHeader = () => {
+const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -21,21 +21,6 @@ const AdminHeader = () => {
   else if (currentPath.includes('/daily-info')) activeTab = 'Daily Info';
   else if (currentPath.includes('/announcements')) activeTab = 'Alerts';
 
-  const navTabs = [
-    { label: 'Overview', path: '/admin/overview' },
-    { label: 'Locations', path: '/admin/locations' },
-    { label: 'Facilities', path: '/admin/facilities' },
-    { label: 'Assistance', path: '/admin/assistance' },
-    { label: 'Guide', path: '/admin/guide' },
-    { label: 'Daily Info', path: '/admin/daily-info' },
-    { label: 'Alerts', path: '/admin/announcements' },
-    { label: 'Analytics', path: '/admin/reports' },
-  ];
-
-  const handleTabClick = (path) => {
-    navigate(path);
-  };
-
   const searchResults = [
     { title: 'Ramkund Main Bathing Ghat', type: 'Location Pin', path: '/admin/locations' },
     { title: 'Trimbakeshwar Temple Darshan', type: 'Location Pin', path: '/admin/locations' },
@@ -48,57 +33,63 @@ const AdminHeader = () => {
 
   return (
     <>
-      {/* FIXED STICKY TOP CONTROL BAR ACROSS ALL ADMIN PAGES */}
-      <header className="sticky top-0 z-30 bg-[#f8fafc]/95 backdrop-blur-md pt-3 pb-3 px-4 sm:px-6 shadow-xs border-b border-amber-200/40">
-        <div className="bg-gradient-to-r from-amber-50/90 via-orange-50/60 to-amber-50/90 rounded-3xl p-4 shadow-sm border border-amber-200/80 flex flex-wrap items-center justify-between gap-4">
-          
-          {/* Left Branding */}
-          <div 
-            onClick={() => navigate('/admin/overview')}
-            className="flex items-center space-x-3 rtl:space-x-reverse cursor-pointer group"
+      {/* FIXED STICKY TOP CONTROL BAR FLUSH AT TOP FOR ADMIN PAGES */}
+      <header className="sticky top-0 z-30 w-full shadow-md bg-gradient-to-r from-amber-800 via-orange-900 to-amber-900 border-b border-amber-500/40 px-3 sm:px-6 py-3 text-white flex items-center justify-between gap-3">
+        {/* Left Branding Section (Icon + Title + Subtitle) */}
+        <div 
+          onClick={() => navigate('/admin/overview')}
+          className="flex items-center space-x-2.5 sm:space-x-3 rtl:space-x-reverse cursor-pointer group min-w-0"
+        >
+          <div className="w-10 h-10 rounded-2xl bg-amber-500/90 text-amber-950 flex items-center justify-center text-xl font-bold shadow-md group-hover:scale-105 transition-transform flex-shrink-0 border border-amber-300/40">
+            🛕
+          </div>
+          <div className="min-w-0">
+            <h1 className="font-bold text-sm sm:text-base lg:text-lg text-amber-50 leading-tight truncate tracking-tight">
+              Nashik Kumbh Mela Companion
+            </h1>
+            <p className="text-[10px] sm:text-[11px] text-amber-200/90 font-mono font-medium truncate">
+              Simhastha Nashik 2026
+            </p>
+          </div>
+        </div>
+
+        {/* Action Buttons Row */}
+        <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse flex-shrink-0">
+          {/* Quick Search Button */}
+          <button 
+            onClick={() => setIsSearchOpen(true)}
+            className="p-2 sm:p-2.5 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 text-amber-200 transition-all shadow-sm flex items-center justify-center" 
+            title="Quick Search"
           >
-            <div className="w-10 h-10 rounded-2xl bg-amber-600 text-white flex items-center justify-center text-xl font-bold shadow-md group-hover:scale-105 transition-transform">
-              🛕
+            <Search className="w-4 h-4" />
+          </button>
+
+          {/* Admin Avatar */}
+          <div 
+            onClick={() => navigate('/admin/settings')}
+            className="flex items-center space-x-2 rtl:space-x-reverse cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-amber-600 text-white flex items-center justify-center font-bold text-xs shadow-sm border border-amber-300/40 flex-shrink-0">
+              KA
             </div>
-            <div>
-              <h1 className="font-bold text-base sm:text-lg text-slate-900 leading-tight">Nashik Kumbh Companion</h1>
-              <p className="text-[11px] text-slate-500 font-medium">SuperAdmin Overview & Control Desk • 2026 Simhastha</p>
-            </div>
-          </div>
-
-
-
-          {/* Right Search, Settings & Profile */}
-          <div className="flex items-center space-x-3 rtl:space-x-reverse">
-            <button 
-              onClick={() => setIsSearchOpen(true)}
-              className="p-2.5 rounded-2xl bg-slate-100 text-slate-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm" 
-              title="Quick Search"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-
-            <button 
-              onClick={() => navigate('/admin/settings')}
-              className="p-2.5 rounded-2xl bg-slate-100 text-slate-600 hover:bg-amber-500 hover:text-white transition-all shadow-sm" 
-              title="System Settings"
-            >
-              <Settings className="w-4 h-4" />
-            </button>
-
-            <div 
-              onClick={() => navigate('/admin/settings')}
-              className="flex items-center space-x-2.5 rtl:space-x-reverse pl-2 border-l border-slate-200 cursor-pointer hover:opacity-80 transition-opacity"
-            >
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-600 to-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-                KA
-              </div>
-              <div className="hidden sm:block text-left">
-                <p className="text-xs font-bold text-slate-900 leading-tight">Kumbh Admin</p>
-                <p className="text-[10px] text-amber-700 font-bold">HQ Panchavati Desk</p>
-              </div>
+            <div className="hidden md:block text-left">
+              <p className="text-xs font-bold text-white leading-tight">Kumbh Admin</p>
+              <p className="text-[10px] text-amber-200 font-bold">HQ Panchavati Desk</p>
             </div>
           </div>
+
+          {/* Mobile Hamburger Toggle Menu Button (Visible on < lg screens) */}
+          <button
+            onClick={() => setIsMobileOpen && setIsMobileOpen(!isMobileOpen)}
+            className="lg:hidden p-2 sm:p-2.5 rounded-full bg-amber-950/60 hover:bg-amber-950/80 border border-amber-400/50 text-amber-100 shadow-md transition-all active:scale-95 flex items-center justify-center"
+            aria-label="Toggle Navigation Menu"
+          >
+            {isMobileOpen ? (
+              <X className="w-5 h-5 text-amber-200" />
+            ) : (
+              <Menu className="w-5 h-5 text-amber-100" />
+            )}
+          </button>
         </div>
       </header>
 
@@ -148,9 +139,7 @@ const AdminHeader = () => {
                   </div>
                 ))
               ) : (
-                <div className="p-4 text-center text-slate-400 text-xs font-medium">
-                  No matching results found.
-                </div>
+                <div className="p-4 text-center text-slate-400 font-medium">No results found for "{searchQuery}"</div>
               )}
             </div>
           </div>

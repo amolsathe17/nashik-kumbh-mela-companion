@@ -55,7 +55,7 @@ const ReportsAnalytics = () => {
       </div>
 
       {/* Overview Analytics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-2">
           <div className="flex justify-between items-start">
             <span className="text-xs font-bold text-slate-500 uppercase">App Downloads / Active Users</span>

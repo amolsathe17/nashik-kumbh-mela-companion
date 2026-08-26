@@ -290,21 +290,21 @@ const Navbar = () => {
             {/* Language Selector Button */}
             <button
               onClick={() => setIsLangOpen(true)}
-              className="flex items-center space-x-1.5 bg-white/15 hover:bg-white/25 px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm border border-white/20 transition-all text-amber-50 shadow-sm"
+              className="flex items-center space-x-1.5 bg-white/15 hover:bg-white/25 px-2.5 sm:px-3 py-1.5 rounded-full text-xs font-semibold backdrop-blur-sm border border-white/20 transition-all text-amber-50 shadow-sm"
               title="Change Language"
             >
               <Globe className="w-4 h-4 text-amber-200" />
-              <span>{currentLang.nativeName}</span>
+              <span className="hidden sm:inline">{currentLang.nativeName}</span>
             </button>
 
-            {/* Emergency Call Button */}
+            {/* Emergency Call Button (Visible on Desktop Header) */}
             <button
               onClick={() => setIsEmergencyOpen(true)}
-              className="flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md hover:scale-105 transition-all animate-pulse"
+              className="hidden sm:flex items-center space-x-1 bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-md hover:scale-105 transition-all animate-pulse"
               title="Emergency Helpline"
             >
               <PhoneCall className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">SOS Help</span>
+              <span>SOS Help</span>
             </button>
 
             {/* Admin Link or Back to Visitor App (Hidden on Mobile View) */}
@@ -371,7 +371,7 @@ const Navbar = () => {
             </div>
 
             {/* Clean Text-Only Navigation Links */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-1">
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {navLinks.map((btn, idx) => {
                 const Icon = btn.icon;
                 return (
@@ -389,6 +389,25 @@ const Navbar = () => {
                   </Link>
                 );
               })}
+
+              {/* Admin Portal Link in Mobile Menu */}
+              <div className="pt-2 border-t border-slate-800">
+                <Link
+                  to={isAdminRoute ? "/" : "/admin/login"}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center justify-between px-4 py-3 rounded-2xl bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 text-white border border-amber-400/40 transition-all text-xs font-bold shadow-md group"
+                >
+                  <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                    {isAdminRoute ? (
+                      <Home className="w-4 h-4 text-amber-100 flex-shrink-0" />
+                    ) : (
+                      <UserCheck className="w-4 h-4 text-amber-100 flex-shrink-0" />
+                    )}
+                    <span>{isAdminRoute ? t('backToHome') : 'Admin Portal Login'}</span>
+                  </div>
+                  <ChevronRight className="w-4 h-4 text-amber-200 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </div>
             </div>
           </div>
         </div>

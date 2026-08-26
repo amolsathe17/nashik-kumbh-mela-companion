@@ -1,15 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
   LayoutDashboard, Calendar, Bell, MapPin, Bus, Compass, 
-  Building2, HelpCircle, BarChart3, Globe, Settings, LogOut, Menu, X 
+  Building2, HelpCircle, BarChart3, Globe, Settings, LogOut, X 
 } from 'lucide-react';
 
-const AdminSidebar = () => {
-  const { adminUser, logout } = useAuth();
+const AdminSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
 
   const navItems = [
     { label: 'Overview', icon: LayoutDashboard, path: '/admin/overview' },
@@ -26,30 +25,37 @@ const AdminSidebar = () => {
   ];
 
   const handleLogout = () => {
+    if (setIsMobileOpen) setIsMobileOpen(false);
     logout();
     navigate('/admin/login');
   };
 
   return (
     <>
-      {/* Mobile Toggle Button */}
-      <div className="lg:hidden bg-slate-900 text-white p-3 flex justify-between items-center border-b border-slate-800">
-        <span className="font-bold text-sm text-amber-400">Admin Control Panel</span>
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="p-2 rounded-lg bg-slate-800 text-amber-400"
-        >
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-      </div>
+      {/* Mobile Backdrop Overlay (visible when mobile sidebar is open) */}
+      {isMobileOpen && (
+        <div 
+          onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+          className="lg:hidden fixed inset-0 z-40 bg-slate-950/70 backdrop-blur-sm transition-opacity animate-fade-in"
+        />
+      )}
 
-      {/* Sidebar Container: Permanently Fixed on Left */}
+      {/* Sidebar Container: Fixed on Left for Desktop (lg:), Slide-Over Drawer from Right to Left for Mobile */}
       <aside className={`
-        fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform transform
-        border-r border-slate-800 shadow-xl h-screen
-        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        fixed inset-y-0 right-0 lg:right-auto lg:left-0 z-50 w-64 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 transform
+        border-l lg:border-l-0 lg:border-r border-slate-800 shadow-2xl h-screen
+        ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
       `}>
-
+        {/* Mobile Close Button Header */}
+        <div className="lg:hidden p-3 bg-slate-950 border-b border-slate-800 flex justify-end">
+          <button
+            onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+            className="p-1.5 rounded-xl bg-slate-800 text-amber-200 hover:bg-slate-700 transition-colors"
+            aria-label="Close Navigation Drawer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
         {/* Navigation Items */}
         <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
@@ -59,11 +65,11 @@ const AdminSidebar = () => {
               <NavLink
                 key={item.path}
                 to={item.path}
-                onClick={() => setIsOpen(false)}
+                onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
                 className={({ isActive }) => `
-                  flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-colors
+                  flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors
                   ${isActive 
-                    ? 'bg-amber-600 text-white font-semibold shadow-md' 
+                    ? 'bg-amber-600 text-white font-bold shadow-md' 
                     : 'text-slate-400 hover:bg-slate-800 hover:text-amber-200'}
                 `}
               >
@@ -75,10 +81,10 @@ const AdminSidebar = () => {
         </nav>
 
         {/* Footer Logout */}
-        <div className="p-4 border-t border-slate-800">
+        <div className="p-4 border-t border-slate-800 bg-slate-950">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white transition-all text-xs font-semibold"
+            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white transition-all text-xs font-bold"
           >
             <LogOut className="w-4 h-4" />
             <span>Sign Out</span>

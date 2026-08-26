@@ -136,7 +136,7 @@ const rawTranslations = {
     privacyNotice: "Location sharing is 100% voluntary and private within your group.",
 
     // Footer Keys
-    footerDesc: "Official Digital Companion platform for pilgrims and international visitors attending Nashik Kumbh Mela 2026. Designed for accessibility, simplicity, and speed.",
+    footerDesc: "Official Digital Companion platform for pilgrims and international visitors attending Nashik Kumbh Mela 2026.",
     officialHelplines: "Official Helplines",
     policeControlRoom: "Police Control Room:",
     medicalAmbulance: "Medical Ambulance:",

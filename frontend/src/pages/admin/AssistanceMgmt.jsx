@@ -72,12 +72,12 @@ const AssistanceMgmt = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Pilgrim Assistance & Help Requests</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Pilgrim Assistance & Help Requests</h2>
           <p className="text-xs text-slate-500">Live Control Triage Desk: Review Requests, Dispatch SMS Updates & Manage Status</p>
         </div>
-        <div className="bg-amber-100 text-amber-900 text-xs font-mono font-bold px-3 py-1.5 rounded-full border border-amber-300">
+        <div className="self-start sm:self-auto bg-amber-100 text-amber-900 text-xs font-mono font-bold px-3 py-1.5 rounded-full border border-amber-300">
           Total Requests: {requests.length}
         </div>
       </div>
@@ -171,7 +171,7 @@ const AssistanceMgmt = () => {
       {/* Send SMS Modal */}
       {smsModalItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl border border-blue-500/30">
+          <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-blue-500/30">
             <div className="flex items-center justify-between border-b pb-3">
               <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
                 <Send className="w-5 h-5 text-blue-600" /> Send SMS Response to Pilgrim
