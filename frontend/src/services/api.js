@@ -277,6 +277,16 @@ api.interceptors.request.use(async (config) => {
           savedCustom.unshift(newItem);
           localStorage.setItem('kumbh_custom_locations', JSON.stringify(savedCustom));
         } catch (e) {}
+      } else if (endpoint === '/pilgrim-guide') {
+        if (!mockData['/pilgrim-guide']) mockData['/pilgrim-guide'] = [];
+        mockData['/pilgrim-guide'] = mockData['/pilgrim-guide'].filter(item => item._id !== newItem._id && item.id !== newItem.id);
+        mockData['/pilgrim-guide'].unshift(newItem);
+
+        try {
+          const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]');
+          savedCustom.unshift(newItem);
+          localStorage.setItem('kumbh_custom_guides', JSON.stringify(savedCustom));
+        } catch (e) {}
       } else {
         if (!mockData[endpoint]) mockData[endpoint] = [];
         if (Array.isArray(mockData[endpoint])) {
@@ -325,6 +335,20 @@ api.interceptors.request.use(async (config) => {
           const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
           const updatedCustom = savedCustom.filter(item => item._id !== id);
           localStorage.setItem('kumbh_custom_locations', JSON.stringify(updatedCustom));
+        } catch (e) {}
+      } else if (basePath === '/pilgrim-guide' || endpoint.startsWith('/pilgrim-guide')) {
+        if (Array.isArray(mockData['/pilgrim-guide'])) {
+          mockData['/pilgrim-guide'] = mockData['/pilgrim-guide'].filter(item => item._id !== id && item.id !== id);
+        }
+
+        try {
+          const savedDeleted = JSON.parse(localStorage.getItem('kumbh_deleted_guides') || '[]');
+          if (!savedDeleted.includes(id)) savedDeleted.push(id);
+          localStorage.setItem('kumbh_deleted_guides', JSON.stringify(savedDeleted));
+
+          const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]');
+          const updatedCustom = savedCustom.filter(item => item._id !== id && item.id !== id);
+          localStorage.setItem('kumbh_custom_guides', JSON.stringify(updatedCustom));
         } catch (e) {}
       } else if (Array.isArray(mockData[basePath])) {
         mockData[basePath] = mockData[basePath].filter(item => item._id !== id);
