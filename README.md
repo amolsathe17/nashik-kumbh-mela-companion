@@ -1,4 +1,4 @@
-# 🛕 Nashik Kumbh Mela Companion
+# 🛕 Nashik Kumbh Mela
 
 A modern, lightweight, scalable, secure, and accessible digital platform designed for **pilgrims, visitors, elderly users, and international tourists** attending the Nashik Kumbh Mela.
 

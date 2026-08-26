@@ -22,7 +22,7 @@ const LanguageSelect = () => {
         <h1 className="text-3xl font-bold tracking-tight mb-2">Choose Your Language</h1>
         <h2 className="text-xl font-semibold text-amber-100">अपनी भाषा का चयन करें</h2>
         <p className="text-xs text-amber-200 mt-2">
-          Nashik Kumbh Mela Digital Companion • Nashik District Administration
+          Nashik Kumbh Mela • Nashik District Administration
         </p>
       </div>
 

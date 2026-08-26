@@ -47,7 +47,7 @@ const Login = () => {
             🛕
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-white drop-shadow-md">Admin Control Portal</h2>
-          <p className="text-xs text-amber-300 font-mono tracking-wider font-semibold drop-shadow">Nashik Kumbh Mela Companion</p>
+          <p className="text-xs text-amber-300 drop-shadow">Nashik Kumbh Mela<br><br></br>Simhastha 2026</p>
         </div>
 
         {errorMsg && (

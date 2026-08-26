@@ -166,7 +166,7 @@ const Navbar = () => {
                 <span>{t('appName')}</span>
               </h1>
               <p className="text-[10px] text-amber-200 font-mono tracking-wider mt-0.5">
-                Simhastha Nashik 2026
+                Simhastha 2026
               </p>
             </div>
           </Link>

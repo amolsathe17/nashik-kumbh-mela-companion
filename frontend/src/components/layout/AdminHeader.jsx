@@ -45,10 +45,10 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
           </div>
           <div className="min-w-0">
             <h1 className="font-bold text-sm sm:text-base lg:text-lg text-amber-50 leading-tight truncate tracking-tight">
-              Nashik Kumbh Mela Companion
+              Nashik Kumbh Mela
             </h1>
             <p className="text-[10px] sm:text-[11px] text-amber-200/90 font-mono font-medium truncate">
-              Simhastha Nashik 2026
+              Simhastha 2026
             </p>
           </div>
         </div>

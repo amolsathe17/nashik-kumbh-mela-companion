@@ -288,7 +288,7 @@ const FamilyGroup = () => {
               </div>
               <h3 className="text-xl font-bold text-slate-950 tracking-tight">{t('createGroup')}</h3>
               <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                Create a new private family group for Nashik Kumbh Mela. Get a unique 6-digit share code to invite family, elderly relatives, and companions.
+                Create a new private family group for Nashik Kumbh Mela. Get a unique 6-digit share code to invite family, elderly relatives, and group members.
               </p>
             </div>
 

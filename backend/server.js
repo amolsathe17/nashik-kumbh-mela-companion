@@ -45,7 +45,7 @@ if (MONGODB_URI) {
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
-    service: 'Nashik Kumbh Mela Companion Backend API',
+    service: 'Nashik Kumbh Mela Backend API',
     timestamp: new Date().toISOString(),
     database: mongoose.connection.readyState === 1 ? 'Connected to MongoDB' : 'Standalone Memory Mode'
   });
@@ -78,5 +78,5 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Nashik Kumbh Mela Companion API running on port ${PORT}`);
+  console.log(`🚀 Nashik Kumbh Mela API running on port ${PORT}`);
 });

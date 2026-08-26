@@ -1,4 +1,4 @@
-// Initial seed data for Nashik Kumbh Mela Companion
+// Initial seed data for Nashik Kumbh Mela
 
 const memoryStore = {
   dailyInfo: [

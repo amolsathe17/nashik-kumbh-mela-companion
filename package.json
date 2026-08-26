@@ -1,7 +1,7 @@
 {
-  "name": "nashik-kumbh-mela-companion-root",
+  "name": "nashik-kumbh-mela-root",
   "version": "1.0.0",
-  "description": "Root workspace script runner for Nashik Kumbh Mela Companion",
+  "description": "Root workspace script runner for Nashik Kumbh Mela",
   "private": true,
   "scripts": {
     "start": "npm --prefix backend start",

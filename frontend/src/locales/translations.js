@@ -12,7 +12,7 @@ const rawTranslations = {
     "ramkundAartiCap": "Ramkund Holy Ghat & Godavari Evening Aarti",
     "trimbakeshwarCap": "Trimbakeshwar Jyotirlinga Temple & Kushavarta Kund",
 
-    appName: "Nashik Kumbh Mela Companion",
+    appName: "Nashik Kumbh Mela",
     welcome: "Welcome to Nashik Kumbh Mela 2026",
     tagline: "Find → Travel → Understand → Get Help",
     chooseLanguage: "Choose Your Language",
@@ -136,7 +136,7 @@ const rawTranslations = {
     privacyNotice: "Location sharing is 100% voluntary and private within your group.",
 
     // Footer Keys
-    footerDesc: "Official Digital Companion platform for pilgrims and international visitors attending Nashik Kumbh Mela 2026.",
+    footerDesc: "Official Digital platform for pilgrims and international visitors attending Nashik Kumbh Mela 2026.",
     officialHelplines: "Official Helplines",
     policeControlRoom: "Police Control Room:",
     medicalAmbulance: "Medical Ambulance:",

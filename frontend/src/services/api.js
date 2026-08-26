@@ -41,7 +41,7 @@ const mockData = {
     {
       _id: 'n-2',
       title: "Welcome to Nashik Simhastha Kumbh Mela 2026",
-      message: "Official pilgrim companion portal is active. Access emergency SOS & location guides.",
+      message: "Official pilgrim portal is active. Access emergency SOS & location guides.",
       category: 'Official Notice',
       createdAt: new Date().toISOString()
     },
