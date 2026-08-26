@@ -311,7 +311,7 @@ const Home = () => {
             </div>
           </div>
         ) : (
-          <div className="h-full flex items-center justify-center animate-pulse">
+          <div className="h-full flex items-start justify-center pt-[70vh] animate-pulse">
             <div className="bg-slate-950/70 backdrop-blur-md px-5 py-2.5 rounded-full border border-amber-400/50 text-xs font-bold text-amber-200 shadow-2xl flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400 animate-spin" />
               <span>Loading Nashik Simhastha 2026...</span>
