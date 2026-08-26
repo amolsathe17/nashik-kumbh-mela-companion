@@ -31,7 +31,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen w-full overflow-hidden relative flex flex-col items-center justify-center p-4 py-12 sm:py-16">
+    <div className="h-screen w-screen overflow-hidden relative flex flex-col items-center justify-center p-4">
       {/* Fixed Background Image stretched 100% width and height for Desktop/Laptop View */}
       <img 
         src="/kumbh-bg.jpg" 

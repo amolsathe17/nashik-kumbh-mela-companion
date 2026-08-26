@@ -171,7 +171,7 @@ const App = () => {
         </Routes>
       </div>
 
-      {!isSplashLanguagePage && !isAdminArea && <Footer />}
+      {!isSplashLanguagePage && !isAdminArea && !isAdminLogin && <Footer />}
       <ScrollToTop />
     </div>
   );
