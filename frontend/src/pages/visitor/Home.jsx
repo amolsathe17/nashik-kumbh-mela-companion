@@ -224,18 +224,18 @@ const Home = () => {
       <Link
         key={idx}
         to={btn.path}
-        className={`p-3 sm:p-3.5 rounded-[32px] border-2 bg-white hover:bg-slate-100 text-slate-900 transition-all hover:scale-102 flex items-center justify-between gap-3 shadow-lg hover:shadow-2xl ${btn.borderColor} my-auto`}
+        className={`p-2.5 sm:p-3.5 rounded-[24px] sm:rounded-[32px] border-2 bg-white hover:bg-slate-100 text-slate-900 transition-all hover:scale-102 flex items-center justify-between gap-1.5 sm:gap-3 shadow-md hover:shadow-2xl ${btn.borderColor} my-auto`}
       >
-        <div className="flex items-center space-x-3 rtl:space-x-reverse min-w-0">
-          <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${btn.color} text-white flex items-center justify-center shadow-md flex-shrink-0`}>
-            <Icon className="w-5 h-5" />
+        <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse min-w-0">
+          <div className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl sm:rounded-2xl bg-gradient-to-br ${btn.color} text-white flex items-center justify-center shadow-md flex-shrink-0`}>
+            <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-sm font-bold leading-snug text-slate-950 truncate tracking-tight">{t(btn.titleKey)}</h4>
-            <p className="text-xs text-slate-600 line-clamp-1 mt-0.5 font-medium">{t(btn.descKey)}</p>
+            <h4 className="text-xs sm:text-sm font-bold leading-tight text-slate-950 truncate tracking-tight">{t(btn.titleKey)}</h4>
+            <p className="text-[10px] sm:text-xs text-slate-600 line-clamp-1 mt-0.5 font-medium">{t(btn.descKey)}</p>
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
+        <ChevronRight className="w-3.5 h-3.5 text-slate-400 flex-shrink-0 hidden xs:block" />
       </Link>
     );
   };
@@ -249,8 +249,8 @@ const Home = () => {
   );
 
   const mobileWelcomeHeader = (
-    <div className="text-center pt-1 pb-12">
-      <h2 className="text-lg sm:text-2xl font-bold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.95)] text-amber-100 tracking-tight">
+    <div className="text-center pt-1 pb-1">
+      <h2 className="text-lg sm:text-xl font-black leading-tight drop-shadow-[0_3px_10px_rgba(0,0,0,0.95)] text-amber-100 tracking-tight">
         {t('welcome')}
       </h2>
     </div>
@@ -276,21 +276,42 @@ const Home = () => {
         </div>
       </div>
 
-      {/* MOBILE & TABLET LAYOUT (< lg): 4-Second Background Reveal Delay */}
+      {/* MOBILE & TABLET LAYOUT (< lg): Welcome Message on TOP & Equal Vertical Alignment */}
       <div 
         onClick={() => setShowMobileContent(true)}
-        className="lg:hidden space-y-4 max-w-xl mx-auto min-h-[75vh] cursor-pointer"
+        className="lg:hidden space-y-2 max-w-xl mx-auto h-[calc(100vh-80px)] overflow-hidden flex flex-col justify-between py-1 cursor-pointer"
       >
         {showMobileContent ? (
-          <div className="space-y-4 animate-fade-in transition-all duration-700">
-            <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-              {mobileCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
-            </div>
-
+          <div className="h-full flex flex-col justify-between space-y-2 animate-fade-in transition-all duration-700 py-1">
+            {/* Welcome Message ON TOP */}
             {mobileWelcomeHeader}
+
+            {/* 5 Rows of 2-Column Cards Equally Distributed Vertically */}
+            <div className="flex-1 flex flex-col justify-between space-y-1.5 py-1">
+              <div className="grid grid-cols-2 gap-2">
+                {renderCard(mobileCards[0], 'mob-0')}
+                {renderCard(mobileCards[1], 'mob-1')}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {renderCard(mobileCards[2], 'mob-2')}
+                {renderCard(mobileCards[3], 'mob-3')}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {renderCard(mobileCards[4], 'mob-4')}
+                {renderCard(mobileCards[5], 'mob-5')}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {renderCard(mobileCards[6], 'mob-6')}
+                {renderCard(mobileCards[7], 'mob-7')}
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {renderCard(mobileCards[8], 'mob-8')}
+                {renderCard(mobileCards[9], 'mob-9')}
+              </div>
+            </div>
           </div>
         ) : (
-          <div className="min-h-[70vh] flex items-end justify-center pb-8 animate-pulse">
+          <div className="h-full flex items-center justify-center animate-pulse">
             <div className="bg-slate-950/70 backdrop-blur-md px-5 py-2.5 rounded-full border border-amber-400/50 text-xs font-bold text-amber-200 shadow-2xl flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-amber-400 animate-spin" />
               <span>Loading Nashik Simhastha 2026...</span>
