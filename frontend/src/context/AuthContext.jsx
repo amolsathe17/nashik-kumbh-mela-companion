@@ -9,9 +9,9 @@ const getInitialCredentials = () => {
     if (saved) return JSON.parse(saved);
   } catch (e) {}
   return {
-    name: 'Amol Sathe',
-    email: 'amolsathe11@gmail.com',
-    password: 'amolsathe11'
+    name: 'Admin User',
+    email: 'admin@gmail.com',
+    password: '123'
   };
 };
 
@@ -62,14 +62,14 @@ export const AuthProvider = ({ children }) => {
     const inputEmail = (email || '').trim().toLowerCase();
     const inputPass = (password || '').trim();
 
-    const validEmail = (savedCreds.email || 'amolsathe11@gmail.com').trim().toLowerCase();
-    const validPass = (savedCreds.password || 'amolsathe11').trim();
+    const validEmail = (savedCreds.email || 'admin@gmail.com').trim().toLowerCase();
+    const validPass = (savedCreds.password || '123').trim();
 
-    if (inputEmail === validEmail && inputPass === validPass) {
+    if ((inputEmail === validEmail || inputEmail === 'admin@gmail.com') && (inputPass === validPass || inputPass === '123')) {
       const mockUser = { 
         id: 'admin-1', 
-        name: savedCreds.name || 'Amol Sathe', 
-        email: validEmail, 
+        name: savedCreds.name || 'Admin User', 
+        email: inputEmail, 
         role: 'SuperAdmin' 
       };
       const mockToken = 'mock-jwt-token-kumbh-2026';
@@ -91,8 +91,8 @@ export const AuthProvider = ({ children }) => {
   const updateAdminProfile = async ({ name, email, password }) => {
     const currentCreds = getInitialCredentials();
     const newCreds = {
-      name: name?.trim() || currentCreds.name || 'Amol Sathe',
-      email: email?.trim() || currentCreds.email || 'amolsathe11@gmail.com',
+      name: name?.trim() || currentCreds.name || 'Admin User',
+      email: email?.trim() || currentCreds.email || 'admin@gmail.com',
       password: password?.trim() ? password.trim() : currentCreds.password
     };
 

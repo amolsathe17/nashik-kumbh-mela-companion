@@ -8,13 +8,13 @@ const getStoredCreds = () => {
     const saved = localStorage.getItem('kumbh_admin_credentials');
     if (saved) return JSON.parse(saved);
   } catch (e) {}
-  return { email: 'amolsathe11@gmail.com', password: 'amolsathe11' };
+  return { email: 'admin@gmail.com', password: '123' };
 };
 
 const Login = () => {
   const stored = getStoredCreds();
-  const [email, setEmail] = useState(stored.email || 'amolsathe11@gmail.com');
-  const [password, setPassword] = useState(stored.password || 'amolsathe11');
+  const [email, setEmail] = useState(stored.email || 'admin@gmail.com');
+  const [password, setPassword] = useState(stored.password || '123');
   const [errorMsg, setErrorMsg] = useState('');
   const { login, loading } = useAuth();
   const navigate = useNavigate();

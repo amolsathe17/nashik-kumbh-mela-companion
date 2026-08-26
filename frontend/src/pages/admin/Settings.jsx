@@ -11,12 +11,12 @@ const Settings = () => {
       const saved = localStorage.getItem('kumbh_admin_credentials');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
-    return { name: 'Amol Sathe', email: 'amolsathe11@gmail.com' };
+    return { name: 'Admin User', email: 'admin@gmail.com' };
   };
 
   const initialCreds = getInitialAdminCreds();
-  const [adminName, setAdminName] = useState(adminUser?.name || initialCreds.name || 'Amol Sathe');
-  const [adminEmail, setAdminEmail] = useState(adminUser?.email || initialCreds.email || 'amolsathe11@gmail.com');
+  const [adminName, setAdminName] = useState(adminUser?.name || initialCreds.name || 'Admin User');
+  const [adminEmail, setAdminEmail] = useState(adminUser?.email || initialCreds.email || 'admin@gmail.com');
   const [adminPassword, setAdminPassword] = useState('');
 
   const [settings, setSettings] = useState({

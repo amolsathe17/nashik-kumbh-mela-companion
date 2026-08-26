@@ -5,9 +5,9 @@ const AdminUser = require('../models/AdminUser');
 // Dynamic in-memory admin credentials fallback
 let dynamicAdmin = {
   id: 'admin-1',
-  name: 'Amol Sathe',
-  email: 'amolsathe11@gmail.com',
-  password: 'amolsathe11',
+  name: 'Admin User',
+  email: 'admin@gmail.com',
+  password: '123',
   role: 'SuperAdmin'
 };
 
@@ -29,11 +29,13 @@ const login = async (req, res) => {
       // Check dynamic admin fallback or default admin credentials
       const isEmailMatch = (
         email.toLowerCase() === dynamicAdmin.email.toLowerCase() ||
+        email.toLowerCase() === 'admin@gmail.com' ||
         email.toLowerCase() === 'amolsathe11@gmail.com' ||
         email.toLowerCase() === 'admin@kumbhmela.gov.in'
       );
       const isPassMatch = (
         password === dynamicAdmin.password ||
+        password === '123' ||
         password === 'amolsathe11' ||
         password === 'Admin@123456' ||
         password === 'admin123'
