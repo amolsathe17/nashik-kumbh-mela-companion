@@ -29,6 +29,16 @@ const Home = () => {
     return localStorage.getItem('kumbh_dismissed_modal_todayinfo') === 'true';
   });
 
+  // Mobile 4-second reveal delay: background image displays first, then cards & welcome text fade in after 4 seconds
+  const [showMobileContent, setShowMobileContent] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowMobileContent(true);
+    }, 4000); // 4 seconds delay for mobile view
+    return () => clearTimeout(timer);
+  }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -205,7 +215,7 @@ const Home = () => {
 
   const desktopHeroSection = (
     <div className="relative text-center mx-auto max-w-xl">
-      <h2 className="text-2xl sm:text-4xl lg:text-4xl font-black leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)] text-amber-100 text-center mx-auto tracking-tight">
+      <h2 className="text-2xl sm:text-2xl lg:text-2xl font-black leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)] text-amber-100 text-center mx-auto tracking-tight">
         {t('welcome')}
       </h2>
     </div>
@@ -239,13 +249,27 @@ const Home = () => {
         </div>
       </div>
 
-      {/* MOBILE & TABLET LAYOUT (< lg): Stacked View */}
-      <div className="lg:hidden space-y-4 max-w-xl mx-auto">
-        <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
-          {mobileCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
-        </div>
+      {/* MOBILE & TABLET LAYOUT (< lg): 4-Second Background Reveal Delay */}
+      <div 
+        onClick={() => setShowMobileContent(true)}
+        className="lg:hidden space-y-4 max-w-xl mx-auto min-h-[75vh] cursor-pointer"
+      >
+        {showMobileContent ? (
+          <div className="space-y-4 animate-fade-in transition-all duration-700">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3.5">
+              {mobileCards.map((btn, idx) => renderCard(btn, `mob-${idx}`))}
+            </div>
 
-        {mobileWelcomeHeader}
+            {mobileWelcomeHeader}
+          </div>
+        ) : (
+          <div className="min-h-[70vh] flex items-end justify-center pb-8 animate-pulse">
+            <div className="bg-slate-950/70 backdrop-blur-md px-5 py-2.5 rounded-full border border-amber-400/50 text-xs font-bold text-amber-200 shadow-2xl flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-amber-400 animate-spin" />
+              <span>Loading Nashik Simhastha 2026...</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* CENTER MODAL POPUP FOR NOTICE & ALERTS */}

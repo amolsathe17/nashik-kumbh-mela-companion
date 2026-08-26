@@ -13,7 +13,7 @@ const rawTranslations = {
     "trimbakeshwarCap": "Trimbakeshwar Jyotirlinga Temple & Kushavarta Kund",
 
     appName: "Nashik Kumbh Mela Companion",
-    welcome: "Welcome to Nashik Kumbh Mela",
+    welcome: "Welcome to Nashik Kumbh Mela 2026",
     tagline: "Find → Travel → Understand → Get Help",
     chooseLanguage: "Choose Your Language",
     selectLanguageSubtitle: "Select your preferred language to proceed",
