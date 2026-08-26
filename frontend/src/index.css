@@ -38,14 +38,14 @@
     background-size: cover !important;
     background-position: center top !important;
     background-repeat: no-repeat !important;
-    background-attachment: fixed !important;
+    background-attachment: scroll !important;
   }
 }
 @media (min-width: 768px) {
   .kumbh-landing-bg {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.45)), url('/kumbh-bg.jpg') !important;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.30), rgba(0, 0, 0, 0.40)), url('/kumbh-bg.jpg') !important;
     background-size: 100% 100% !important;
-    background-position: center top !important;
+    background-position: center center !important;
     background-attachment: fixed !important;
     background-repeat: no-repeat !important;
   }
