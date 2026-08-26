@@ -31,8 +31,8 @@ const Login = () => {
   };
 
   return (
-    <div className="fixed inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-center p-4 z-50 bg-slate-950">
-      {/* Fixed Background Image stretched 100% width and height for Desktop/Laptop View */}
+    <div className="relative w-full min-h-[calc(100vh-65px)] overflow-hidden flex flex-col items-center justify-center p-4">
+      {/* Background Image stretched 100% width and height for Desktop/Laptop View */}
       <img 
         src="/kumbh-bg.jpg" 
         alt="Kumbh Mela Background" 

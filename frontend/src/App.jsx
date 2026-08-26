@@ -116,7 +116,7 @@ const App = () => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen w-full flex flex-col selection:bg-amber-200 selection:text-amber-900 bg-[#e5ecf6] relative">
+    <div className="min-h-screen w-full flex flex-col selection:bg-amber-200 selection:text-amber-900 bg-[#e5ecf6] relative overflow-x-hidden">
       {!isSplashLanguagePage && !isAdminArea && <Navbar />}
 
       <div 
