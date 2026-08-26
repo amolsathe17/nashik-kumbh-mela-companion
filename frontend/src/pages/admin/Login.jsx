@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Lock, Mail, ShieldCheck, AlertCircle } from 'lucide-react';
+import { Lock, Mail, AlertCircle } from 'lucide-react';
 
 const getStoredCreds = () => {
   try {
@@ -47,7 +47,7 @@ const Login = () => {
             🛕
           </div>
           <h2 className="text-2xl font-bold tracking-tight text-white drop-shadow-md">Admin Control Portal</h2>
-          <p className="text-xs text-amber-300 drop-shadow">Nashik Kumbh Mela<br><br></br>Simhastha 2026</p>
+          <p className="text-xs text-amber-300 drop-shadow">Nashik Kumbh Mela-Simhastha 2026</p>
         </div>
 
         {errorMsg && (
