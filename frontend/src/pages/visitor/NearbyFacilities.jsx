@@ -412,11 +412,6 @@ const NearbyFacilities = () => {
                       <span>{getCatIcon(fac.category)}</span>
                       <span>{fac.category}</span>
                     </div>
-
-                    <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
-                      <CheckCircle className="w-3 h-3 text-white" />
-                      <span>Officially Verified</span>
-                    </div>
                   </div>
 
                   <div className="p-5 space-y-3">
@@ -492,9 +487,6 @@ const NearbyFacilities = () => {
                 alt={selectedFacility.name} 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow">
-                Officially Verified
-              </div>
             </div>
 
             <div className="space-y-3 text-xs">

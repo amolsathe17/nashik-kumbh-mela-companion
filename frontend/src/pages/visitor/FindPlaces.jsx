@@ -579,21 +579,6 @@ const FindPlaces = () => {
                       <span>{getCategoryEmoji(loc.category)}</span>
                       <span>{categoryLabel}</span>
                     </div>
-
-                    {/* Official Confirmation Tag */}
-                    <div className="absolute top-3 right-3">
-                      {loc.isConfirmed !== false ? (
-                        <div className="bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
-                          <CheckCircle className="w-3 h-3 text-white" />
-                          <span>Officially Confirmed</span>
-                        </div>
-                      ) : (
-                        <div className="bg-amber-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow flex items-center space-x-1">
-                          <Clock className="w-3 h-3 text-white" />
-                          <span>Proposed 2027</span>
-                        </div>
-                      )}
-                    </div>
                   </div>
 
                   {/* Card Body Info */}
@@ -671,9 +656,6 @@ const FindPlaces = () => {
                 alt={selectedPlace.name} 
                 className="w-full h-full object-cover"
               />
-              <div className="absolute top-3 left-3 bg-emerald-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow">
-                {selectedPlace.isConfirmed !== false ? 'Officially Confirmed' : 'Proposed 2027'}
-              </div>
             </div>
 
             <div className="space-y-3 text-xs">
