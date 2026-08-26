@@ -31,15 +31,15 @@ const Login = () => {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative flex flex-col items-center justify-center p-4">
+    <div className="fixed inset-0 w-full h-full overflow-hidden flex flex-col items-center justify-center p-4 z-50 bg-slate-950">
       {/* Fixed Background Image stretched 100% width and height for Desktop/Laptop View */}
       <img 
         src="/kumbh-bg.jpg" 
         alt="Kumbh Mela Background" 
-        className="fixed inset-0 w-full h-full object-cover md:object-fill pointer-events-none z-0"
+        className="absolute inset-0 w-full h-full object-cover md:object-fill pointer-events-none z-0"
       />
       {/* Overlay */}
-      <div className="fixed inset-0 bg-slate-950/70 pointer-events-none z-0" />
+      <div className="absolute inset-0 bg-slate-950/70 pointer-events-none z-0" />
 
       <div className="bg-slate-900/75 backdrop-blur-xl border border-white/20 rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl shadow-black/80 space-y-5 relative z-10 my-auto">
         <div className="text-center space-y-2">
