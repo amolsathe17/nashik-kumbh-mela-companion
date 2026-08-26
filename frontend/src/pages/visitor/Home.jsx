@@ -222,7 +222,7 @@ const Home = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-3 sm:py-6">
+    <div className="max-w-7xl mx-auto px-4 py-3 sm:py-6 relative z-10">
       {/* DESKTOP LAYOUT (lg:): Cards Left | Center Content | Cards Right */}
       <div className="hidden lg:grid lg:grid-cols-12 lg:gap-6 lg:items-start">
         {/* Left Column */}

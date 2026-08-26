@@ -122,6 +122,19 @@ const App = () => {
       <div 
         className={`flex-1 min-h-[calc(100vh-70px)] relative ${isHomePage ? 'kumbh-landing-bg' : 'bg-[#e5ecf6]'}`}
       >
+        {isHomePage && (
+          <>
+            {/* Fixed Background Image for Desktop / Laptop View (matching Admin Login page) */}
+            <img 
+              src="/kumbh-bg.jpg" 
+              alt="Kumbh Mela Background" 
+              className="hidden md:block fixed inset-0 w-full h-full object-fill pointer-events-none z-0"
+            />
+            {/* Dark Overlay for Desktop View */}
+            <div className="hidden md:block fixed inset-0 bg-slate-950/40 pointer-events-none z-0" />
+          </>
+        )}
+
         <Routes>
           {/* Visitor Routes */}
           <Route path="/" element={<Home />} />
