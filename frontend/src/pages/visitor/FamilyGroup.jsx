@@ -248,10 +248,6 @@ const FamilyGroup = () => {
             👨‍👩‍👧‍👦
           </div>
           <div>
-            <div className="inline-flex items-center space-x-1.5 bg-indigo-500/30 px-3 py-0.5 rounded-full text-[11px] font-bold text-indigo-100 mb-1 border border-indigo-200/30">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Opt-In Encrypted Family Safety Hub</span>
-            </div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('familyGroup')}</h2>
             <p className="text-xs sm:text-sm text-indigo-100 font-medium mt-0.5">
               {t('familyGroupDesc') || 'Real-time Opt-In Family Coordination, Emergency Meeting Point & SOS Broadcasts'}

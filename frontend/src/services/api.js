@@ -56,37 +56,55 @@ const mockData = {
   '/locations': [
     {
       _id: 'loc-1',
-      name: 'Ramkund Holy Bathing Ghat',
+      name: 'Ramkund Holy Bathing Ghat (रामकुंड पवित्र घाट)',
       category: 'Ghat',
       address: 'Panchavati, Nashik, Maharashtra 422003',
-      description: 'Primary sacred bathing ghat on the banks of Godavari River.',
+      location: 'Panchavati, Nashik, Maharashtra 422003',
+      description: 'Primary sacred bathing ghat on River Godavari where Lord Rama performed rituals. Primary site for Shahi Snan and evening Maha Aarti.',
       coordinates: { lat: 20.0063, lng: 73.7915 },
-      status: 'Active'
+      status: 'Active',
+      isConfirmed: true,
+      verified: true,
+      contactNumber: '0253-2575555',
+      image: '/shahi-snan.jpg',
+      timings: 'Open 24 Hours (Holy Dip 4:00 AM - 10:00 PM)',
+      facilities: ['Safety Netting', 'Life Guards', 'Clean Changing Rooms', 'Emergency Helpdesk'],
+      distance: '2.5 km from Nashik CBS Bus Stand'
     },
     {
       _id: 'loc-2',
-      name: 'Trimbakeshwar Jyotirlinga Temple',
+      name: 'Trimbakeshwar Jyotirlinga Temple (त्र्यंबकेश्वर ज्योतिर्लिंग)',
       category: 'Temple',
-      address: 'Trimbak, Nashik, Maharashtra 422212',
-      description: 'One of the 12 sacred Jyotirlinga temples of Lord Shiva.',
+      address: 'Trimbak Town, Nashik District, Maharashtra 422212',
+      location: 'Trimbak Town, Nashik District, Maharashtra 422212',
+      description: 'One of the 12 sacred Jyotirlinga temples of Lord Shiva. Built of black basalt by Peshwa Balaji Baji Rao.',
       coordinates: { lat: 19.9322, lng: 73.5303 },
-      status: 'Active'
+      status: 'Active',
+      isConfirmed: true,
+      verified: true,
+      contactNumber: '0253-2591241',
+      image: '/dhwajarohan.webp',
+      timings: '5:00 AM - 9:00 PM',
+      facilities: ['VIP Pass Counter', 'Footwear Depot', 'Queue Complex', 'Wheelchair Facility'],
+      distance: '28 km West of Nashik'
     }
   ],
   '/facilities': [
     {
       _id: 'fac-1',
-      name: 'Tapovan Annadan & Food Arena',
+      name: 'Tapovan Annadan & Food Arena (तपोवन अन्नछत्र)',
       category: 'Food Area',
-      location: 'Tapovan Sadhugram, Nashik',
-      capacityNotes: 'Free langar meals served 24/7 for all pilgrims.'
-    },
-    {
-      _id: 'fac-2',
-      name: 'Panchavati Pilgrim Medical & Emergency Hub',
-      category: 'Medical',
-      location: 'Near Ramkund Ghat, Panchavati',
-      capacityNotes: 'Doctors on duty, ICU ambulances and free medicines.'
+      address: 'Sector 2, Tapovan Sadhugram, Nashik 422003',
+      location: 'Sector 2, Tapovan Sadhugram, Nashik 422003',
+      description: 'Massive community dining hall serving fresh, wholesome, pure vegetarian Mahaprasad free of cost to over 100,000 pilgrims daily.',
+      capacityNotes: 'Free langar meals served 24/7 for all pilgrims.',
+      image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
+      timings: '7:00 AM - 10:30 PM (Continuous Mahaprasad)',
+      distance: 'Inside Tapovan Sadhugram City',
+      contactNumber: '0253-2575555',
+      verified: true,
+      isConfirmed: true,
+      facilities: ['Free Mahaprasad', 'Hygienic Dining Benches', 'Purified Water', 'RO Drinking Water']
     }
   ],
   '/pilgrim-guide': [
@@ -94,9 +112,11 @@ const mockData = {
       _id: 'guide-1',
       category: 'Shahi Snan',
       title: 'First Amrit Shahi Snan (प्रथम अमृत शाही स्नान)',
+      subtitle: '02 August 2027 • Main Bathing Day',
       eventDate: '02 August 2027',
       location: 'Ramkund (Nashik) & Kushavarta Kund (Trimbakeshwar)',
       description: 'The first grand royal bath date of Simhastha Kumbh with Naga Sadhus royal procession.',
+      image: '/shahi-snan.jpg',
       highlights: ['Royal bath procession by Akharas', 'Sacred dip at sunrise in Godavari River']
     }
   ],
