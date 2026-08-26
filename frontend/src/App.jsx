@@ -171,7 +171,11 @@ const App = () => {
         </Routes>
       </div>
 
-      {!isSplashLanguagePage && !isAdminArea && !isAdminLogin && <Footer />}
+      {!isSplashLanguagePage && !isAdminArea && !isAdminLogin && (
+        <div className={isHomePage ? "block lg:hidden" : "block"}>
+          <Footer />
+        </div>
+      )}
       <ScrollToTop />
     </div>
   );

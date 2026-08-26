@@ -187,29 +187,33 @@ const Home = () => {
       <Link
         key={idx}
         to={btn.path}
-        className={`p-3 sm:p-4 rounded-[22px] sm:rounded-[28px] border-2 bg-white hover:bg-slate-200 hover:border-slate-400 text-slate-900 transition-all hover:scale-102 hover:shadow-2xl flex items-center justify-between gap-2 sm:gap-3 shadow-lg ${btn.borderColor}`}
+        className={`p-3 sm:p-3.5 rounded-[32px] border-2 bg-white hover:bg-slate-100 text-slate-900 transition-all hover:scale-102 flex items-center justify-between gap-3 shadow-lg hover:shadow-2xl ${btn.borderColor} my-auto`}
       >
-        <div className="flex items-center space-x-2.5 sm:space-x-3 rtl:space-x-reverse min-w-0">
-          <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-br ${btn.color} text-white flex items-center justify-center shadow-md flex-shrink-0`}>
-            <Icon className="w-5 h-5 sm:w-6 sm:h-6" />
+        <div className="flex items-center space-x-3 rtl:space-x-reverse min-w-0">
+          <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${btn.color} text-white flex items-center justify-center shadow-md flex-shrink-0`}>
+            <Icon className="w-5 h-5" />
           </div>
           <div className="min-w-0">
-            <h4 className="text-sm sm:text-base font-bold leading-tight text-slate-950 truncate tracking-tight">{t(btn.titleKey)}</h4>
-            <p className="text-xs text-slate-600 line-clamp-1 mt-0.5">{t(btn.descKey)}</p>
+            <h4 className="text-sm font-bold leading-snug text-slate-950 truncate tracking-tight">{t(btn.titleKey)}</h4>
+            <p className="text-xs text-slate-600 line-clamp-1 mt-0.5 font-medium">{t(btn.descKey)}</p>
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-slate-400 flex-shrink-0 hidden xs:block" />
+        <ChevronRight className="w-4 h-4 text-slate-400 flex-shrink-0" />
       </Link>
     );
   };
 
   const desktopHeroSection = (
-    <div className="relative rounded-3xl px-4 py-8 sm:py-12 border-0 bg-transparent text-white flex flex-col items-center justify-center text-center shadow-none mx-auto w-full min-h-[160px] sm:min-h-[820px]">
-      <div className="relative z-10 flex flex-col items-center justify-center text-center mx-auto">
-        <h2 className="text-xl sm:text-3xl font-bold leading-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] text-amber-100 text-center mx-auto max-w-xl">
-          {t('welcome')}
-        </h2>
+    <div className="relative rounded-3xl p-8 border border-amber-400/30 bg-slate-950/40 backdrop-blur-md text-white flex flex-col items-center justify-center text-center shadow-2xl mx-auto w-full max-w-lg space-y-3">
+      <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-3xl mx-auto shadow-md">
+        🛕
       </div>
+      <h2 className="text-2xl sm:text-3xl font-black leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] text-amber-100 text-center mx-auto tracking-tight">
+        {t('welcome')}
+      </h2>
+      <p className="text-xs text-amber-200/90 font-medium leading-relaxed drop-shadow max-w-sm">
+        Official Simhastha Pilgrim Companion • Ghats, Shahi Snan Schedules, Transport & Safety
+      </p>
     </div>
   );
 
@@ -222,21 +226,21 @@ const Home = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-3 sm:py-6 relative z-10">
-      {/* DESKTOP LAYOUT (lg:): Cards Left | Center Content | Cards Right */}
-      <div className="hidden lg:grid lg:grid-cols-12 lg:gap-6 lg:items-start">
-        {/* Left Column */}
-        <div className="lg:col-span-3 space-y-4">
+    <div className="max-w-7xl mx-auto px-4 py-2 relative z-10">
+      {/* DESKTOP LAYOUT (lg:): Fixed Height, 0 Scrollbars, Equal Vertical Alignment */}
+      <div className="hidden lg:grid lg:grid-cols-12 lg:gap-6 h-[calc(100vh-85px)] overflow-hidden items-stretch py-1">
+        {/* Left Column (5 Cards Equally Spaced Vertically) */}
+        <div className="lg:col-span-3 h-full flex flex-col justify-between py-1">
           {leftCards.map((btn, idx) => renderCard(btn, `left-${idx}`))}
         </div>
 
-        {/* Center Column */}
-        <div className="lg:col-span-6 space-y-6">
+        {/* Center Column (Welcome Section Vertically Centered) */}
+        <div className="lg:col-span-6 h-full flex flex-col items-center justify-center">
           {desktopHeroSection}
         </div>
 
-        {/* Right Column */}
-        <div className="lg:col-span-3 space-y-4">
+        {/* Right Column (5 Cards Equally Spaced Vertically) */}
+        <div className="lg:col-span-3 h-full flex flex-col justify-between py-1">
           {rightCards.map((btn, idx) => renderCard(btn, `right-${idx}`))}
         </div>
       </div>
