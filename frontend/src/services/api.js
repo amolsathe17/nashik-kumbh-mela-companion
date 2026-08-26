@@ -242,7 +242,15 @@ api.interceptors.request.use(async (config) => {
           createdAt: new Date().toISOString()
         });
       } else if (endpoint === '/travel') {
+        if (!mockData['/travel']) mockData['/travel'] = [];
+        mockData['/travel'] = mockData['/travel'].filter(item => item._id !== newItem._id && item.id !== newItem.id);
         mockData['/travel'].unshift(newItem);
+
+        try {
+          const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_travel') || '[]');
+          savedCustom.unshift(newItem);
+          localStorage.setItem('kumbh_custom_travel', JSON.stringify(savedCustom));
+        } catch (e) {}
 
         mockData['/notifications'].unshift({
           _id: 'notif-' + Date.now(),
@@ -349,6 +357,20 @@ api.interceptors.request.use(async (config) => {
           const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]');
           const updatedCustom = savedCustom.filter(item => item._id !== id && item.id !== id);
           localStorage.setItem('kumbh_custom_guides', JSON.stringify(updatedCustom));
+        } catch (e) {}
+      } else if (basePath === '/travel' || endpoint.startsWith('/travel')) {
+        if (Array.isArray(mockData['/travel'])) {
+          mockData['/travel'] = mockData['/travel'].filter(item => item._id !== id && item.id !== id);
+        }
+
+        try {
+          const savedDeleted = JSON.parse(localStorage.getItem('kumbh_deleted_travel') || '[]');
+          if (!savedDeleted.includes(id)) savedDeleted.push(id);
+          localStorage.setItem('kumbh_deleted_travel', JSON.stringify(savedDeleted));
+
+          const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_travel') || '[]');
+          const updatedCustom = savedCustom.filter(item => item._id !== id && item.id !== id);
+          localStorage.setItem('kumbh_custom_travel', JSON.stringify(updatedCustom));
         } catch (e) {}
       } else if (Array.isArray(mockData[basePath])) {
         mockData[basePath] = mockData[basePath].filter(item => item._id !== id);
