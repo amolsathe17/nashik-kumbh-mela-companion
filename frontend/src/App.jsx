@@ -49,8 +49,13 @@ const ProtectedAdminRoute = ({ children }) => {
       <AdminSidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
       <div className="flex-1 lg:ml-64 flex flex-col h-screen overflow-hidden min-w-0">
         <AdminHeader isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
-        <main className="flex-1 p-3 sm:p-6 overflow-y-auto min-w-0">
-          {children}
+        <main className="flex-1 p-3 sm:p-6 overflow-y-auto min-w-0 flex flex-col justify-between">
+          <div className="flex-1">
+            {children}
+          </div>
+          <footer className="pt-6 pb-2 text-center text-xs font-semibold text-slate-500 border-t border-slate-300/50 mt-6">
+            © 2026 Nashik Kumbh Mela Authority. All rights reserved.
+          </footer>
         </main>
       </div>
     </div>
