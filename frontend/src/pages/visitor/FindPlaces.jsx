@@ -365,27 +365,34 @@ const FindPlaces = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
+        const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
+        const customItems = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+
         const res = await api.get('/locations').catch(() => null);
-        if (res?.data?.success && Array.isArray(res.data.data) && res.data.data.length > 0) {
-          const filteredApi = res.data.data.filter(item => item.category !== 'Medical' && item.category !== 'Medical Centre');
+        let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-          const enrichedApiItems = filteredApi.map(item => ({
-            ...item,
-            address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
-            description: item.description || item.capacityNotes || item.details || item.notes || 'Official Nashik Kumbh Mela facility and pilgrim service location.',
-            image: item.image || item.imageUrl || '/shahi-snan.jpg',
-            timings: item.timings || item.hours || 'Open 24 Hours',
-            distance: item.distance || 'Central Kumbh Area',
-            contactNumber: item.contactNumber || item.phone || '0253-2575555',
-            facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Service', 'Verified Site', 'Helpdesk']
-          }));
+        // Combine API items and custom local items
+        const allItems = [...customItems, ...apiItems];
+        const filteredApi = allItems.filter(item => 
+          item.category !== 'Medical' && 
+          item.category !== 'Medical Centre' && 
+          !deletedIds.includes(item._id)
+        );
 
-          const apiNames = new Set(enrichedApiItems.map(i => i.name));
-          const combined = [...enrichedApiItems, ...defaultLocations.filter(d => !apiNames.has(d.name))];
-          setLocations(combined);
-        } else {
-          setLocations(defaultLocations);
-        }
+        const enrichedApiItems = filteredApi.map(item => ({
+          ...item,
+          address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
+          description: item.description || item.capacityNotes || item.details || item.notes || 'Official Nashik Kumbh Mela facility and pilgrim service location.',
+          image: item.image || item.imageUrl || '/shahi-snan.jpg',
+          timings: item.timings || item.hours || 'Open 24 Hours',
+          distance: item.distance || 'Central Kumbh Area',
+          contactNumber: item.contactNumber || item.phone || '0253-2575555',
+          facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Service', 'Verified Site', 'Helpdesk']
+        }));
+
+        const apiNames = new Set(enrichedApiItems.map(i => i.name));
+        const combined = [...enrichedApiItems, ...defaultLocations.filter(d => !apiNames.has(d.name) && !deletedIds.includes(d._id))];
+        setLocations(combined);
       } catch (err) {
         setLocations(defaultLocations);
       } finally {

@@ -71,4 +71,18 @@ const updateLocation = async (req, res) => {
   }
 };
 
-module.exports = { getLocations, createLocation, updateLocation };
+const deleteLocation = async (req, res) => {
+  try {
+    const { id } = req.params;
+    try {
+      await Location.findByIdAndDelete(id);
+    } catch (e) {}
+
+    memoryStore.locations = memoryStore.locations.filter(item => item._id !== id);
+    res.json({ success: true, message: 'Location deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error deleting location' });
+  }
+};
+
+module.exports = { getLocations, createLocation, updateLocation, deleteLocation };

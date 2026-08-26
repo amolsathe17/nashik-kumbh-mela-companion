@@ -261,6 +261,22 @@ api.interceptors.request.use(async (config) => {
           category: 'Emergency Alert',
           createdAt: new Date().toISOString()
         });
+      } else if (endpoint === '/locations' || endpoint === '/facilities') {
+        if (!mockData['/locations']) mockData['/locations'] = [];
+        if (!mockData['/facilities']) mockData['/facilities'] = [];
+
+        mockData['/locations'] = mockData['/locations'].filter(item => item._id !== newItem._id && item.name !== newItem.name);
+        mockData['/facilities'] = mockData['/facilities'].filter(item => item._id !== newItem._id && item.name !== newItem.name);
+
+        mockData['/locations'].unshift(newItem);
+        mockData['/facilities'].unshift(newItem);
+
+        // Store custom locations in localStorage for persistence
+        try {
+          const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+          savedCustom.unshift(newItem);
+          localStorage.setItem('kumbh_custom_locations', JSON.stringify(savedCustom));
+        } catch (e) {}
       } else {
         if (!mockData[endpoint]) mockData[endpoint] = [];
         if (Array.isArray(mockData[endpoint])) {
@@ -291,6 +307,25 @@ api.interceptors.request.use(async (config) => {
         if (mockData['/daily-information/today']?._id === id) {
           mockData['/daily-information/today'] = mockData['/daily-information'][0] || null;
         }
+      } else if (basePath === '/locations' || basePath === '/facilities' || endpoint.startsWith('/locations') || endpoint.startsWith('/facilities')) {
+        if (Array.isArray(mockData['/locations'])) {
+          mockData['/locations'] = mockData['/locations'].filter(item => item._id !== id);
+        }
+        if (Array.isArray(mockData['/facilities'])) {
+          mockData['/facilities'] = mockData['/facilities'].filter(item => item._id !== id);
+        }
+
+        // Store deleted ID in localStorage for persistence
+        try {
+          const savedDeleted = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
+          if (!savedDeleted.includes(id)) savedDeleted.push(id);
+          localStorage.setItem('kumbh_deleted_locations', JSON.stringify(savedDeleted));
+
+          // Remove from custom stored locations as well
+          const savedCustom = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+          const updatedCustom = savedCustom.filter(item => item._id !== id);
+          localStorage.setItem('kumbh_custom_locations', JSON.stringify(updatedCustom));
+        } catch (e) {}
       } else if (Array.isArray(mockData[basePath])) {
         mockData[basePath] = mockData[basePath].filter(item => item._id !== id);
       }
