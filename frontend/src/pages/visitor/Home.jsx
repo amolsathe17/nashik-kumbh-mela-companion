@@ -286,8 +286,8 @@ const Home = () => {
             {/* Welcome Message ON TOP */}
             {mobileWelcomeHeader}
 
-            {/* 5 Rows of 2-Column Cards Equally Distributed Vertically */}
-            <div className="flex-1 flex flex-col justify-between space-y-1.5 py-1">
+            {/* 5 Rows of 2-Column Cards Equally Distributed Vertically with 10% Bottom Padding */}
+            <div className="flex-1 flex flex-col justify-between space-y-1.5 py-1 pb-[10%]">
               <div className="grid grid-cols-2 gap-2">
                 {renderCard(mobileCards[0], 'mob-0')}
                 {renderCard(mobileCards[1], 'mob-1')}
