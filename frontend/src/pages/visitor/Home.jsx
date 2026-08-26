@@ -204,16 +204,10 @@ const Home = () => {
   };
 
   const desktopHeroSection = (
-    <div className="relative rounded-3xl p-8 border border-amber-400/30 bg-slate-950/40 backdrop-blur-md text-white flex flex-col items-center justify-center text-center shadow-2xl mx-auto w-full max-w-lg space-y-3">
-      <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-3xl mx-auto shadow-md">
-        🛕
-      </div>
-      <h2 className="text-2xl sm:text-3xl font-black leading-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.95)] text-amber-100 text-center mx-auto tracking-tight">
+    <div className="relative text-center mx-auto max-w-xl">
+      <h2 className="text-2xl sm:text-4xl lg:text-4xl font-black leading-tight drop-shadow-[0_4px_12px_rgba(0,0,0,0.95)] text-amber-100 text-center mx-auto tracking-tight">
         {t('welcome')}
       </h2>
-      <p className="text-xs text-amber-200/90 font-medium leading-relaxed drop-shadow max-w-sm">
-        Official Simhastha Pilgrim Companion • Ghats, Shahi Snan Schedules, Transport & Safety
-      </p>
     </div>
   );
 
