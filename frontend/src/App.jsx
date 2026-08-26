@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ArrowUp } from 'lucide-react';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import AdminSidebar from './components/layout/AdminSidebar';
@@ -39,17 +40,50 @@ import Settings from './pages/admin/Settings';
 const ProtectedAdminRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const mainRef = useRef(null);
+  const location = useLocation();
+
+  // Scroll main container to top on admin route changes
+  useEffect(() => {
+    if (mainRef.current) {
+      mainRef.current.scrollTop = 0;
+    }
+  }, [location.pathname]);
+
+  // Monitor scroll position of main content container
+  useEffect(() => {
+    const mainEl = mainRef.current;
+    if (!mainEl) return;
+
+    const handleScroll = () => {
+      if (mainEl.scrollTop > 150) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    mainEl.addEventListener('scroll', handleScroll);
+    return () => mainEl.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScrollToTop = () => {
+    if (mainRef.current) {
+      mainRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   if (!isAuthenticated) {
     return <Navigate to="/admin/login" replace />;
   }
 
   return (
-    <div className="h-screen w-screen bg-[#e6ebf5] flex overflow-hidden">
+    <div className="h-screen w-screen bg-[#e6ebf5] flex overflow-hidden relative">
       <AdminSidebar isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
       <div className="flex-1 lg:ml-64 flex flex-col h-screen overflow-hidden min-w-0">
         <AdminHeader isMobileOpen={isMobileOpen} setIsMobileOpen={setIsMobileOpen} />
-        <main className="flex-1 p-3 sm:p-6 overflow-y-auto min-w-0 flex flex-col justify-between">
+        <main ref={mainRef} className="flex-1 p-3 sm:p-6 overflow-y-auto min-w-0 flex flex-col justify-between relative">
           <div className="flex-1">
             {children}
           </div>
@@ -58,6 +92,18 @@ const ProtectedAdminRoute = ({ children }) => {
           </footer>
         </main>
       </div>
+
+      {/* Floating Scroll-to-Top Button for Admin Pages */}
+      {showScrollTop && (
+        <button
+          onClick={handleScrollToTop}
+          className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-amber-600 hover:bg-amber-700 text-white shadow-2xl transition-all border border-amber-300/40 hover:scale-110 active:scale-95 animate-fade-in flex items-center justify-center"
+          title="Scroll to Top"
+          aria-label="Scroll to top"
+        >
+          <ArrowUp className="w-5 h-5" />
+        </button>
+      )}
     </div>
   );
 };
