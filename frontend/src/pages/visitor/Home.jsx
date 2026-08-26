@@ -60,6 +60,21 @@ const Home = () => {
   const activeAnnouncements = announcements.filter(a => !dismissedAnnounceIds.includes(a._id));
   const hasActiveModalContent = activeAnnouncements.length > 0 || (todayInfo && !isTodayInfoDismissed);
 
+  // Trigger 4-second delay for mobile viewport reveal
+  const triggerMobile4sDelay = () => {
+    if (window.innerWidth < 1024) {
+      setShowMobileContent(false);
+      setTimeout(() => {
+        setShowMobileContent(true);
+      }, 4000);
+    }
+  };
+
+  const handleCloseNoticeModal = () => {
+    setShowNoticeModal(false);
+    triggerMobile4sDelay();
+  };
+
   // When pilgrim views or deletes a notice, remove from center modal popup permanently while keeping in dropdown
   const handleDeleteSingleAnnouncement = (id) => {
     setDismissedAnnounceIds(prev => {
@@ -67,6 +82,12 @@ const Home = () => {
       try {
         localStorage.setItem('kumbh_dismissed_modal_announcements', JSON.stringify(updated));
       } catch (e) {}
+
+      const remainingAnn = announcements.filter(a => !updated.includes(a._id));
+      if (remainingAnn.length === 0 && (isTodayInfoDismissed || !todayInfo)) {
+        setShowNoticeModal(false);
+        triggerMobile4sDelay();
+      }
       return updated;
     });
   };
@@ -77,6 +98,11 @@ const Home = () => {
     try {
       localStorage.setItem('kumbh_dismissed_modal_todayinfo', 'true');
     } catch (e) {}
+
+    if (activeAnnouncements.length === 0) {
+      setShowNoticeModal(false);
+      triggerMobile4sDelay();
+    }
   };
 
   const handleDeleteAllNotices = () => {
@@ -88,6 +114,7 @@ const Home = () => {
       localStorage.setItem('kumbh_dismissed_modal_todayinfo', 'true');
     } catch (e) {}
     setShowNoticeModal(false);
+    triggerMobile4sDelay();
   };
 
   // Left column cards (desktop)
@@ -276,7 +303,7 @@ const Home = () => {
       {showNoticeModal && hasActiveModalContent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 animate-fade-in">
           {/* Backdrop dismiss */}
-          <div className="absolute inset-0" onClick={() => setShowNoticeModal(false)} />
+          <div className="absolute inset-0" onClick={handleCloseNoticeModal} />
 
           {/* Center Modal Container */}
           <div className="relative w-full max-w-lg bg-gradient-to-b from-amber-500 via-orange-500 to-amber-700 p-1 rounded-[32px] shadow-2xl z-10 my-auto">
@@ -299,7 +326,7 @@ const Home = () => {
                 </div>
 
                 <button
-                  onClick={() => setShowNoticeModal(false)}
+                  onClick={handleCloseNoticeModal}
                   className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
                   aria-label="Close Notice Popup"
                 >
@@ -331,7 +358,7 @@ const Home = () => {
                           to="/notifications" 
                           onClick={() => {
                             handleDeleteSingleAnnouncement(ann._id);
-                            setShowNoticeModal(false);
+                            handleCloseNoticeModal();
                           }}
                           className="text-xs font-bold text-amber-700 hover:underline flex items-center gap-0.5"
                         >
@@ -388,7 +415,7 @@ const Home = () => {
                         to="/todays-kumbh"
                         onClick={() => {
                           handleDeleteTodayInfo();
-                          setShowNoticeModal(false);
+                          handleCloseNoticeModal();
                         }}
                         className="text-xs font-bold text-amber-700 hover:text-amber-800 flex items-center space-x-1"
                       >
@@ -412,7 +439,7 @@ const Home = () => {
                 </button>
 
                 <button
-                  onClick={() => setShowNoticeModal(false)}
+                  onClick={handleCloseNoticeModal}
                   className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-transform hover:scale-102"
                 >
                   Close Window
