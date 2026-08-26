@@ -8,7 +8,7 @@ const Footer = () => {
   const [isEmergencyOpen, setIsEmergencyOpen] = useState(false);
 
   return (
-    <footer className="bg-slate-900 text-slate-300 mt-0 border-t-4 border-amber-500 text-center">
+    <footer className="relative z-10 bg-slate-900 text-slate-300 mt-0 border-t-4 border-amber-500 text-center">
       <div className="max-w-7xl mx-auto px-4 py-8 space-y-6">
         {/* App Title & Description Centered */}
         <div className="flex flex-col items-center justify-center space-y-2">
