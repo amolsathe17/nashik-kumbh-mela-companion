@@ -16,11 +16,8 @@ const FindPlaces = () => {
   const [loading, setLoading] = useState(true);
   const [selectedPlace, setSelectedPlace] = useState(null);
 
-  // Removed Medical Centre tab as requested
-  const categories = [
-    'All', 'Ghat', 'Temple', 'Police/Help Centre', 
-    'Parking', 'Drinking Water', 'Toilet', 'Food Area', 'Camp/Accommodation', 'Info / Help'
-  ];
+  // Category tabs strictly for main places (Ghats & Temples)
+  const categories = ['All', 'Ghat', 'Temple'];
 
   // Authentic Dataset for Nashik-Trimbakeshwar Kumbh Mela 2026-2027 (Strictly Local Nashik Kumbh Images & No Medical Tab)
   const defaultLocations = [
@@ -371,28 +368,59 @@ const FindPlaces = () => {
         const res = await api.get('/locations').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-        // Combine API items and custom local items
-        const allItems = [...customItems, ...apiItems];
-        const filteredApi = allItems.filter(item => 
+        // Combine API items, custom local items, and default items
+        const allItems = [...customItems, ...apiItems, ...defaultLocations];
+        const filtered = allItems.filter(item => 
+          item && 
           item.category !== 'Medical' && 
           item.category !== 'Medical Centre' && 
-          !deletedIds.includes(item._id)
+          !deletedIds.includes(item._id) &&
+          !deletedIds.includes(item.id)
         );
 
-        const enrichedApiItems = filteredApi.map(item => ({
-          ...item,
-          address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
-          description: item.description || item.capacityNotes || item.details || item.notes || 'Official Nashik Kumbh Mela facility and pilgrim service location.',
-          image: item.image || item.imageUrl || '/shahi-snan.jpg',
-          timings: item.timings || item.hours || 'Open 24 Hours',
-          distance: item.distance || 'Central Kumbh Area',
-          contactNumber: item.contactNumber || item.phone || '0253-2575555',
-          facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Service', 'Verified Site', 'Helpdesk']
-        }));
+        // Strict deduplication by normalized name and ID
+        const seenNames = new Set();
+        const seenIds = new Set();
+        const uniqueLocations = [];
 
-        const apiNames = new Set(enrichedApiItems.map(i => i.name));
-        const combined = [...enrichedApiItems, ...defaultLocations.filter(d => !apiNames.has(d.name) && !deletedIds.includes(d._id))];
-        setLocations(combined);
+        for (const item of filtered) {
+          const normName = String(item.name || '').trim().toLowerCase();
+          const itemId = String(item._id || item.id || '').trim();
+
+          if (seenNames.has(normName) || (itemId && seenIds.has(itemId))) {
+            continue;
+          }
+          if (normName) seenNames.add(normName);
+          if (itemId) seenIds.add(itemId);
+
+          uniqueLocations.push({
+            ...item,
+            address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
+            description: item.description || item.capacityNotes || item.details || item.notes || 'Official Nashik Kumbh Mela facility and pilgrim service location.',
+            image: item.image || item.imageUrl || '/shahi-snan.jpg',
+            timings: item.timings || item.hours || 'Open 24 Hours',
+            distance: item.distance || 'Central Kumbh Area',
+            contactNumber: item.contactNumber || item.phone || '0253-2575555',
+            facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Service', 'Verified Site', 'Helpdesk']
+          });
+        }
+
+        // Apply custom sequence ordering set by Admin
+        const orderIds = JSON.parse(localStorage.getItem('kumbh_order_locations') || '[]');
+        if (orderIds && orderIds.length > 0) {
+          const orderMap = new Map();
+          orderIds.forEach((id, idx) => orderMap.set(String(id), idx));
+
+          uniqueLocations.sort((a, b) => {
+            const idA = String(a._id || a.id || '');
+            const idB = String(b._id || b.id || '');
+            const posA = orderMap.has(idA) ? orderMap.get(idA) : 99999;
+            const posB = orderMap.has(idB) ? orderMap.get(idB) : 99999;
+            return posA - posB;
+          });
+        }
+
+        setLocations(uniqueLocations);
       } catch (err) {
         setLocations(defaultLocations);
       } finally {
@@ -402,26 +430,24 @@ const FindPlaces = () => {
     fetchLocations();
   }, []);
 
+  const isPlaceCategory = (catStr) => {
+    if (!catStr) return false;
+    const s = String(catStr).trim().toLowerCase();
+    return s.includes('ghat') || s.includes('temple') || s.includes('mandir');
+  };
+
   const matchCategory = (itemCat, targetCat) => {
+    if (!itemCat || !isPlaceCategory(itemCat)) return false;
     if (!targetCat || targetCat === 'All') return true;
-    if (!itemCat) return false;
 
-    const item = String(itemCat).trim().toLowerCase();
-    const target = String(targetCat).trim().toLowerCase();
+    const normalize = (catStr) => {
+      const s = String(catStr || '').trim().toLowerCase();
+      if (s.includes('ghat')) return 'ghat';
+      if (s.includes('temple') || s.includes('mandir')) return 'temple';
+      return s;
+    };
 
-    if (item === target) return true;
-
-    if (target === 'ghat') return item === 'ghat';
-    if (target === 'temple') return item === 'temple';
-    if (target === 'police/help centre') return item === 'police/help centre' || item === 'police' || item === 'police centre';
-    if (target === 'parking') return item === 'parking';
-    if (target === 'drinking water') return item === 'drinking water' || item === 'water';
-    if (target === 'toilet') return item === 'toilet';
-    if (target === 'food area') return item === 'food area' || item === 'food';
-    if (target === 'camp/accommodation') return item === 'camp/accommodation' || item === 'camp' || item === 'accommodation';
-    if (target === 'info / help') return item === 'info / help' || item === 'info' || item === 'help';
-
-    return item === target;
+    return normalize(itemCat) === normalize(targetCat);
   };
 
   const filteredLocations = locations.filter(loc => {
@@ -611,19 +637,12 @@ const FindPlaces = () => {
                 </div>
 
                 {/* Card Actions */}
-                <div className="p-5 pt-0 flex items-center gap-2">
-                  <button
-                    onClick={() => setSelectedPlace(loc)}
-                    className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1"
-                  >
-                    <Info className="w-3.5 h-3.5 text-amber-600" /> View Details
-                  </button>
-
+                <div className="p-5 pt-0">
                   <a
                     href={getGoogleMapsDirectionsUrl(loc)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center gap-1"
+                    className="w-full py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center gap-1"
                   >
                     <Navigation className="w-3.5 h-3.5" /> Get Directions
                   </a>
@@ -637,80 +656,6 @@ const FindPlaces = () => {
           <AlertTriangle className="w-10 h-10 text-amber-500 mx-auto" />
           <h3 className="font-bold text-slate-800 text-base">No places found in "{selectedCategory}"</h3>
           <p className="text-xs text-slate-500">Try adjusting your search query or select "All Categories".</p>
-        </div>
-      )}
-
-      {/* Place Details Modal Popup */}
-      {selectedPlace && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-amber-500/30">
-            <div className="flex items-center justify-between border-b pb-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">{getCategoryEmoji(selectedPlace.category)}</span>
-                <h3 className="font-bold text-base text-slate-900">{selectedPlace.name}</h3>
-              </div>
-              <button 
-                onClick={() => setSelectedPlace(null)}
-                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="h-48 rounded-2xl overflow-hidden bg-slate-900 relative">
-              <img 
-                src={selectedPlace.image || selectedPlace.imageUrl || '/shahi-snan.jpg'} 
-                alt={selectedPlace.name} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <div>
-                <h4 className="font-bold text-slate-700 mb-1">About Location:</h4>
-                <p className="text-slate-600 leading-relaxed">
-                  {selectedPlace.description || selectedPlace.capacityNotes || 'Official Nashik Kumbh Mela facility and pilgrim service location.'}
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200 font-medium">
-                <div>📍 Address: <span className="font-bold text-slate-900">{selectedPlace.address || selectedPlace.location || 'Panchavati, Nashik'}</span></div>
-                <div>⏰ Timings: <span className="font-bold text-slate-900">{selectedPlace.timings || selectedPlace.hours || '24/7'}</span></div>
-                <div>📞 Helpline: <span className="font-bold text-amber-700">{selectedPlace.contactNumber || selectedPlace.phone || '0253-2575555'}</span></div>
-                <div>🚗 Distance: <span className="font-bold text-slate-900">{selectedPlace.distance || 'Central'}</span></div>
-              </div>
-
-              {selectedPlace.facilities && selectedPlace.facilities.length > 0 && (
-                <div>
-                  <h4 className="font-bold text-slate-700 mb-1.5">Available Services & Infrastructure:</h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedPlace.facilities.map((fac, idx) => (
-                      <span key={idx} className="bg-amber-100 text-amber-900 px-2.5 py-1 rounded-lg font-bold text-[11px] flex items-center gap-1">
-                        <CheckCircle className="w-3 h-3 text-amber-700" /> {fac}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="pt-3 border-t flex gap-2">
-              <button
-                onClick={() => setSelectedPlace(null)}
-                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
-              >
-                Close
-              </button>
-              <a
-                href={getGoogleMapsDirectionsUrl(selectedPlace)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1 shadow"
-              >
-                <Navigation className="w-4 h-4" /> Open in Google Maps
-              </a>
-            </div>
-          </div>
         </div>
       )}
     </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   Bus, Car, Footprints, Plus, Trash2, CheckCircle, AlertCircle, 
-  MapPin, Clock, Navigation, Search, ShieldAlert, Compass, Edit3, X
+  MapPin, Clock, Navigation, Search, ShieldAlert, Compass, Edit3, X, ArrowUp, ArrowDown, Copy
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -9,6 +9,7 @@ const TravelMgmt = () => {
   const [travelItems, setTravelItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingTravel, setEditingTravel] = useState(null);
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('All');
 
@@ -112,6 +113,107 @@ const TravelMgmt = () => {
     fetchTravel();
   }, []);
 
+  const resetForm = () => {
+    setEditingTravel(null);
+    setForm({
+      fromLocation: '',
+      toLocation: '',
+      title: '',
+      routeType: 'Journey Route',
+      estimatedTime: '10 Mins (Shuttle)',
+      distance: '1.5 km',
+      nearestParking: 'Tapovan Satellite Parking Hub A',
+      parkingSlotsTotal: 5000,
+      parkingSlotsAvailable: 4200,
+      shuttleServiceInfo: 'Electric Shuttle Bus running every 3 to 5 minutes (Free)',
+      privateVehicleInfo: 'Private vehicles restricted inside core ghat area. Park at outer satellite hubs.',
+      walkingPathInfo: 'Pedestrian green route available along river promenade.',
+      status: 'Clear',
+      description: ''
+    });
+  };
+
+  const handleEdit = (item) => {
+    setEditingTravel(item);
+    setForm({
+      fromLocation: item.fromLocation || '',
+      toLocation: item.toLocation || '',
+      title: item.title || '',
+      routeType: item.routeType || 'Journey Route',
+      estimatedTime: item.estimatedTime || '10 Mins (Shuttle)',
+      distance: item.distance || '1.5 km',
+      nearestParking: item.nearestParking || 'Tapovan Satellite Parking Hub A',
+      parkingSlotsTotal: item.parkingSlotsTotal || 5000,
+      parkingSlotsAvailable: item.parkingSlotsAvailable || 4200,
+      shuttleServiceInfo: item.shuttleServiceInfo || '',
+      privateVehicleInfo: item.privateVehicleInfo || '',
+      walkingPathInfo: item.walkingPathInfo || '',
+      status: item.status || 'Clear',
+      description: item.description || ''
+    });
+    setShowModal(true);
+  };
+
+  const handleCopy = (item) => {
+    setEditingTravel(null);
+    setForm({
+      fromLocation: item.fromLocation || '',
+      toLocation: item.toLocation || '',
+      title: '',
+      routeType: item.routeType || 'Journey Route',
+      estimatedTime: item.estimatedTime || '10 Mins (Shuttle)',
+      distance: item.distance || '1.5 km',
+      nearestParking: item.nearestParking || 'Tapovan Satellite Parking Hub A',
+      parkingSlotsTotal: item.parkingSlotsTotal || 5000,
+      parkingSlotsAvailable: item.parkingSlotsAvailable || 4200,
+      shuttleServiceInfo: item.shuttleServiceInfo || '',
+      privateVehicleInfo: item.privateVehicleInfo || '',
+      walkingPathInfo: item.walkingPathInfo || '',
+      status: item.status || 'Clear',
+      description: item.description || ''
+    });
+    setShowModal(true);
+  };
+
+  const applyCustomOrder = (items) => {
+    const orderIds = JSON.parse(localStorage.getItem('kumbh_order_travel') || '[]');
+    if (!orderIds || orderIds.length === 0) return items;
+
+    const orderMap = new Map();
+    orderIds.forEach((id, idx) => orderMap.set(String(id), idx));
+
+    return [...items].sort((a, b) => {
+      const idA = String(a._id || a.id || '');
+      const idB = String(b._id || b.id || '');
+      const posA = orderMap.has(idA) ? orderMap.get(idA) : 99999;
+      const posB = orderMap.has(idB) ? orderMap.get(idB) : 99999;
+      return posA - posB;
+    });
+  };
+
+  const handleMove = (index, direction) => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= filteredTravelItems.length) return;
+
+    const itemToMove = filteredTravelItems[index];
+    const targetItem = filteredTravelItems[targetIndex];
+
+    const realIndex = travelItems.findIndex(t => (t._id || t.id) === (itemToMove._id || itemToMove.id));
+    const realTargetIndex = travelItems.findIndex(t => (t._id || t.id) === (targetItem._id || targetItem.id));
+
+    if (realIndex === -1 || realTargetIndex === -1) return;
+
+    const updated = [...travelItems];
+    const temp = updated[realIndex];
+    updated[realIndex] = updated[realTargetIndex];
+    updated[realTargetIndex] = temp;
+
+    setTravelItems(updated);
+
+    const orderIds = updated.map(t => t._id || t.id);
+    localStorage.setItem('kumbh_order_travel', JSON.stringify(orderIds));
+  };
+
   const fetchTravel = async () => {
     try {
       setLoading(true);
@@ -121,13 +223,30 @@ const TravelMgmt = () => {
       const res = await api.get('/travel').catch(() => null);
       let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-      const combined = [...customTravel, ...apiItems];
+      const rawList = [...customTravel, ...apiItems, ...defaultTravelData];
+      const seenTitles = new Set();
+      const seenIds = new Set();
+      const finalItems = [];
 
-      const enrichedApiItems = combined
-        .filter(item => !deletedIds.includes(item._id) && !deletedIds.includes(item.id))
-        .map(item => ({
-          _id: item._id || item.id,
-          id: item._id || item.id,
+      for (const item of rawList) {
+        if (!item) continue;
+        const itemId = String(item._id || item.id || '').trim();
+        const normTitle = String(item.title || item.name || `${item.fromLocation || ''} to ${item.toLocation || ''}`).trim().toLowerCase();
+
+        if (deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
+          continue;
+        }
+
+        if ((itemId && seenIds.has(itemId)) || (normTitle && seenTitles.has(normTitle))) {
+          continue;
+        }
+
+        if (itemId) seenIds.add(itemId);
+        if (normTitle) seenTitles.add(normTitle);
+
+        finalItems.push({
+          _id: itemId || 'trv-' + Date.now(),
+          id: itemId || 'trv-' + Date.now(),
           fromLocation: item.fromLocation || item.from || 'Tapovan',
           toLocation: item.toLocation || item.to || 'Ramkund',
           title: item.title || `${item.fromLocation || 'Origin'} to ${item.toLocation || 'Destination'}`,
@@ -142,15 +261,10 @@ const TravelMgmt = () => {
           walkingPathInfo: item.walkingPathInfo || item.walkingPath || 'Pedestrian walkway available.',
           status: item.status || 'Clear',
           description: item.description || 'Verified Kumbh Mela transport and parking advisory.'
-        }));
+        });
+      }
 
-      const apiTitles = new Set(enrichedApiItems.map(i => i.title));
-      const finalItems = [
-        ...enrichedApiItems,
-        ...defaultTravelData.filter(d => !apiTitles.has(d.title) && !deletedIds.includes(d.id))
-      ];
-
-      setTravelItems(finalItems);
+      setTravelItems(applyCustomOrder(finalItems));
     } catch (err) {
       setTravelItems(defaultTravelData);
     } finally {
@@ -166,12 +280,12 @@ const TravelMgmt = () => {
     }
 
     try {
-      const newId = 'trv-' + Date.now();
+      const targetId = editingTravel ? (editingTravel._id || editingTravel.id) : ('trv-' + Date.now());
       const generatedTitle = form.title.trim() || `${form.fromLocation.trim()} to ${form.toLocation.trim()} Transport Corridor`;
 
       const payload = {
-        _id: newId,
-        id: newId,
+        _id: targetId,
+        id: targetId,
         fromLocation: form.fromLocation.trim(),
         toLocation: form.toLocation.trim(),
         title: generatedTitle,
@@ -188,27 +302,16 @@ const TravelMgmt = () => {
         description: form.description.trim() || `${generatedTitle} travel details, shuttle bus frequencies, and parking status.`
       };
 
-      const res = await api.post('/travel', payload);
-      if (res?.data?.success || res?.status === 200 || res?.status === 201) {
-        setShowModal(false);
-        setForm({
-          fromLocation: '',
-          toLocation: '',
-          title: '',
-          routeType: 'Journey Route',
-          estimatedTime: '10 Mins (Shuttle)',
-          distance: '1.5 km',
-          nearestParking: 'Tapovan Satellite Parking Hub A',
-          parkingSlotsTotal: 5000,
-          parkingSlotsAvailable: 4200,
-          shuttleServiceInfo: 'Electric Shuttle Bus running every 3 to 5 minutes (Free)',
-          privateVehicleInfo: 'Private vehicles restricted inside core ghat area. Park at outer satellite hubs.',
-          walkingPathInfo: 'Pedestrian green route available along river promenade.',
-          status: 'Clear',
-          description: ''
-        });
-        fetchTravel();
-      }
+      const customTravel = JSON.parse(localStorage.getItem('kumbh_custom_travel') || '[]');
+      const filteredCustom = customTravel.filter(c => c._id !== targetId && c.id !== targetId && c.title !== editingTravel?.title);
+      localStorage.setItem('kumbh_custom_travel', JSON.stringify([payload, ...filteredCustom]));
+
+      await api.post('/travel', payload).catch(() => null);
+
+      setShowModal(false);
+      resetForm();
+      alert(`Route card "${generatedTitle}" saved successfully.`);
+      fetchTravel();
     } catch (err) {
       alert('Error publishing travel & parking route');
     }
@@ -218,9 +321,24 @@ const TravelMgmt = () => {
     if (!window.confirm(`Are you sure you want to delete "${title}"? It will be removed from visitor journey planners.`)) return;
 
     try {
-      await api.delete(`/travel/${id}`).catch(() => null);
+      if (id) {
+        await api.delete(`/travel/${id}`).catch(() => null);
+      }
+
+      // Persist deletion to localStorage so default/local cards are also permanently hidden
+      const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_travel') || '[]');
+      if (id && !deletedIds.includes(id)) {
+        deletedIds.push(id);
+        localStorage.setItem('kumbh_deleted_travel', JSON.stringify(deletedIds));
+      }
+
+      // Clean up from custom travel storage if present
+      const customTravel = JSON.parse(localStorage.getItem('kumbh_custom_travel') || '[]');
+      const updatedCustom = customTravel.filter(item => item._id !== id && item.id !== id && item.title !== title);
+      localStorage.setItem('kumbh_custom_travel', JSON.stringify(updatedCustom));
+
       setTravelItems(prev => prev.filter(item => item._id !== id && item.id !== id && item.title !== title));
-      alert(`"${title}" has been deleted.`);
+      alert(`"${title}" has been deleted successfully.`);
       fetchTravel();
     } catch (err) {
       alert('Error deleting travel route');
@@ -317,7 +435,7 @@ const TravelMgmt = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {filteredTravelItems.map((item) => {
+          {filteredTravelItems.map((item, idx) => {
             const occupancyPct = Math.round(((item.parkingSlotsTotal - item.parkingSlotsAvailable) / item.parkingSlotsTotal) * 100) || 30;
 
             return (
@@ -333,11 +451,33 @@ const TravelMgmt = () => {
                       </span>
                       <h3 className="font-bold text-base text-slate-900 mt-1">{item.title}</h3>
                     </div>
-                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
-                      item.status === 'Clear' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-900 border-amber-200'
-                    }`}>
-                      {item.status}
-                    </span>
+
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                        item.status === 'Clear' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-900 border-amber-200'
+                      }`}>
+                        {item.status}
+                      </span>
+
+                      <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                        <button
+                          onClick={() => handleMove(idx, 'up')}
+                          disabled={idx === 0}
+                          className="p-1 rounded-lg hover:bg-slate-200 text-slate-700 disabled:opacity-30 transition-all"
+                          title="Move Sequence Up"
+                        >
+                          <ArrowUp className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleMove(idx, 'down')}
+                          disabled={idx === filteredTravelItems.length - 1}
+                          className="p-1 rounded-lg hover:bg-slate-200 text-slate-700 disabled:opacity-30 transition-all"
+                          title="Move Sequence Down"
+                        >
+                          <ArrowDown className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex items-center justify-between text-xs font-bold bg-blue-50 p-3 rounded-2xl border border-blue-200">
@@ -391,14 +531,34 @@ const TravelMgmt = () => {
                     <CheckCircle className="w-3.5 h-3.5" /> Published to Journey Planner
                   </span>
 
-                  <button
-                    onClick={() => handleDelete(item._id || item.id, item.title)}
-                    className="px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-colors flex items-center gap-1.5 text-xs font-bold shadow-sm"
-                    title="Delete Card"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                    <span>Delete</span>
-                  </button>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => handleCopy(item)}
+                      className="px-2.5 py-2 rounded-xl text-indigo-700 hover:bg-indigo-50 border border-indigo-200 hover:border-indigo-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                      title="Copy Card with Mandatory New Title"
+                    >
+                      <Copy className="w-3.5 h-3.5" />
+                      <span>Copy</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleEdit(item)}
+                      className="px-2.5 py-2 rounded-xl text-blue-700 hover:bg-blue-50 border border-blue-200 hover:border-blue-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                      title="Edit Card"
+                    >
+                      <Edit3 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(item._id || item.id, item.title)}
+                      className="px-2.5 py-2 rounded-xl text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                      title="Delete Card"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             );
@@ -406,17 +566,19 @@ const TravelMgmt = () => {
         </div>
       )}
 
-      {/* Modal: Add Route & Parking Config */}
+      {/* Modal: Add or Edit Route & Parking Config */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
           <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-blue-500/30">
             <div className="flex items-center justify-between border-b pb-3">
               <div className="flex items-center space-x-2">
                 <Compass className="w-6 h-6 text-blue-600" />
-                <h3 className="font-bold text-lg text-slate-900">Add Route & Parking Configuration</h3>
+                <h3 className="font-bold text-lg text-slate-900">
+                  {editingTravel ? `Edit Travel Route ("${editingTravel.title}")` : 'Add Route & Parking Configuration'}
+                </h3>
               </div>
               <button 
-                onClick={() => setShowModal(false)}
+                onClick={() => { setShowModal(false); resetForm(); }}
                 className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
               >
                 <X className="w-4 h-4" />
@@ -579,7 +741,7 @@ const TravelMgmt = () => {
               <div className="pt-3 border-t flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => { setShowModal(false); resetForm(); }}
                   className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
                 >
                   Cancel
@@ -588,7 +750,7 @@ const TravelMgmt = () => {
                   type="submit"
                   className="flex-1 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-1"
                 >
-                  <Plus className="w-4 h-4" /> Publish Route & Parking
+                  <Plus className="w-4 h-4" /> {editingTravel ? 'Save Changes' : 'Publish Route & Parking'}
                 </button>
               </div>
             </form>

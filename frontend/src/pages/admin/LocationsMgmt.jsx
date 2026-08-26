@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   MapPin, Plus, Trash2, CheckCircle, Search, AlertCircle, 
-  Navigation, Clock, Phone, Building2, Image as ImageIcon, X, Filter
+  Navigation, Clock, Phone, Building2, Image as ImageIcon, X, Filter, Edit3, ArrowUp, ArrowDown, Copy
 } from 'lucide-react';
 import api from '../../services/api';
 
@@ -9,6 +9,7 @@ const LocationsMgmt = () => {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [editingLocation, setEditingLocation] = useState(null);
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
 
@@ -47,27 +48,138 @@ const LocationsMgmt = () => {
     fetchLocations();
   }, []);
 
+  const resetForm = () => {
+    setEditingLocation(null);
+    setForm({
+      name: '',
+      category: 'Ghat',
+      address: '',
+      description: '',
+      image: '/shahi-snan.jpg',
+      timings: 'Open 24 Hours',
+      distance: 'Central Kumbh Area',
+      contactNumber: '0253-2575555',
+      facilitiesInput: '24/7 Access, Helpdesk, Security',
+      status: 'Active'
+    });
+  };
+
+  const handleEdit = (loc) => {
+    setEditingLocation(loc);
+    setForm({
+      name: loc.name || '',
+      category: loc.category || 'Ghat',
+      address: loc.address || loc.location || '',
+      description: loc.description || '',
+      image: loc.image || loc.imageUrl || '/shahi-snan.jpg',
+      timings: loc.timings || 'Open 24 Hours',
+      distance: loc.distance || 'Central Kumbh Area',
+      contactNumber: loc.contactNumber || '0253-2575555',
+      facilitiesInput: Array.isArray(loc.facilities) ? loc.facilities.join(', ') : (loc.facilities || '24/7 Access, Helpdesk'),
+      status: loc.status || 'Active'
+    });
+    setShowModal(true);
+  };
+
+  const handleCopy = (loc) => {
+    setEditingLocation(null);
+    setForm({
+      name: '',
+      category: loc.category || 'Ghat',
+      address: loc.address || loc.location || '',
+      description: loc.description || '',
+      image: loc.image || loc.imageUrl || '/shahi-snan.jpg',
+      timings: loc.timings || 'Open 24 Hours',
+      distance: loc.distance || 'Central Kumbh Area',
+      contactNumber: loc.contactNumber || '0253-2575555',
+      facilitiesInput: Array.isArray(loc.facilities) ? loc.facilities.join(', ') : (loc.facilities || '24/7 Access, Helpdesk'),
+      status: loc.status || 'Active'
+    });
+    setShowModal(true);
+  };
+
+  const applyCustomOrder = (items) => {
+    const orderIds = JSON.parse(localStorage.getItem('kumbh_order_locations') || '[]');
+    if (!orderIds || orderIds.length === 0) return items;
+
+    const orderMap = new Map();
+    orderIds.forEach((id, idx) => orderMap.set(String(id), idx));
+
+    return [...items].sort((a, b) => {
+      const idA = String(a._id || a.id || '');
+      const idB = String(b._id || b.id || '');
+      const posA = orderMap.has(idA) ? orderMap.get(idA) : 99999;
+      const posB = orderMap.has(idB) ? orderMap.get(idB) : 99999;
+      return posA - posB;
+    });
+  };
+
+  const handleMove = (index, direction) => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= filteredLocations.length) return;
+
+    // Find actual indices in locations array
+    const itemToMove = filteredLocations[index];
+    const targetItem = filteredLocations[targetIndex];
+
+    const realIndex = locations.findIndex(l => (l._id || l.id) === (itemToMove._id || itemToMove.id));
+    const realTargetIndex = locations.findIndex(l => (l._id || l.id) === (targetItem._id || targetItem.id));
+
+    if (realIndex === -1 || realTargetIndex === -1) return;
+
+    const updated = [...locations];
+    const temp = updated[realIndex];
+    updated[realIndex] = updated[realTargetIndex];
+    updated[realTargetIndex] = temp;
+
+    setLocations(updated);
+
+    const orderIds = updated.map(l => l._id || l.id);
+    localStorage.setItem('kumbh_order_locations', JSON.stringify(orderIds));
+  };
+
   const fetchLocations = async () => {
     try {
       setLoading(true);
-      // Fetch both locations & facilities endpoints to combine all cards with Directions
+      const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
+      const customLocs = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+
       const [locRes, facRes] = await Promise.all([
         api.get('/locations').catch(() => null),
         api.get('/facilities').catch(() => null)
       ]);
 
-      let combined = [];
-
+      let rawList = [...customLocs];
       if (locRes?.data?.success && Array.isArray(locRes.data.data)) {
-        combined = [...combined, ...locRes.data.data];
+        rawList = [...rawList, ...locRes.data.data];
       }
       if (facRes?.data?.success && Array.isArray(facRes.data.data)) {
-        const existingNames = new Set(combined.map(c => c.name));
-        const newFacs = facRes.data.data.filter(f => !existingNames.has(f.name));
-        combined = [...combined, ...newFacs];
+        rawList = [...rawList, ...facRes.data.data];
       }
 
-      setLocations(combined);
+      const seenNames = new Set();
+      const seenIds = new Set();
+      const combined = [];
+
+      for (const item of rawList) {
+        if (!item) continue;
+        const normName = String(item.name || item.title || '').trim().toLowerCase();
+        const itemId = String(item._id || item.id || '').trim();
+
+        if (deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
+          continue;
+        }
+
+        if (seenNames.has(normName) || (itemId && seenIds.has(itemId))) {
+          continue;
+        }
+        if (normName) seenNames.add(normName);
+        if (itemId) seenIds.add(itemId);
+
+        combined.push(item);
+      }
+
+      setLocations(applyCustomOrder(combined));
     } catch (err) {
       console.error('Failed to fetch locations:', err);
     } finally {
@@ -88,8 +200,11 @@ const LocationsMgmt = () => {
         .map(s => s.trim())
         .filter(Boolean);
 
+      const targetId = editingLocation ? (editingLocation._id || editingLocation.id) : ('loc-' + Date.now());
+
       const payload = {
-        _id: 'loc-' + Date.now(),
+        _id: targetId,
+        id: targetId,
         name: form.name.trim(),
         category: form.category,
         address: form.address.trim(),
@@ -105,29 +220,19 @@ const LocationsMgmt = () => {
         verified: true
       };
 
-      // Post to /locations endpoint
-      const res = await api.post('/locations', payload);
-      // Also post to /facilities endpoint for cross-compatibility
+      const customLocs = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+      const filteredCustom = customLocs.filter(c => c._id !== targetId && c.id !== targetId && c.name !== editingLocation?.name);
+      localStorage.setItem('kumbh_custom_locations', JSON.stringify([payload, ...filteredCustom]));
+
+      await api.post('/locations', payload).catch(() => null);
       await api.post('/facilities', payload).catch(() => null);
 
-      if (res?.data?.success || res?.status === 200 || res?.status === 201) {
-        setShowModal(false);
-        setForm({
-          name: '',
-          category: 'Ghat',
-          address: '',
-          description: '',
-          image: '/shahi-snan.jpg',
-          timings: 'Open 24 Hours',
-          distance: 'Central Kumbh Area',
-          contactNumber: '0253-2575555',
-          facilitiesInput: '24/7 Access, Helpdesk, Security',
-          status: 'Active'
-        });
-        fetchLocations();
-      }
+      setShowModal(false);
+      resetForm();
+      alert(`Location card "${form.name}" saved successfully.`);
+      fetchLocations();
     } catch (err) {
-      alert('Error creating location card');
+      alert('Error saving location card');
     }
   };
 
@@ -135,22 +240,56 @@ const LocationsMgmt = () => {
     if (!window.confirm(`Are you sure you want to delete "${name}"? It will be removed for all visitors across all tabs.`)) return;
 
     try {
-      await api.delete(`/locations/${id}`).catch(() => null);
-      await api.delete(`/facilities/${id}`).catch(() => null);
+      if (id) {
+        await api.delete(`/locations/${id}`).catch(() => null);
+        await api.delete(`/facilities/${id}`).catch(() => null);
+      }
 
-      setLocations(prev => prev.filter(item => item._id !== id && item.name !== name));
-      alert(`"${name}" has been deleted.`);
+      // Persist deletion to localStorage so default/local cards are also permanently hidden
+      const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
+      if (id && !deletedIds.includes(id)) {
+        deletedIds.push(id);
+        localStorage.setItem('kumbh_deleted_locations', JSON.stringify(deletedIds));
+      }
+
+      // Clean up from custom locations storage if present
+      const customLocs = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+      const updatedCustom = customLocs.filter(item => item._id !== id && item.id !== id && item.name !== name);
+      localStorage.setItem('kumbh_custom_locations', JSON.stringify(updatedCustom));
+
+      setLocations(prev => prev.filter(item => item._id !== id && item.id !== id && item.name !== name));
+      alert(`"${name}" has been deleted successfully.`);
       fetchLocations();
     } catch (err) {
       alert('Error deleting location card');
     }
   };
 
-  const filteredLocations = locations.filter(loc => {
-    const matchesCat = selectedCategory === 'All' || 
-      (loc.category && loc.category.toLowerCase().includes(selectedCategory.toLowerCase())) ||
-      (selectedCategory === 'Police / Help Centre' && (loc.category?.includes('Police') || loc.category?.includes('Help')));
+  const matchCategory = (itemCat, targetCat) => {
+    if (!targetCat || targetCat === 'All') return true;
+    if (!itemCat) return false;
 
+    const normalize = (catStr) => {
+      const s = String(catStr || '').trim().toLowerCase();
+      if (s.includes('ghat')) return 'ghat';
+      if (s.includes('temple') || s.includes('mandir')) return 'temple';
+      if (s.includes('toilet') || s.includes('sanitation') || s.includes('washroom') || s.includes('restroom')) return 'toilet';
+      if (s.includes('water')) return 'drinking water';
+      if (s.includes('food') || s.includes('annadan') || s.includes('meal')) return 'food area';
+      if (s.includes('police') || s.includes('help centre') || s.includes('help center') || s.includes('helpdesk')) return 'police / help centre';
+      if (s.includes('camp') || s.includes('accommodation') || s.includes('tent') || s.includes('yatri niwas')) return 'accommodation';
+      if (s.includes('parking')) return 'parking';
+      if (s.includes('pharmacy') || s.includes('medical')) return 'pharmacy';
+      if (s.includes('transport') || s.includes('shuttle') || s.includes('bus')) return 'transport';
+      if (s.includes('info')) return 'info / help';
+      return s;
+    };
+
+    return normalize(itemCat) === normalize(targetCat);
+  };
+
+  const filteredLocations = locations.filter(loc => {
+    const matchesCat = matchCategory(loc.category, selectedCategory);
     const searchLow = search.toLowerCase();
     const matchesSearch = searchLow === '' ||
       (loc.name && loc.name.toLowerCase().includes(searchLow)) ||
@@ -201,7 +340,7 @@ const LocationsMgmt = () => {
         <div className="flex gap-2 overflow-x-auto pb-2 text-xs scrollbar-none">
           {categories.map((cat) => {
             const isSelected = selectedCategory === cat;
-            const count = cat === 'All' ? locations.length : locations.filter(l => l.category && l.category.toLowerCase().includes(cat.toLowerCase())).length;
+            const count = cat === 'All' ? locations.length : locations.filter(l => matchCategory(l.category, cat)).length;
 
             return (
               <button
@@ -236,7 +375,7 @@ const LocationsMgmt = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {filteredLocations.map((loc) => (
+          {filteredLocations.map((loc, idx) => (
             <div 
               key={loc._id} 
               className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all flex flex-col justify-between"
@@ -251,6 +390,24 @@ const LocationsMgmt = () => {
                   />
                   <div className="absolute top-3 left-3 bg-amber-900/90 backdrop-blur-md text-amber-200 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-amber-400/40">
                     {loc.category}
+                  </div>
+                  <div className="absolute top-3 right-3 flex items-center gap-1 bg-slate-950/70 backdrop-blur-md p-1 rounded-xl border border-white/20">
+                    <button
+                      onClick={() => handleMove(idx, 'up')}
+                      disabled={idx === 0}
+                      className="p-1 rounded-lg hover:bg-white/20 text-white disabled:opacity-30 transition-all"
+                      title="Move Sequence Up"
+                    >
+                      <ArrowUp className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => handleMove(idx, 'down')}
+                      disabled={idx === filteredLocations.length - 1}
+                      className="p-1 rounded-lg hover:bg-white/20 text-white disabled:opacity-30 transition-all"
+                      title="Move Sequence Down"
+                    >
+                      <ArrowDown className="w-3.5 h-3.5" />
+                    </button>
                   </div>
                 </div>
 
@@ -284,31 +441,53 @@ const LocationsMgmt = () => {
                   <CheckCircle className="w-3.5 h-3.5" /> Published to Visitor Pages
                 </span>
 
-                <button
-                  onClick={() => handleDelete(loc._id, loc.name)}
-                  className="px-3 py-2 rounded-xl text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-colors flex items-center gap-1.5 text-xs font-bold shadow-sm"
-                  title="Delete Card"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  <span>Delete</span>
-                </button>
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => handleCopy(loc)}
+                    className="px-2.5 py-2 rounded-xl text-blue-700 hover:bg-blue-50 border border-blue-200 hover:border-blue-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                    title="Copy Card with Mandatory New Name"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Copy</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleEdit(loc)}
+                    className="px-2.5 py-2 rounded-xl text-amber-700 hover:bg-amber-50 border border-amber-200 hover:border-amber-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                    title="Edit Card"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    <span>Edit</span>
+                  </button>
+
+                  <button
+                    onClick={() => handleDelete(loc._id || loc.id, loc.name)}
+                    className="px-2.5 py-2 rounded-xl text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                    title="Delete Card"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Delete</span>
+                  </button>
+                </div>
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Modal: Create New Location Card */}
+      {/* Modal: Create or Edit Location Card */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
           <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-amber-500/30">
             <div className="flex items-center justify-between border-b pb-3">
               <div className="flex items-center space-x-2">
                 <MapPin className="w-6 h-6 text-amber-600" />
-                <h3 className="font-bold text-lg text-slate-900">Create New Location & Facility Card</h3>
+                <h3 className="font-bold text-lg text-slate-900">
+                  {editingLocation ? `Edit Location Card ("${editingLocation.name}")` : 'Create New Location Card'}
+                </h3>
               </div>
               <button 
-                onClick={() => setShowModal(false)}
+                onClick={() => { setShowModal(false); resetForm(); }}
                 className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
               >
                 <X className="w-4 h-4" />
@@ -453,7 +632,7 @@ const LocationsMgmt = () => {
               <div className="pt-3 border-t flex gap-2">
                 <button
                   type="button"
-                  onClick={() => setShowModal(false)}
+                  onClick={() => { setShowModal(false); resetForm(); }}
                   className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
                 >
                   Cancel
@@ -462,7 +641,7 @@ const LocationsMgmt = () => {
                   type="submit"
                   className="flex-1 py-3 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-1"
                 >
-                  <Plus className="w-4 h-4" /> Publish Card to Visitor Pages
+                  <Plus className="w-4 h-4" /> {editingLocation ? 'Save Changes' : 'Publish Card to Visitor Pages'}
                 </button>
               </div>
             </form>

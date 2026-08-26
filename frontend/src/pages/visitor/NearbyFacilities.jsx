@@ -225,28 +225,59 @@ const NearbyFacilities = () => {
         const res = await api.get('/facilities').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-        // Combine API items and custom local items
-        const allItems = [...customItems, ...apiItems];
-        const filteredApi = allItems.filter(item => 
+        // Combine API items, custom local items, and default items
+        const allItems = [...customItems, ...apiItems, ...defaultFacilities];
+        const filtered = allItems.filter(item => 
+          item && 
           item.category !== 'Medical' && 
           item.category !== 'Medical Centre' && 
-          !deletedIds.includes(item._id)
+          !deletedIds.includes(item._id) &&
+          !deletedIds.includes(item.id)
         );
 
-        const enrichedApiItems = filteredApi.map(item => ({
-          ...item,
-          address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
-          description: item.description || item.capacityNotes || item.details || item.notes || 'Verified pilgrim assistance facility equipped with essential infrastructure for Simhastha Kumbh 2026-2027.',
-          image: item.image || item.imageUrl || '/shahi-snan.jpg',
-          timings: item.timings || item.hours || 'Open 24 Hours (Continuous Service)',
-          distance: item.distance || 'Central Kumbh Corridor (5 mins walk)',
-          contactNumber: item.contactNumber || item.contactInfo || item.phone || '0253-2575555',
-          facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Operational', 'Verified Desk', 'Clean Amenities']
-        }));
+        // Strict deduplication by normalized name and ID
+        const seenNames = new Set();
+        const seenIds = new Set();
+        const uniqueFacilities = [];
 
-        const apiNames = new Set(enrichedApiItems.map(i => i.name));
-        const combined = [...enrichedApiItems, ...defaultFacilities.filter(d => !apiNames.has(d.name) && !deletedIds.includes(d._id))];
-        setFacilities(combined);
+        for (const item of filtered) {
+          const normName = String(item.name || '').trim().toLowerCase();
+          const itemId = String(item._id || item.id || '').trim();
+
+          if (seenNames.has(normName) || (itemId && seenIds.has(itemId))) {
+            continue;
+          }
+          if (normName) seenNames.add(normName);
+          if (itemId) seenIds.add(itemId);
+
+          uniqueFacilities.push({
+            ...item,
+            address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
+            description: item.description || item.capacityNotes || item.details || item.notes || 'Verified pilgrim assistance facility equipped with essential infrastructure for Simhastha Kumbh 2026-2027.',
+            image: item.image || item.imageUrl || '/shahi-snan.jpg',
+            timings: item.timings || item.hours || 'Open 24 Hours (Continuous Service)',
+            distance: item.distance || 'Central Kumbh Corridor (5 mins walk)',
+            contactNumber: item.contactNumber || item.contactInfo || item.phone || '0253-2575555',
+            facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Operational', 'Verified Desk', 'Clean Amenities']
+          });
+        }
+
+        // Apply custom sequence ordering set by Admin
+        const orderIds = JSON.parse(localStorage.getItem('kumbh_order_facilities') || '[]');
+        if (orderIds && orderIds.length > 0) {
+          const orderMap = new Map();
+          orderIds.forEach((id, idx) => orderMap.set(String(id), idx));
+
+          uniqueFacilities.sort((a, b) => {
+            const idA = String(a._id || a.id || '');
+            const idB = String(b._id || b.id || '');
+            const posA = orderMap.has(idA) ? orderMap.get(idA) : 99999;
+            const posB = orderMap.has(idB) ? orderMap.get(idB) : 99999;
+            return posA - posB;
+          });
+        }
+
+        setFacilities(uniqueFacilities);
       } catch (err) {
         setFacilities(defaultFacilities);
       } finally {
@@ -260,38 +291,22 @@ const NearbyFacilities = () => {
     if (!targetCat || targetCat === 'All') return true;
     if (!itemCat) return false;
 
-    const item = String(itemCat).trim().toLowerCase();
-    const target = String(targetCat).trim().toLowerCase();
+    const normalize = (catStr) => {
+      const s = String(catStr || '').trim().toLowerCase();
+      if (s.includes('ghat')) return 'ghat';
+      if (s.includes('temple') || s.includes('mandir')) return 'temple';
+      if (s.includes('toilet') || s.includes('sanitation') || s.includes('washroom') || s.includes('restroom')) return 'toilet';
+      if (s.includes('water')) return 'drinking water';
+      if (s.includes('food') || s.includes('annadan') || s.includes('meal')) return 'food area';
+      if (s.includes('police') || s.includes('help centre') || s.includes('help center') || s.includes('helpdesk')) return 'police centre';
+      if (s.includes('camp') || s.includes('accommodation') || s.includes('tent') || s.includes('yatri niwas')) return 'accommodation';
+      if (s.includes('parking')) return 'parking';
+      if (s.includes('pharmacy') || s.includes('medical')) return 'pharmacy';
+      if (s.includes('transport') || s.includes('shuttle') || s.includes('bus')) return 'transport';
+      return s;
+    };
 
-    if (item === target) return true;
-
-    // Strict non-leaking category matching logic:
-    if (target === 'drinking water') {
-      return item === 'drinking water' || item === 'water';
-    }
-    if (target === 'food area') {
-      return item === 'food area' || item === 'food';
-    }
-    if (target === 'accommodation') {
-      return item === 'accommodation' || item === 'camp/accommodation' || item === 'camp';
-    }
-    if (target === 'toilet') {
-      return item === 'toilet' || item === 'sanitation';
-    }
-    if (target === 'pharmacy') {
-      return item === 'pharmacy';
-    }
-    if (target === 'parking') {
-      return item === 'parking';
-    }
-    if (target === 'police centre' || target === 'police/help centre') {
-      return item === 'police centre' || item === 'police/help centre' || item === 'police';
-    }
-    if (target === 'transport') {
-      return item === 'transport';
-    }
-
-    return item === target;
+    return normalize(itemCat) === normalize(targetCat);
   };
 
   const filteredFacilities = facilities.filter(fac => {
@@ -441,19 +456,12 @@ const NearbyFacilities = () => {
                   </div>
                 </div>
 
-                <div className="p-5 pt-0 flex items-center gap-2">
-                  <button
-                    onClick={() => setSelectedFacility(fac)}
-                    className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1"
-                  >
-                    <Info className="w-3.5 h-3.5 text-purple-600" /> Details
-                  </button>
-
+                <div className="p-5 pt-0">
                   <a
                     href={getGoogleMapsDirectionsUrl(fac)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center gap-1"
+                    className="w-full py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center gap-1"
                   >
                     <Navigation className="w-3.5 h-3.5" /> Directions
                   </a>
@@ -467,77 +475,6 @@ const NearbyFacilities = () => {
           <Building2 className="w-10 h-10 text-purple-500 mx-auto" />
           <h3 className="font-bold text-slate-800 text-base">No facilities found in "{selectedCat}"</h3>
           <p className="text-xs text-slate-500">Select "All" to view all available nearby facilities.</p>
-        </div>
-      )}
-
-      {/* Facility Details Modal */}
-      {selectedFacility && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-purple-500/30">
-            <div className="flex items-center justify-between border-b pb-3">
-              <div className="flex items-center space-x-2">
-                <span className="text-2xl">{getCatIcon(selectedFacility.category)}</span>
-                <h3 className="font-bold text-base text-slate-900">{selectedFacility.name}</h3>
-              </div>
-              <button 
-                onClick={() => setSelectedFacility(null)}
-                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="h-48 rounded-2xl overflow-hidden bg-slate-900 relative">
-              <img 
-                src={selectedFacility.image || selectedFacility.imageUrl || '/shahi-snan.jpg'} 
-                alt={selectedFacility.name} 
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-3 text-xs">
-              <p className="text-slate-600 leading-relaxed font-medium">
-                {selectedFacility.description || selectedFacility.capacityNotes || 'Verified pilgrim assistance facility equipped with essential infrastructure for Simhastha Kumbh 2026-2027.'}
-              </p>
-
-              <div className="grid grid-cols-2 gap-2 bg-slate-50 p-3 rounded-2xl border border-slate-200 font-medium">
-                <div>📍 Address: <span className="font-bold text-slate-900">{selectedFacility.address || selectedFacility.location || 'Panchavati, Nashik'}</span></div>
-                <div>⏰ Hours: <span className="font-bold text-slate-900">{selectedFacility.timings || selectedFacility.hours || '24/7'}</span></div>
-                <div>📞 Contact: <span className="font-bold text-purple-700">{selectedFacility.contactNumber || selectedFacility.phone || '0253-2575555'}</span></div>
-                <div>🚗 Distance: <span className="font-bold text-slate-900">{selectedFacility.distance || 'Central'}</span></div>
-              </div>
-
-              {selectedFacility.facilities && selectedFacility.facilities.length > 0 && (
-                <div>
-                  <h4 className="font-bold text-slate-700 mb-1.5">Amenities Available:</h4>
-                  <div className="flex flex-wrap gap-1.5">
-                    {selectedFacility.facilities.map((fac, idx) => (
-                      <span key={idx} className="bg-purple-100 text-purple-900 px-2.5 py-1 rounded-lg font-bold text-[11px] flex items-center gap-1">
-                        <CheckCircle className="w-3 h-3 text-purple-700" /> {fac}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="pt-3 border-t flex gap-2">
-              <button
-                onClick={() => setSelectedFacility(null)}
-                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
-              >
-                Close
-              </button>
-              <a
-                href={getGoogleMapsDirectionsUrl(selectedFacility)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-1 shadow"
-              >
-                <Navigation className="w-4 h-4" /> Open in Google Maps
-              </a>
-            </div>
-          </div>
         </div>
       )}
     </div>

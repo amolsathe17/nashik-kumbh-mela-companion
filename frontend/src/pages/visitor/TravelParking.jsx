@@ -86,13 +86,30 @@ const TravelParking = () => {
       const res = await api.get('/travel').catch(() => null);
       let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-      const combined = [...customTravel, ...apiItems];
+      const rawList = [...customTravel, ...apiItems, ...defaultTravelData];
+      const seenTitles = new Set();
+      const seenIds = new Set();
+      const finalItems = [];
 
-      const enrichedApiItems = combined
-        .filter(item => !deletedIds.includes(item._id) && !deletedIds.includes(item.id))
-        .map(item => ({
-          _id: item._id || item.id,
-          id: item._id || item.id,
+      for (const item of rawList) {
+        if (!item) continue;
+        const itemId = String(item._id || item.id || '').trim();
+        const normTitle = String(item.title || item.name || `${item.fromLocation || ''} to ${item.toLocation || ''}`).trim().toLowerCase();
+
+        if (deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
+          continue;
+        }
+
+        if ((itemId && seenIds.has(itemId)) || (normTitle && seenTitles.has(normTitle))) {
+          continue;
+        }
+
+        if (itemId) seenIds.add(itemId);
+        if (normTitle) seenTitles.add(normTitle);
+
+        finalItems.push({
+          _id: itemId || 'trv-' + Date.now(),
+          id: itemId || 'trv-' + Date.now(),
           fromLocation: item.fromLocation || item.from || 'Tapovan',
           toLocation: item.toLocation || item.to || 'Ramkund',
           title: item.title || `${item.fromLocation || 'Origin'} to ${item.toLocation || 'Destination'}`,
@@ -107,13 +124,23 @@ const TravelParking = () => {
           walkingPathInfo: item.walkingPathInfo || item.walkingPath || 'Pedestrian green route available.',
           status: item.status || 'Clear',
           description: item.description || 'Verified Simhastha transport update.'
-        }));
+        });
+      }
 
-      const apiTitles = new Set(enrichedApiItems.map(i => i.title));
-      const finalItems = [
-        ...enrichedApiItems,
-        ...defaultTravelData.filter(d => !apiTitles.has(d.title) && !deletedIds.includes(d.id))
-      ];
+      // Apply custom sequence ordering set by Admin
+      const orderIds = JSON.parse(localStorage.getItem('kumbh_order_travel') || '[]');
+      if (orderIds && orderIds.length > 0) {
+        const orderMap = new Map();
+        orderIds.forEach((id, idx) => orderMap.set(String(id), idx));
+
+        finalItems.sort((a, b) => {
+          const idA = String(a._id || a.id || '');
+          const idB = String(b._id || b.id || '');
+          const posA = orderMap.has(idA) ? orderMap.get(idA) : 99999;
+          const posB = orderMap.has(idB) ? orderMap.get(idB) : 99999;
+          return posA - posB;
+        });
+      }
 
       setTravelData(finalItems);
     } catch (err) {

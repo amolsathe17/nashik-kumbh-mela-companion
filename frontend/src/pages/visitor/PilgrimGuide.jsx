@@ -28,8 +28,8 @@ const PilgrimGuide = () => {
   const defaultGuideData = [
     // --- 1. SHAHI SNAN DATES ---
     {
-      id: 'guide-shahi-1',
-      category: 'Shahi Snan',
+      id: 'guide-ritual-0',
+      category: 'Ritual Guide',
       title: 'Dhwajarohan (ध्वजारोहण) - Official Commencement',
       subtitle: '31 October 2026 • Ramkund & Kushavarta Kund',
       image: '/dhwajarohan.webp',
@@ -118,11 +118,11 @@ const PilgrimGuide = () => {
     {
       id: 'guide-akhara-1',
       category: 'Akharas',
-      title: 'Shaivite Naga Akharas (ज Oldest Naga Sadhu Orders)',
+      title: 'Shaivite Akharas (शैव अखाड़े) - Juna, Niranjani & Mahanirvani',
       subtitle: 'Trimbakeshwar & Tapovan Sadhugram',
       image: '/shahi.jpg',
       location: 'Trimbakeshwar & Tapovan Sector 1',
-      description: 'The ancient Shaivite monastic orders (Juna Akhara, Niranjani Akhara, Mahanirvani Akhara) led by Naga Sadhus who renounce worldly life and meditate on Lord Shiva.',
+      description: 'The ancient Shaivite monastic orders (Shri Panch Dashnam Juna Akhara, Niranjani Akhara, Mahanirvani Akhara) led by Naga Sadhus who renounce worldly life and meditate on Lord Shiva.',
       highlights: [
         'Lead the first royal Shahi Snan procession at Kushavarta Kund',
         'Famous for Trishul weapons demonstrations and ash-smearing rituals',
@@ -132,15 +132,15 @@ const PilgrimGuide = () => {
     {
       id: 'guide-akhara-2',
       category: 'Akharas',
-      title: 'Vaishnavite Akharas (वैष्णव अखाड़ा - अनी)',
-      subtitle: 'Tapovan Kumbh Nagari, Nashik',
+      title: 'Vaishnavite Akharas (वैष्णव अखाड़े) - Nirmohi, Digambar & Nirvani Ani',
+      subtitle: 'Panchavati & Tapovan Sadhugram',
       image: '/unnamed-2025-02-03t105950ss_1738561979.jpg',
-      location: 'Tapovan Sector 2 & 3, Nashik',
-      description: 'The Vaishnavite Akharas (Nirmohi, Digambar, Nirvani Ani) worship Lord Vishnu and Lord Rama. They wear sandalwood tilaks, tulsi beads, and carry flags of Lord Hanuman.',
+      location: 'Tapovan Sadhugram & Panchavati Promenade',
+      description: 'The three prominent Vaishnavite Ani Akharas (Nirmohi Ani, Digambar Ani, and Nirvani Ani Akhara) dedicated to Lord Vishnu and Lord Rama, renowned for their grand holy processions.',
       highlights: [
-        'Camped at Tapovan in Nashik city near Lakshmana Rekha site',
-        'Organize massive daily free Annakshetra (Langar) feeding 100,000+ devotees',
-        'Continuous Ramayana discourses and devotional Bhajan kirtans'
+        'Lead the royal Shahi Snan processions at Ramkund Bathing Ghat',
+        'Spiritual discourses, Ram Katha, and Mahaprasadam distribution in Sadhugram',
+        'Decorated silver chariots and flag-bearing sadhu processions'
       ]
     },
 
@@ -218,28 +218,68 @@ const PilgrimGuide = () => {
       const res = await api.get('/pilgrim-guide').catch(() => null);
       let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-      const combined = [...customGuides, ...apiItems];
+      const rawList = [...customGuides, ...apiItems, ...defaultGuideData];
+      const seenTitles = new Set();
+      const seenIds = new Set();
+      const finalItems = [];
 
-      // Normalize items and filter out deleted items
-      const enrichedApiItems = combined
-        .filter(item => !deletedIds.includes(item._id) && !deletedIds.includes(item.id))
-        .map(item => ({
-          id: item._id || item.id,
-          _id: item._id || item.id,
-          category: item.category || 'Shahi Snan',
-          title: item.title,
+      for (const item of rawList) {
+        if (!item) continue;
+        const itemId = String(item._id || item.id || '').trim();
+        let itemTitle = item.title || item.name || 'Pilgrim Guide';
+        let itemCategory = item.category || 'Shahi Snan';
+
+        let normTitle = itemTitle.trim().toLowerCase();
+
+        // Automatic normalization for Shaivite Akharas and Dhwajarohan
+        if (normTitle.includes('shaivite') || normTitle.includes('naga akharas') || normTitle.includes('oldest naga')) {
+          itemTitle = 'Shaivite Akharas (शैव अखाड़े) - Juna, Niranjani & Mahanirvani';
+          itemCategory = 'Akharas';
+          normTitle = itemTitle.toLowerCase();
+        }
+
+        if (normTitle.includes('dhwajarohan') && itemCategory === 'Shahi Snan') {
+          itemCategory = 'Ritual Guide';
+        }
+
+        if (deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
+          continue;
+        }
+
+        if ((itemId && seenIds.has(itemId)) || (normTitle && seenTitles.has(normTitle))) {
+          continue;
+        }
+
+        if (itemId) seenIds.add(itemId);
+        if (normTitle) seenTitles.add(normTitle);
+
+        finalItems.push({
+          id: itemId || 'guide-' + Date.now(),
+          _id: itemId || 'guide-' + Date.now(),
+          category: itemCategory,
+          title: itemTitle,
           subtitle: item.subtitle || item.eventDate || 'Pilgrim Guidance Note',
-          image: item.image || item.imageUrl || '/shahi-snan.jpg',
+          image: item.image || item.imageUrl || '/shahi.jpg',
           location: item.location || 'Panchavati, Nashik',
-          description: item.description,
-          highlights: (item.highlights && item.highlights.length > 0) ? item.highlights : [item.description]
-        }));
+          description: item.description || 'Simhastha Kumbh pilgrim guidance.',
+          highlights: (item.highlights && item.highlights.length > 0) ? item.highlights : [item.description || 'Guide Info']
+        });
+      }
 
-      const apiTitles = new Set(enrichedApiItems.map(i => i.title));
-      const finalItems = [
-        ...enrichedApiItems,
-        ...defaultGuideData.filter(d => !apiTitles.has(d.title) && !deletedIds.includes(d.id))
-      ];
+      // Apply custom sequence ordering set by Admin
+      const orderIds = JSON.parse(localStorage.getItem('kumbh_order_guides') || '[]');
+      if (orderIds && orderIds.length > 0) {
+        const orderMap = new Map();
+        orderIds.forEach((id, idx) => orderMap.set(String(id), idx));
+
+        finalItems.sort((a, b) => {
+          const idA = String(a._id || a.id || '');
+          const idB = String(b._id || b.id || '');
+          const posA = orderMap.has(idA) ? orderMap.get(idA) : 99999;
+          const posB = orderMap.has(idB) ? orderMap.get(idB) : 99999;
+          return posA - posB;
+        });
+      }
 
       setGuides(finalItems);
     } catch (err) {
@@ -253,18 +293,17 @@ const PilgrimGuide = () => {
     if (!targetCatId || targetCatId === 'All') return true;
     if (!itemCat) return false;
 
-    const item = String(itemCat).trim().toLowerCase();
-    const target = String(targetCatId).trim().toLowerCase();
+    const normalize = (catStr) => {
+      const s = String(catStr || '').trim().toLowerCase();
+      if (s.includes('shahi snan')) return 'shahi snan';
+      if (s.includes('ritual')) return 'ritual guide';
+      if (s.includes('akhara')) return 'akharas';
+      if (s.includes('temple')) return 'temple guide';
+      if (s.includes('travel') || s.includes('safety')) return 'travel & safety';
+      return s;
+    };
 
-    if (item === target) return true;
-
-    if (target === 'shahi snan') return item === 'shahi snan';
-    if (target === 'ritual guide') return item === 'ritual guide' || item.includes('ritual') || item.includes('yagna');
-    if (target === 'akharas') return item === 'akharas' || item.includes('akhara') || item.includes('sadhu');
-    if (target === 'temple guide') return item === 'temple guide' || item.includes('temple');
-    if (target === 'travel & safety') return item === 'travel & safety' || item.includes('travel') || item.includes('safety') || item.includes('emergency');
-
-    return item === target;
+    return normalize(itemCat) === normalize(targetCatId);
   };
 
   const filteredGuides = guides.filter(g => matchCategory(g.category, activeCategory));
@@ -367,15 +406,6 @@ const PilgrimGuide = () => {
                   )}
                 </div>
               </div>
-
-              <div className="p-5 pt-0">
-                <button
-                  onClick={() => setSelectedGuide(guide)}
-                  className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center gap-1.5"
-                >
-                  <BookOpen className="w-4 h-4" /> Read Full Guide
-                </button>
-              </div>
             </div>
           ))}
         </div>
@@ -384,72 +414,6 @@ const PilgrimGuide = () => {
           <BookOpen className="w-10 h-10 text-rose-500 mx-auto" />
           <h3 className="font-bold text-slate-800 text-base">No guide cards found in "{activeCategory}"</h3>
           <p className="text-xs text-slate-500">Select "All Categories" to view all available pilgrim guides.</p>
-        </div>
-      )}
-
-      {/* Guide Detail Modal */}
-      {selectedGuide && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-rose-500/30">
-            <div className="flex items-center justify-between border-b pb-3">
-              <div>
-                <span className="text-[10px] font-bold uppercase bg-rose-100 text-rose-800 px-2.5 py-0.5 rounded-full">
-                  {selectedGuide.category}
-                </span>
-                <h3 className="font-bold text-lg text-slate-900 mt-1">{selectedGuide.title}</h3>
-              </div>
-              <button 
-                onClick={() => setSelectedGuide(null)}
-                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="h-52 rounded-2xl overflow-hidden bg-slate-900">
-              <img 
-                src={selectedGuide.image || '/shahi-snan.jpg'} 
-                alt={selectedGuide.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
-
-            <div className="space-y-3 text-xs leading-relaxed text-slate-700">
-              <p className="font-medium text-slate-800 text-sm leading-normal">{selectedGuide.description}</p>
-
-              {selectedGuide.location && (
-                <div className="flex items-center space-x-1.5 text-xs text-rose-800 font-bold bg-rose-50 px-3 py-1.5 rounded-xl border border-rose-200">
-                  <MapPin className="w-4 h-4 text-rose-600 flex-shrink-0" />
-                  <span>Location: {selectedGuide.location}</span>
-                </div>
-              )}
-
-              {selectedGuide.highlights && (
-                <div className="bg-rose-50 p-4 rounded-2xl border border-rose-200 space-y-2">
-                  <h4 className="font-bold text-rose-900 text-xs flex items-center gap-1">
-                    <Sparkles className="w-4 h-4 text-rose-600" /> Key Pilgrim Highlights & Protocols:
-                  </h4>
-                  <ul className="space-y-1.5">
-                    {selectedGuide.highlights.map((h, i) => (
-                      <li key={i} className="flex items-start gap-2 text-rose-950 font-medium">
-                        <span className="text-rose-600 font-bold">•</span>
-                        <span>{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            <div className="pt-3 border-t">
-              <button
-                onClick={() => setSelectedGuide(null)}
-                className="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow"
-              >
-                Close Guide
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>
