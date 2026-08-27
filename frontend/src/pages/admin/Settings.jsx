@@ -43,7 +43,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-5xl">
+    <div className="space-y-6 max-w-7xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Admin Control Settings</h2>
@@ -52,179 +52,191 @@ const Settings = () => {
       </div>
 
       <form onSubmit={handleSave} className="space-y-6 text-xs">
-        {/* Event & System Information */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
-            <Server className="w-5 h-5 text-amber-600" /> Event & System Identification
-          </h3>
+        {/* ROW 1: Event & System Identification (Left) & Emergency Helplines Registry (Right) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          {/* Event & System Information */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
+              <Server className="w-5 h-5 text-amber-600" /> Event & System Identification
+            </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Official Event Title</label>
-              <input
-                type="text"
-                required
-                value={settings.eventName}
-                onChange={(e) => setSettings({ ...settings, eventName: e.target.value })}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 font-semibold"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Governing Authority</label>
-              <input
-                type="text"
-                required
-                value={settings.municipality}
-                onChange={(e) => setSettings({ ...settings, municipality: e.target.value })}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 font-semibold"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Emergency Contacts Registry */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
-            <Phone className="w-5 h-5 text-red-600" /> Emergency Helplines Registry
-          </h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Police Emergency</label>
-              <input
-                type="text"
-                required
-                value={settings.policeHelpline}
-                onChange={(e) => setSettings({ ...settings, policeHelpline: e.target.value })}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono font-bold"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Ambulance SOS</label>
-              <input
-                type="text"
-                required
-                value={settings.ambulanceHelpline}
-                onChange={(e) => setSettings({ ...settings, ambulanceHelpline: e.target.value })}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono font-bold"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Kumbh Control Room Phone</label>
-              <input
-                type="text"
-                required
-                value={settings.controlRoomPhone}
-                onChange={(e) => setSettings({ ...settings, controlRoomPhone: e.target.value })}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono font-bold"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Notification & SMS Gateway Settings */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
-            <MessageSquare className="w-5 h-5 text-blue-600" /> Broadcast & SMS Gateway Configuration
-          </h3>
-
-          <div className="space-y-3">
-            <div className="p-4 rounded-2xl bg-slate-50 border flex items-center justify-between">
+            <div className="space-y-4 flex-1">
               <div>
-                <div className="font-bold text-slate-900">SMS Gateway Provider Status</div>
-                <div className="text-slate-500 font-mono">{settings.smsGatewayStatus}</div>
+                <label className="block font-bold text-slate-700 mb-1">Official Event Title</label>
+                <input
+                  type="text"
+                  required
+                  value={settings.eventName}
+                  onChange={(e) => setSettings({ ...settings, eventName: e.target.value })}
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 font-semibold text-slate-900"
+                />
               </div>
-              <span className="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full">
-                Active
-              </span>
-            </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border flex items-center justify-between">
               <div>
-                <div className="font-bold text-slate-900">Auto-Broadcast Notifications on Daily Info Release</div>
-                <div className="text-slate-500">Automatically sends in-app notification to all mobile visitors when Admin creates a daily release.</div>
+                <label className="block font-bold text-slate-700 mb-1">Governing Authority</label>
+                <input
+                  type="text"
+                  required
+                  value={settings.municipality}
+                  onChange={(e) => setSettings({ ...settings, municipality: e.target.value })}
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 font-semibold text-slate-900"
+                />
               </div>
-              <input
-                type="checkbox"
-                checked={settings.autoBroadcastOnPublish}
-                onChange={(e) => setSettings({ ...settings, autoBroadcastOnPublish: e.target.checked })}
-                className="w-5 h-5 text-amber-600 rounded focus:ring-amber-500"
-              />
             </div>
+          </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 border flex items-center justify-between">
-              <div>
-                <div className="font-bold text-slate-900">Auto-SMS Dispatch on Help Triage Response</div>
-                <div className="text-slate-500">Enables direct SMS response dispatch to pilgrim mobile number from Admin Control Desk.</div>
+          {/* Emergency Helplines Registry (Right side of Event & System Identification) */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
+              <Phone className="w-5 h-5 text-red-600" /> Emergency Helplines Registry
+            </h3>
+
+            <div className="space-y-4 flex-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Police Emergency</label>
+                  <input
+                    type="text"
+                    required
+                    value={settings.policeHelpline}
+                    onChange={(e) => setSettings({ ...settings, policeHelpline: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono font-bold text-slate-900"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Ambulance SOS</label>
+                  <input
+                    type="text"
+                    required
+                    value={settings.ambulanceHelpline}
+                    onChange={(e) => setSettings({ ...settings, ambulanceHelpline: e.target.value })}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono font-bold text-slate-900"
+                  />
+                </div>
               </div>
-              <input
-                type="checkbox"
-                checked={settings.autoSmsOnAssistanceDispatch}
-                onChange={(e) => setSettings({ ...settings, autoSmsOnAssistanceDispatch: e.target.checked })}
-                className="w-5 h-5 text-amber-600 rounded focus:ring-amber-500"
-              />
+
+              <div>
+                <label className="block font-bold text-slate-700 mb-1">Kumbh Control Room Phone</label>
+                <input
+                  type="text"
+                  required
+                  value={settings.controlRoomPhone}
+                  onChange={(e) => setSettings({ ...settings, controlRoomPhone: e.target.value })}
+                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl font-mono font-bold text-slate-900"
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Security & Admin Profile */}
-        <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4">
-          <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
-            <ShieldCheck className="w-5 h-5 text-purple-600" /> SuperAdmin Security & Credentials Profile
-          </h3>
+        {/* ROW 2: Broadcast & SMS Gateway (Left) & SuperAdmin Security Profile (Right) */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+          {/* Notification & SMS Gateway Settings */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
+              <MessageSquare className="w-5 h-5 text-blue-600" /> Broadcast & SMS Gateway Configuration
+            </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Admin Full Name</label>
-              <input
-                type="text"
-                required
-                value={adminName}
-                onChange={(e) => setAdminName(e.target.value)}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:ring-2 focus:ring-amber-500"
-                placeholder="Admin Name"
-              />
+            <div className="space-y-3 flex-1">
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div>
+                  <div className="font-bold text-slate-900 text-xs">SMS Gateway Provider Status</div>
+                  <div className="text-slate-500 font-mono text-[11px] mt-0.5">{settings.smsGatewayStatus}</div>
+                </div>
+                <span className="text-[11px] font-bold px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full flex-shrink-0">
+                  Active
+                </span>
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div className="pr-2">
+                  <div className="font-bold text-slate-900 text-xs">Auto-Broadcast Notifications on Daily Info Release</div>
+                  <div className="text-slate-500 text-[11px] mt-0.5">Sends in-app notification to mobile visitors when Admin creates a daily release.</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={settings.autoBroadcastOnPublish}
+                  onChange={(e) => setSettings({ ...settings, autoBroadcastOnPublish: e.target.checked })}
+                  className="w-5 h-5 text-amber-600 rounded focus:ring-amber-500 flex-shrink-0 cursor-pointer"
+                />
+              </div>
+
+              <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                <div className="pr-2">
+                  <div className="font-bold text-slate-900 text-xs">Auto-SMS Dispatch on Help Triage Response</div>
+                  <div className="text-slate-500 text-[11px] mt-0.5">Enables direct SMS response dispatch to pilgrim mobile number from Admin Control Desk.</div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={settings.autoSmsOnAssistanceDispatch}
+                  onChange={(e) => setSettings({ ...settings, autoSmsOnAssistanceDispatch: e.target.checked })}
+                  className="w-5 h-5 text-amber-600 rounded focus:ring-amber-500 flex-shrink-0 cursor-pointer"
+                />
+              </div>
             </div>
+          </div>
 
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Admin Email Address</label>
-              <input
-                type="email"
-                required
-                value={adminEmail}
-                onChange={(e) => setAdminEmail(e.target.value)}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono font-bold focus:ring-2 focus:ring-amber-500"
-                placeholder="admin@gmail.com"
-              />
-            </div>
+          {/* SuperAdmin Security & Credentials Profile (Right side of Broadcast & SMS Gateway) */}
+          <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <h3 className="font-bold text-base text-slate-900 flex items-center gap-2 border-b pb-3">
+              <ShieldCheck className="w-5 h-5 text-purple-600" /> SuperAdmin Security & Credentials Profile
+            </h3>
 
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Update Password</label>
-              <input
-                type="password"
-                value={adminPassword}
-                onChange={(e) => setAdminPassword(e.target.value)}
-                className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono focus:ring-2 focus:ring-amber-500"
-                placeholder="Leave blank to keep current"
-              />
-            </div>
+            <div className="space-y-4 flex-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Admin Full Name</label>
+                  <input
+                    type="text"
+                    required
+                    value={adminName}
+                    onChange={(e) => setAdminName(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-bold focus:ring-2 focus:ring-amber-500"
+                    placeholder="Admin Name"
+                  />
+                </div>
 
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Access Role</label>
-              <input
-                type="text"
-                disabled
-                value={adminUser?.role || 'SuperAdmin'}
-                className="w-full p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 font-mono font-bold"
-              />
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Admin Email Address</label>
+                  <input
+                    type="email"
+                    required
+                    value={adminEmail}
+                    onChange={(e) => setAdminEmail(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono font-bold focus:ring-2 focus:ring-amber-500"
+                    placeholder="admin@gmail.com"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Update Password</label>
+                  <input
+                    type="password"
+                    value={adminPassword}
+                    onChange={(e) => setAdminPassword(e.target.value)}
+                    className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl text-slate-900 font-mono focus:ring-2 focus:ring-amber-500"
+                    placeholder="Leave blank to keep current"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-slate-700 mb-1">Access Role</label>
+                  <input
+                    type="text"
+                    disabled
+                    value={adminUser?.role || 'SuperAdmin'}
+                    className="w-full p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 font-mono font-bold"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-left pt-2">
+        <div className="flex justify-start pt-2">
           <button
             type="submit"
             className="px-6 py-3.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm rounded-2xl shadow-lg flex items-center gap-2 transition-transform hover:scale-101"
@@ -235,8 +247,8 @@ const Settings = () => {
       </form>
 
       {/* Centered Modal Popup for Successful Settings Save */}
-      {saved && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4 animate-fade-in">
+      {saved && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
           <div className="bg-white rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl border border-emerald-500/30 space-y-4">
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner border border-emerald-200">
               <CheckCircle className="w-9 h-9 text-emerald-600" />
@@ -244,7 +256,7 @@ const Settings = () => {
             
             <div className="space-y-1.5">
               <h3 className="text-lg font-bold text-slate-900">Settings Saved Successfully!</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <p className="text-xs text-slate-500 font-medium leading-relaxed">
                 Admin profile credentials and system configurations have been updated.
               </p>
             </div>
@@ -256,7 +268,8 @@ const Settings = () => {
               OK, Got it!
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

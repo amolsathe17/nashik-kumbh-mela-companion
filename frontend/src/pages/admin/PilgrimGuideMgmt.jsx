@@ -1,20 +1,47 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Compass, Plus, Trash2, CheckCircle, Calendar, AlertCircle, 
-  Search, BookOpen, MapPin, Sparkles, X, Filter, Image as ImageIcon, Edit3, ArrowUp, ArrowDown, Copy
+  Search, BookOpen, MapPin, Sparkles, X, Filter, Image as ImageIcon, Edit3, ArrowUp, ArrowDown, Copy, Upload, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import api from '../../services/api';
 
 const PilgrimGuideMgmt = () => {
+  const tabsRef = useRef(null);
   const [guideItems, setGuideItems] = useState([]);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = () => {
+    const el = tabsRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 5);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+  };
+
+  const scrollTabs = (direction) => {
+    if (tabsRef.current) {
+      const scrollAmount = direction === 'left' ? -240 : 240;
+      tabsRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [guideItems]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingGuide, setEditingGuide] = useState(null);
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState('Shahi Snan');
+  const [deleteConfirmItem, setDeleteConfirmItem] = useState(null);
+  const [saveSuccessMessage, setSaveSuccessMessage] = useState('');
 
   const categories = [
-    'All', 'Shahi Snan', 'Ritual Guide', 'Akharas', 'Temple Guide', 'Travel & Safety'
+    'Shahi Snan', 'Ritual Guide', 'Akharas'
   ];
 
   const presetImages = [
@@ -123,7 +150,7 @@ const PilgrimGuideMgmt = () => {
     {
       id: 'guide-temple-1',
       _id: 'guide-temple-1',
-      category: 'Temple Guide',
+      category: 'Ritual Guide',
       title: 'Trimbakeshwar Jyotirlinga Darshan Protocol',
       subtitle: '5:00 AM - 9:00 PM • Trimbak Town',
       image: '/dhwajarohan.webp',
@@ -138,7 +165,7 @@ const PilgrimGuideMgmt = () => {
     {
       id: 'guide-safety-1',
       _id: 'guide-safety-1',
-      category: 'Travel & Safety',
+      category: 'Ritual Guide',
       title: 'Satellite Parking & Electric Shuttle Bus Corridors',
       subtitle: 'City Transport Protocol',
       image: '/kumbh-bg1.jpg',
@@ -202,7 +229,23 @@ const PilgrimGuideMgmt = () => {
     setGuideItems(updated);
 
     const orderIds = updated.map(g => g._id || g.id);
-    localStorage.setItem('kumbh_order_guides', JSON.stringify(orderIds));
+    localStorage.setItem('kumbh_order_guide', JSON.stringify(orderIds));
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size exceeds 5MB limit. Please select a smaller image file.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setForm(prev => ({ ...prev, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const fetchGuideItems = async () => {
@@ -238,7 +281,8 @@ const PilgrimGuideMgmt = () => {
           itemCategory = 'Ritual Guide';
         }
 
-        if (deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
+        const removedCardIds = ['guide-ritual-2', 'guide-ritual-3', 'guide-temple-2', 'guide-safety-2'];
+        if (removedCardIds.includes(itemId) || deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
           continue;
         }
 
@@ -313,13 +357,14 @@ const PilgrimGuideMgmt = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.title.trim() || !form.description.trim()) {
+    if (!form.title || !form.title.trim() || !form.description || !form.description.trim()) {
       alert('Please fill in card title and description');
       return;
     }
 
     try {
-      const highlights = form.highlightsText
+      const highlightsTextStr = String(form.highlightsText || '');
+      const highlights = highlightsTextStr
         .split('\n')
         .map(h => h.trim())
         .filter(Boolean);
@@ -329,56 +374,74 @@ const PilgrimGuideMgmt = () => {
       const payload = {
         _id: targetId,
         id: targetId,
-        category: form.category,
+        category: form.category || 'Shahi Snan',
         title: form.title.trim(),
-        subtitle: form.subtitle.trim() || 'Official Pilgrim Guide',
-        eventDate: form.subtitle.trim(),
-        location: form.location.trim() || 'Panchavati, Nashik',
+        subtitle: (form.subtitle || '').trim() || 'Official Pilgrim Guide',
+        eventDate: (form.subtitle || '').trim(),
+        location: (form.location || '').trim() || 'Panchavati, Nashik',
         description: form.description.trim(),
         image: form.image || '/shahi-snan.jpg',
         highlights: highlights.length > 0 ? highlights : [form.description.trim()]
       };
 
-      const customGuides = JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]');
-      const filteredCustom = customGuides.filter(c => c._id !== targetId && c.id !== targetId && c.title !== editingGuide?.title);
-      localStorage.setItem('kumbh_custom_guides', JSON.stringify([payload, ...filteredCustom]));
+      // Safely save to localStorage (with quota handling)
+      try {
+        const customGuides = JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]');
+        const filteredCustom = customGuides.filter(c => c && c._id !== targetId && c.id !== targetId && c.title !== editingGuide?.title);
+        localStorage.setItem('kumbh_custom_guides', JSON.stringify([payload, ...filteredCustom]));
+      } catch (storageErr) {
+        console.warn('LocalStorage quota warning:', storageErr);
+      }
 
+      // Optimistically update local state so card appears immediately
+      setGuideItems(prev => {
+        const filtered = prev.filter(g => (g._id || g.id) !== targetId && g.title !== editingGuide?.title);
+        return [payload, ...filtered];
+      });
+
+      // Send to backend API asynchronously (ignore backend errors so local save always succeeds)
       await api.post('/pilgrim-guide', payload).catch(() => null);
 
+      const savedTitle = form.title.trim();
       setShowModal(false);
       resetForm();
-      alert(`Guide card "${form.title}" saved successfully.`);
-      fetchGuideItems();
+      setSaveSuccessMessage(`Guide card "${savedTitle}" saved successfully.`);
+      setTimeout(() => setSaveSuccessMessage(''), 4000);
     } catch (err) {
-      alert('Error saving pilgrim guide card');
+      console.error('Error saving pilgrim guide card:', err);
+      alert('Error saving pilgrim guide card: ' + (err.message || 'Unknown error'));
     }
   };
 
-  const handleDelete = async (id, title) => {
-    if (!window.confirm(`Are you sure you want to delete "${title}"? It will be removed for all visitors across all tabs.`)) return;
-    
+  const handleDelete = (id, title) => {
+    setDeleteConfirmItem({ id, title });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirmItem) return;
+    const { id, title } = deleteConfirmItem;
+
     try {
       if (id) {
         await api.delete(`/pilgrim-guide/${id}`).catch(() => null);
       }
 
-      // Persist deletion to localStorage so default/local cards are also permanently hidden
       const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_guides') || '[]');
       if (id && !deletedIds.includes(id)) {
         deletedIds.push(id);
         localStorage.setItem('kumbh_deleted_guides', JSON.stringify(deletedIds));
       }
 
-      // Clean up from custom guide storage if present
       const customGuides = JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]');
       const updatedCustom = customGuides.filter(item => item._id !== id && item.id !== id && item.title !== title);
       localStorage.setItem('kumbh_custom_guides', JSON.stringify(updatedCustom));
 
       setGuideItems(prev => prev.filter(item => item._id !== id && item.id !== id && item.title !== title));
-      alert(`"${title}" has been deleted successfully.`);
       fetchGuideItems();
     } catch (err) {
       alert('Error deleting guide card');
+    } finally {
+      setDeleteConfirmItem(null);
     }
   };
 
@@ -412,66 +475,104 @@ const PilgrimGuideMgmt = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-rose-900 via-red-900 to-amber-950 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 border border-rose-500/30">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <div className="w-14 h-14 rounded-2xl bg-rose-500/20 backdrop-blur-md border border-rose-400/40 flex items-center justify-center text-3xl flex-shrink-0 shadow-md">
+      {/* Page Header Banner */}
+      <div className="bg-gradient-to-r from-red-950 via-rose-950 to-slate-950 border border-rose-500/40 p-5 sm:p-6 rounded-[28px] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden min-h-[96px]">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md border border-rose-400/40 flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-md">
             📕
           </div>
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-rose-100">Pilgrim Guide Management</h2>
-            <p className="text-xs text-rose-200/80 mt-0.5 font-medium">
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-rose-100 leading-tight truncate">Pilgrim Guide Management</h2>
+            <p className="text-xs sm:text-sm text-rose-200/80 mt-0.5 font-medium truncate">
               Create & Manage Cards for Shahi Snan Dates, Sacred Rituals, Akharas, Temple Darshan & Travel Safety
             </p>
           </div>
         </div>
 
-        <button
-          onClick={() => setShowModal(true)}
-          className="self-start sm:self-auto px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-lg flex items-center gap-2 transition-all hover:scale-102 border border-rose-400/40"
-        >
-          <Plus className="w-4 h-4" /> Create New Guide Card
-        </button>
+        <div className="flex items-center gap-3 self-start sm:self-auto z-10 flex-shrink-0">
+          <span className="px-4 py-2.5 rounded-2xl bg-rose-950/60 text-rose-100 border border-rose-400/40 text-xs font-bold shadow-md">
+            📋 List View ({guideItems.length})
+          </span>
+          <button
+            onClick={() => setShowModal(true)}
+            className="px-5 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs rounded-2xl shadow-lg flex items-center gap-2 transition-all hover:scale-102 border border-rose-400/40"
+          >
+            <Plus className="w-4 h-4" /> Create New Guide Card
+          </button>
+        </div>
       </div>
 
-      {/* Filter & Search Bar */}
-      <div className="space-y-3">
-        <div className="relative">
+      {/* Filter & Search Bar Row: Search Left, Scrollable Tabs with Circular Arrow Buttons Right */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 w-full">
+        {/* Search Bar Input */}
+        <div className="relative lg:w-72 xl:w-80 flex-shrink-0">
           <Search className="w-5 h-5 text-rose-600 absolute left-4 top-3.5 rtl:right-4 rtl:left-auto" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search guide cards by title, description, or location..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-rose-200 rounded-2xl shadow-sm text-sm font-semibold focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none rtl:pr-12 rtl:pl-4"
+            placeholder="Search guide cards..."
+            className="w-full pl-12 pr-4 py-3 bg-white border-2 border-rose-200 rounded-2xl shadow-sm text-sm font-semibold focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none rtl:pr-12 rtl:pl-4"
           />
         </div>
 
-        {/* Category Horizontal Filter Chips matching visitor tabs */}
-        <div className="flex gap-2 overflow-x-auto pb-2 text-xs scrollbar-none">
-          {categories.map((cat) => {
-            const isSelected = selectedCategory === cat;
-            const count = cat === 'All' ? guideItems.length : guideItems.filter(g => matchCategory(g.category, cat)).length;
+        {/* Category Horizontal Filter Chips with Circular Left/Right Arrow Buttons & Scrollbar */}
+        <div className="flex-1 min-w-0 flex items-center gap-1.5">
+          {canScrollLeft && (
+            <button
+              type="button"
+              onClick={() => scrollTabs('left')}
+              className="w-8 h-8 rounded-full bg-white hover:bg-rose-50 border border-slate-300 text-slate-700 shadow-sm flex items-center justify-center flex-shrink-0 transition-all hover:scale-105"
+              title="Scroll Left"
+              aria-label="Scroll Left"
+            >
+              <ChevronLeft className="w-4 h-4 text-rose-700" />
+            </button>
+          )}
 
-            return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2.5 rounded-full font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-2 rtl:space-x-reverse border ${
-                  isSelected
-                    ? 'bg-rose-700 text-white border-rose-600 shadow-md'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-rose-50'
-                }`}
-              >
-                <span>{cat}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
-                  isSelected ? 'bg-rose-950/40 text-white' : 'bg-slate-100 text-slate-700'
-                }`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
+          <div
+            ref={tabsRef}
+            onScroll={checkScroll}
+            className="flex-1 min-w-0 overflow-x-auto py-1 text-xs scrollbar-thin scrollbar-thumb-rose-300 scroll-smooth"
+          >
+            <div className="flex items-center gap-2 flex-nowrap min-w-max">
+              {categories.map((cat) => {
+                const isSelected = selectedCategory === cat;
+                const count = cat === 'All' ? guideItems.length : guideItems.filter(g => matchCategory(g.category, cat)).length;
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-4 py-2.5 rounded-full font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-2 rtl:space-x-reverse border flex-shrink-0 ${
+                      isSelected
+                        ? 'bg-rose-700 text-white border-rose-600 shadow-md'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-rose-50'
+                    }`}
+                  >
+                    <span>{cat}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
+                      isSelected ? 'bg-rose-950/40 text-white' : 'bg-slate-100 text-slate-700'
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {canScrollRight && (
+            <button
+              type="button"
+              onClick={() => scrollTabs('right')}
+              className="w-8 h-8 rounded-full bg-white hover:bg-rose-50 border border-slate-300 text-slate-700 shadow-sm flex items-center justify-center flex-shrink-0 transition-all hover:scale-105"
+              title="Scroll Right"
+              aria-label="Scroll Right"
+            >
+              <ChevronRight className="w-4 h-4 text-rose-700" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -488,63 +589,66 @@ const PilgrimGuideMgmt = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {filteredGuideItems.map((item, idx) => (
             <div 
-              key={item._id || item.id} 
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all flex flex-col justify-between"
+              key={item._id || item.id || idx}
+              className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all flex flex-col h-full"
             >
-              <div>
-                <div className="relative h-44 bg-slate-900 overflow-hidden">
-                  <img 
-                    src={item.image || item.imageUrl || '/shahi-snan.jpg'} 
-                    alt={item.title}
-                    onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
-                    className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
-                  />
-                  <div className="absolute top-3 left-3 bg-rose-900/90 backdrop-blur-md text-rose-200 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-rose-400/40">
-                    {item.category}
-                  </div>
-                  <div className="absolute top-3 right-3 flex items-center gap-1 bg-slate-950/70 backdrop-blur-md p-1 rounded-xl border border-white/20">
-                    <button
-                      onClick={() => handleMove(idx, 'up')}
-                      disabled={idx === 0}
-                      className="p-1 rounded-lg hover:bg-white/20 text-white disabled:opacity-30 transition-all"
-                      title="Move Sequence Up"
-                    >
-                      <ArrowUp className="w-3.5 h-3.5" />
-                    </button>
-                    <button
-                      onClick={() => handleMove(idx, 'down')}
-                      disabled={idx === filteredGuideItems.length - 1}
-                      className="p-1 rounded-lg hover:bg-white/20 text-white disabled:opacity-30 transition-all"
-                      title="Move Sequence Down"
-                    >
-                      <ArrowDown className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-5 space-y-2.5">
-                  <h3 className="font-bold text-base text-slate-900 leading-snug">{item.title}</h3>
-                  {item.subtitle && <p className="text-[11px] font-bold text-rose-700">{item.subtitle}</p>}
-                  <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{item.description}</p>
-
-                  {item.location && (
-                    <div className="flex items-center space-x-1.5 text-xs text-rose-800 font-bold bg-rose-50 px-2.5 py-1 rounded-xl border border-rose-200">
-                      <MapPin className="w-3.5 h-3.5 text-rose-600 flex-shrink-0" />
-                      <span className="truncate">{item.location}</span>
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="relative h-48 bg-slate-900 overflow-hidden">
+                    <img 
+                      src={item.image || '/shahi-snan.jpg'} 
+                      alt={item.title}
+                      onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
+                      className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
+                    />
+                    <div className="absolute top-3 left-3 bg-rose-900/90 backdrop-blur-md text-rose-200 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-rose-400/40">
+                      {item.category}
                     </div>
-                  )}
+                    <div className="absolute top-3 right-3 flex items-center gap-1 bg-slate-950/70 backdrop-blur-md p-1 rounded-xl border border-white/20">
+                      <button
+                        onClick={() => handleMove(idx, 'up')}
+                        disabled={idx === 0}
+                        className="p-1 rounded-lg hover:bg-white/20 text-white disabled:opacity-30 transition-all"
+                        title="Move Sequence Up"
+                      >
+                        <ArrowUp className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        onClick={() => handleMove(idx, 'down')}
+                        disabled={idx === filteredGuideItems.length - 1}
+                        className="p-1 rounded-lg hover:bg-white/20 text-white disabled:opacity-30 transition-all"
+                        title="Move Sequence Down"
+                      >
+                        <ArrowDown className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="p-5 space-y-2.5">
+                    <h3 className="font-bold text-base text-slate-900 leading-snug">{item.title}</h3>
+                    {item.subtitle && <p className="text-[11px] font-bold text-rose-700">{item.subtitle}</p>}
+                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{item.description}</p>
+
+                    {item.location && (
+                      <div className="flex items-center space-x-1.5 text-xs text-rose-800 font-bold bg-rose-50 px-2.5 py-1 rounded-xl border border-rose-200">
+                        <MapPin className="w-3.5 h-3.5 text-rose-600 flex-shrink-0" />
+                        <span className="truncate">{item.location}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              <div className="p-5 pt-0 flex items-center justify-between gap-2 border-t border-slate-100 mt-2">
+              {/* Perfectly Aligned Pill-Shaped Action Buttons */}
+              <div className="p-5 pt-3 mt-auto flex items-center justify-between gap-2 border-t border-slate-100">
                 <span className="text-[11px] font-bold text-emerald-600 flex items-center gap-1">
-                  <CheckCircle className="w-3.5 h-3.5" /> Published to Visitor Guide
+                  <CheckCircle className="w-3.5 h-3.5" /> Published
                 </span>
 
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => handleCopy(item)}
-                    className="px-2.5 py-2 rounded-xl text-rose-700 hover:bg-rose-50 border border-rose-200 hover:border-rose-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                    className="px-3 py-1.5 rounded-full text-rose-700 hover:bg-rose-50 border border-rose-200 hover:border-rose-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
                     title="Copy Card with Mandatory New Title"
                   >
                     <Copy className="w-3.5 h-3.5" />
@@ -553,7 +657,7 @@ const PilgrimGuideMgmt = () => {
 
                   <button
                     onClick={() => handleEdit(item)}
-                    className="px-2.5 py-2 rounded-xl text-amber-700 hover:bg-amber-50 border border-amber-200 hover:border-amber-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                    className="px-3 py-1.5 rounded-full text-amber-700 hover:bg-amber-50 border border-amber-200 hover:border-amber-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
                     title="Edit Card"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
@@ -562,7 +666,7 @@ const PilgrimGuideMgmt = () => {
 
                   <button
                     onClick={() => handleDelete(item._id || item.id, item.title)}
-                    className="px-2.5 py-2 rounded-xl text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
+                    className="px-3 py-1.5 rounded-full text-red-600 hover:bg-red-50 border border-red-200 hover:border-red-300 transition-colors flex items-center gap-1 text-xs font-bold shadow-sm"
                     title="Delete Card"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -576,146 +680,266 @@ const PilgrimGuideMgmt = () => {
       )}
 
       {/* Modal: Create or Edit Pilgrim Guide Card */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 space-y-4 shadow-2xl border border-rose-500/30">
-            <div className="flex items-center justify-between border-b pb-3">
-              <div className="flex items-center space-x-2">
-                <Compass className="w-6 h-6 text-rose-600" />
-                <h3 className="font-bold text-lg text-slate-900">
-                  {editingGuide ? `Edit Pilgrim Guide ("${editingGuide.title}")` : 'Create Pilgrim Guide Card'}
-                </h3>
+      {showModal && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
+            {/* Fixed Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between flex-shrink-0 bg-white">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-10 h-10 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center font-bold flex-shrink-0">
+                  <Compass className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-slate-900 leading-tight">
+                    {editingGuide ? `Edit Pilgrim Guide Card ("${editingGuide.title}")` : 'Create New Pilgrim Guide Card'}
+                  </h3>
+                  <p className="text-xs text-slate-500 font-normal mt-0.5">Configure ritual guides, akhara details, and bathing ghat schedules</p>
+                </div>
               </div>
               <button 
                 onClick={() => { setShowModal(false); resetForm(); }}
-                className="p-1.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors"
+                title="Close"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4 text-xs font-medium">
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">Card Title *</label>
-                <input
-                  type="text"
-                  required
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  placeholder="e.g. First Amrit Shahi Snan Guidelines"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 font-semibold outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Form wrapping scrollable body and fixed footer */}
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              {/* Scrollable Body */}
+              <div className="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Category *</label>
-                  <select
-                    value={form.category}
-                    onChange={(e) => setForm({ ...form, category: e.target.value })}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 font-semibold outline-none"
-                  >
-                    <option value="Shahi Snan">Shahi Snan</option>
-                    <option value="Ritual Guide">Ritual Guide</option>
-                    <option value="Akharas">Akharas</option>
-                    <option value="Temple Guide">Temple Guide</option>
-                    <option value="Travel & Safety">Travel & Safety</option>
-                  </select>
+                  <label className="block font-semibold text-slate-700 text-xs mb-1.5">Guide Card Title *</label>
+                  <input
+                    type="text"
+                    required
+                    value={form.title}
+                    onChange={(e) => setForm({ ...form, title: e.target.value })}
+                    placeholder="e.g. Vaishnavite Akharas - Digambar, Nirmohi & Nirvani"
+                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold text-slate-700 text-xs mb-1.5">Category *</label>
+                    <select
+                      value={form.category}
+                      onChange={(e) => setForm({ ...form, category: e.target.value })}
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all"
+                    >
+                      {categories.filter(c => c !== 'All').map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-slate-700 text-xs mb-1.5">Location / Sector *</label>
+                    <input
+                      type="text"
+                      required
+                      value={form.location}
+                      onChange={(e) => setForm({ ...form, location: e.target.value })}
+                      placeholder="e.g. Tapovan Sadhugram Sector 1 & Ramkund Ghat"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
+                    />
+                  </div>
                 </div>
 
                 <div>
-                  <label className="block font-bold text-slate-700 mb-1">Subtitle / Event Date</label>
+                  <label className="block font-semibold text-slate-700 text-xs mb-1.5">Detailed Description *</label>
+                  <textarea
+                    rows={3}
+                    required
+                    value={form.description}
+                    onChange={(e) => setForm({ ...form, description: e.target.value })}
+                    placeholder="Provide full description of rituals, historical significance, or guidelines..."
+                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-slate-700 text-xs mb-1.5">Guide Card Image (Upload File or Enter URL)</label>
+                  
+                  {form.image ? (
+                    <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm group mb-2 bg-slate-900">
+                      <img 
+                        src={form.image} 
+                        alt="Card Preview" 
+                        className="w-full h-40 object-cover" 
+                      />
+                      <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                        <label className="cursor-pointer px-3.5 py-2 bg-white text-slate-900 text-xs font-bold rounded-xl shadow hover:bg-slate-100 transition-colors flex items-center gap-1.5">
+                          <Upload className="w-4 h-4 text-rose-600" />
+                          <span>Change Image</span>
+                          <input 
+                            type="file" 
+                            accept="image/*" 
+                            className="hidden" 
+                            onChange={handleImageUpload} 
+                          />
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => setForm({ ...form, image: '' })}
+                          className="px-3.5 py-2 bg-red-600 text-white text-xs font-bold rounded-xl shadow hover:bg-red-700 transition-colors flex items-center gap-1.5"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          <span>Remove</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <label className="border-2 border-dashed border-slate-300 hover:border-rose-500 bg-slate-50 hover:bg-rose-50/40 rounded-2xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all space-y-2 mb-2">
+                      <div className="w-10 h-10 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center">
+                        <Upload className="w-5 h-5" />
+                      </div>
+                      <div className="text-center">
+                        <p className="text-xs font-bold text-slate-800">Click to Upload Image File from Device</p>
+                        <p className="text-[10px] text-slate-500 font-medium">PNG, JPG, WEBP formats supported (Will display on cards for all users)</p>
+                      </div>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        className="hidden" 
+                        onChange={handleImageUpload} 
+                      />
+                    </label>
+                  )}
+
                   <input
                     type="text"
-                    value={form.subtitle}
-                    onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
-                    placeholder="e.g. 02 August 2027 • Main Bathing Day"
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 font-semibold outline-none"
+                    value={form.image}
+                    onChange={(e) => setForm({ ...form, image: e.target.value })}
+                    placeholder="Or paste custom image URL (e.g. /shahi-snan.jpg or https://...)"
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-[11px] outline-none"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block font-semibold text-slate-700 text-xs mb-1.5">Operating Hours / Schedule</label>
+                    <input
+                      type="text"
+                      value={form.timings}
+                      onChange={(e) => setForm({ ...form, timings: e.target.value })}
+                      placeholder="e.g. 4:00 AM - 10:00 PM Daily"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block font-semibold text-slate-700 text-xs mb-1.5">Dress Code & Etiquette</label>
+                    <input
+                      type="text"
+                      value={form.dressCode}
+                      onChange={(e) => setForm({ ...form, dressCode: e.target.value })}
+                      placeholder="e.g. Traditional ethnic attire required"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-slate-700 text-xs mb-1.5">Pilgrim Rules / Dos & Don'ts (Comma Separated)</label>
+                  <input
+                    type="text"
+                    value={form.rulesInput}
+                    onChange={(e) => setForm({ ...form, rulesInput: e.target.value })}
+                    placeholder="e.g. Maintain silence near sanctum, No plastic footwear near ghat"
+                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">Pilgrimage Location</label>
-                <input
-                  type="text"
-                  value={form.location}
-                  onChange={(e) => setForm({ ...form, location: e.target.value })}
-                  placeholder="e.g. Ramkund Bathing Ghat & Kushavarta Kund"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 font-semibold outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">Detailed Description *</label>
-                <textarea
-                  rows={3}
-                  required
-                  value={form.description}
-                  onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  placeholder="Provide essential background information, spiritual history, or rules..."
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 font-semibold outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">Select Authentic Image</label>
-                <div className="grid grid-cols-3 gap-2 mb-2">
-                  {presetImages.slice(0, 6).map((img, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setForm({ ...form, image: img.url })}
-                      className={`relative h-16 rounded-xl overflow-hidden border-2 transition-all ${
-                        form.image === img.url ? 'border-rose-600 ring-2 ring-rose-500' : 'border-slate-200 hover:border-rose-300'
-                      }`}
-                    >
-                      <img src={img.url} alt={img.label} className="w-full h-full object-cover" />
-                      <span className="absolute bottom-0 inset-x-0 bg-slate-950/70 text-white text-[9px] truncate px-1 py-0.5 text-center font-bold">
-                        {img.label}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-
-                <input
-                  type="text"
-                  value={form.image}
-                  onChange={(e) => setForm({ ...form, image: e.target.value })}
-                  placeholder="Or enter custom image path (e.g. /shahi-snan.jpg)"
-                  className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl font-mono text-[11px] outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">Key Highlights & Protocol (One per line)</label>
-                <textarea
-                  rows={3}
-                  value={form.highlightsText}
-                  onChange={(e) => setForm({ ...form, highlightsText: e.target.value })}
-                  placeholder="• Royal procession starts at 4:00 AM&#10;• Public bathing after Akhara holy dips conclude&#10;• Free shuttle buses from outer parking hubs"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-rose-500 font-semibold outline-none"
-                />
-              </div>
-
-              <div className="pt-3 border-t flex gap-2">
+              {/* Fixed Footer */}
+              <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-3 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => { setShowModal(false); resetForm(); }}
-                  className="flex-1 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow-lg flex items-center justify-center gap-1"
+                  className="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5"
                 >
                   <Plus className="w-4 h-4" /> {editingGuide ? 'Save Changes' : 'Publish Guide Card'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
+      )}
+
+      {/* CUSTOM CENTER DELETE CONFIRMATION MODAL POPUP */}
+      {deleteConfirmItem && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+          <div className="absolute inset-0" onClick={() => setDeleteConfirmItem(null)} />
+
+          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 z-10 space-y-5 text-center">
+            <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto shadow-inner border border-red-200">
+              <AlertTriangle className="w-7 h-7" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug">Confirm Deletion</h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                Are you sure you want to delete <span className="font-bold text-slate-900">"{deleteConfirmItem.title}"</span>? It will be removed for all visitors across all tabs.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmItem(null)}
+                className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md transition-all hover:scale-102"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+
+      {/* CUSTOM CENTER SAVE SUCCESS MODAL POPUP */}
+      {saveSuccessMessage && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-emerald-500/30 p-6 z-10 space-y-4 text-center">
+            <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner border border-emerald-200">
+              <CheckCircle2 className="w-9 h-9 text-emerald-600" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug">Saved Successfully!</h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                {saveSuccessMessage}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setSaveSuccessMessage('')}
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all hover:scale-102"
+            >
+              OK, Got it!
+            </button>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );

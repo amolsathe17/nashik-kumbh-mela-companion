@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
@@ -321,8 +322,8 @@ const Home = () => {
       </div>
 
       {/* CENTER MODAL POPUP FOR NOTICE & ALERTS */}
-      {showNoticeModal && hasActiveModalContent && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 animate-fade-in">
+      {showNoticeModal && hasActiveModalContent && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/75 backdrop-blur-md p-4 animate-fade-in">
           {/* Backdrop dismiss */}
           <div className="absolute inset-0" onClick={handleCloseNoticeModal} />
 
@@ -346,13 +347,25 @@ const Home = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={handleCloseNoticeModal}
-                  className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
-                  aria-label="Close Notice Popup"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <div className="flex items-center space-x-2 rtl:space-x-reverse">
+                  <button
+                    onClick={handleDeleteAllNotices}
+                    className="p-2 rounded-full bg-red-950/60 hover:bg-red-900/80 text-red-400 hover:text-red-200 border border-red-500/40 transition-colors"
+                    title="Delete All Notices"
+                    aria-label="Delete All Notices"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+
+                  <button
+                    onClick={handleCloseNoticeModal}
+                    className="p-2 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                    aria-label="Close Notice Popup"
+                    title="Close"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
 
               {/* Modal Body: Cards with View and Delete actions */}
@@ -447,29 +460,10 @@ const Home = () => {
                   </div>
                 )}
               </div>
-
-              {/* Modal Footer Controls */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-800 text-xs">
-                <button
-                  onClick={handleDeleteAllNotices}
-                  className="px-4 py-2 rounded-xl bg-red-600/20 hover:bg-red-600/30 text-red-300 hover:text-red-200 border border-red-500/40 font-bold flex items-center gap-1.5 transition-colors"
-                  title="Dismiss all modal notices permanently for this session"
-                >
-                  <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                  <span>Delete All Notices</span>
-                </button>
-
-                <button
-                  onClick={handleCloseNoticeModal}
-                  className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs shadow-md transition-transform hover:scale-102"
-                >
-                  Close Window
-                </button>
-              </div>
-
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

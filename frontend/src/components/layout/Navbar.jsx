@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   Globe, PhoneCall, UserCheck, Menu, X, Home, ChevronRight, CheckCircle, Trash2,
-  BookOpen, MapPin, Compass, Building2, Bell, Scroll, Bus, Calendar, HelpCircle, Users
+  BookOpen, MapPin, Compass, Building2, Bell, Scroll, Bus, Calendar, HelpCircle, Users, ShieldCheck
 } from 'lucide-react';
 import LanguageModal from '../common/LanguageModal';
 import EmergencyModal from '../common/EmergencyModal';
@@ -58,10 +58,11 @@ const Navbar = () => {
 
   const unreadCount = notifications.filter(n => !readNotifIds.includes(n._id)).length;
 
-  // All 10 Navigation Links matching reference image layout & styling
+  // Navigation Links matching exact sequence
   const navLinks = [
     {
       titleKey: 'aboutKumbhmela',
+      labelFallback: 'About Kumbhmela',
       descKey: 'aboutKumbhmelaCardDesc',
       icon: BookOpen,
       path: '/about-kumbhmela',
@@ -70,6 +71,7 @@ const Navbar = () => {
     },
     {
       titleKey: 'aboutKumbh',
+      labelFallback: 'About Nasik Kumbh',
       descKey: 'aboutKumbhCardDesc',
       icon: Scroll,
       path: '/about-kumbh',
@@ -77,31 +79,8 @@ const Navbar = () => {
       borderColor: 'border-amber-500'
     },
     {
-      titleKey: 'findPlaces',
-      descKey: 'findPlacesDesc',
-      icon: MapPin,
-      path: '/find-places',
-      color: 'from-amber-500 to-orange-600',
-      borderColor: 'border-amber-400'
-    },
-    {
-      titleKey: 'travelParking',
-      descKey: 'travelParkingDesc',
-      icon: Bus,
-      path: '/travel-parking',
-      color: 'from-blue-600 to-indigo-700',
-      borderColor: 'border-blue-400'
-    },
-    {
-      titleKey: 'pilgrimGuide',
-      descKey: 'pilgrimGuideDesc',
-      icon: Compass,
-      path: '/pilgrim-guide',
-      color: 'from-rose-500 to-red-600',
-      borderColor: 'border-rose-400'
-    },
-    {
       titleKey: 'todaysKumbh',
+      labelFallback: "Today's Kumbh",
       descKey: 'todaysKumbhDesc',
       icon: Calendar,
       path: '/todays-kumbh',
@@ -109,7 +88,26 @@ const Navbar = () => {
       borderColor: 'border-emerald-400'
     },
     {
+      titleKey: 'findPlaces',
+      labelFallback: 'Find Places',
+      descKey: 'findPlacesDesc',
+      icon: MapPin,
+      path: '/find-places',
+      color: 'from-amber-500 to-orange-600',
+      borderColor: 'border-amber-400'
+    },
+    {
+      titleKey: 'pilgrimGuide',
+      labelFallback: 'Pilgrim Guide',
+      descKey: 'pilgrimGuideDesc',
+      icon: Compass,
+      path: '/pilgrim-guide',
+      color: 'from-rose-500 to-red-600',
+      borderColor: 'border-rose-400'
+    },
+    {
       titleKey: 'nearbyFacilities',
+      labelFallback: 'Nearby Facilities',
       descKey: 'nearbyFacilitiesDesc',
       icon: Building2,
       path: '/nearby-facilities',
@@ -117,15 +115,35 @@ const Navbar = () => {
       borderColor: 'border-purple-400'
     },
     {
-      titleKey: 'helpSafety',
+      titleKey: 'travelParking',
+      labelFallback: 'Travel & Parking',
+      descKey: 'travelParkingDesc',
+      icon: Bus,
+      path: '/travel-parking',
+      color: 'from-blue-600 to-indigo-700',
+      borderColor: 'border-blue-400'
+    },
+    {
+      titleKey: 'familyGroup',
+      labelFallback: 'Travel Group',
+      descKey: 'familyGroupDesc',
+      icon: Users,
+      path: '/family-group',
+      color: 'from-indigo-500 to-purple-600',
+      borderColor: 'border-indigo-400'
+    },
+    {
+      titleKey: 'travelSafetyTips',
+      labelFallback: 'Travel, Safety & Tips',
       descKey: 'helpSafetyDesc',
-      icon: HelpCircle,
-      path: '/help-safety',
-      color: 'from-red-500 to-orange-600',
-      borderColor: 'border-red-400'
+      icon: ShieldCheck,
+      path: '/travel-safety-tips',
+      color: 'from-blue-600 to-indigo-700',
+      borderColor: 'border-blue-400'
     },
     {
       titleKey: 'alerts',
+      labelFallback: 'Alerts & News',
       descKey: 'alertsDesc',
       icon: Bell,
       path: '/notifications',
@@ -133,27 +151,28 @@ const Navbar = () => {
       borderColor: 'border-cyan-400'
     },
     {
-      titleKey: 'familyGroup',
-      descKey: 'familyGroupDesc',
-      icon: Users,
-      path: '/family-group',
-      color: 'from-indigo-500 to-purple-600',
-      borderColor: 'border-indigo-400'
+      titleKey: 'helpSafety',
+      labelFallback: 'Help & Safety',
+      descKey: 'helpSafetyDesc',
+      icon: HelpCircle,
+      path: '/help-safety',
+      color: 'from-red-500 to-orange-600',
+      borderColor: 'border-red-400'
     }
   ];
 
   return (
     <>
-      {/* Page Content Backdrop Blur Overlay (below Top Nav Bar) */}
+      {/* Full-Screen Backdrop Blur Overlay */}
       {isNotifDropdownOpen && (
         <div 
-          className="fixed inset-x-0 bottom-0 top-[58px] bg-slate-950/70 backdrop-blur-md z-30 transition-all animate-fade-in"
+          className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-[100] transition-all animate-fade-in"
           onClick={() => setIsNotifDropdownOpen(false)}
         />
       )}
 
-      {/* Top Navigation Bar (Visible Clearly) */}
-      <header className="sticky top-0 z-40 bg-gradient-to-r from-amber-800 via-amber-700 to-orange-800 text-white shadow-xl border-b-2 border-amber-500/40 backdrop-blur-md">
+      {/* Top Navigation Bar (Fixed on Top) */}
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-amber-800 via-amber-700 to-orange-800 text-white shadow-xl border-b-2 border-amber-500/40 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2.5 flex items-center justify-between">
           
           {/* Logo & Branding Header */}
@@ -195,7 +214,7 @@ const Navbar = () => {
 
               {/* Notification Dropdown Menu */}
               {isNotifDropdownOpen && (
-                <div className="fixed left-1/2 -translate-x-1/2 top-16 w-[92vw] max-w-sm sm:absolute sm:left-auto sm:right-0 sm:top-full sm:translate-x-0 sm:mt-3 sm:w-96 bg-white text-slate-900 rounded-3xl shadow-2xl border-2 border-amber-400/80 z-50 overflow-hidden animate-fade-in">
+                <div className="fixed left-1/2 -translate-x-1/2 top-16 w-[92vw] max-w-sm sm:absolute sm:left-auto sm:right-0 sm:top-full sm:translate-x-0 sm:mt-3 sm:w-96 bg-white text-slate-900 rounded-3xl shadow-2xl border-2 border-amber-400/80 z-[101] overflow-hidden animate-fade-in">
                   {/* Dropdown Header */}
                   <div className="bg-gradient-to-r from-amber-700 via-orange-600 to-amber-800 text-white p-3.5 flex items-center justify-between shadow-md">
                     <div className="flex items-center space-x-2 rtl:space-x-reverse">
@@ -326,10 +345,10 @@ const Navbar = () => {
               </Link>
             )}
 
-            {/* Modern Mobile Menu Toggle Button */}
+            {/* Modern Mobile Menu Toggle Button (Visible on Mobile/Tablet only, hidden on desktop/laptop) */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="bg-amber-900/60 hover:bg-amber-900/80 text-amber-100 p-2 rounded-full border border-amber-400/40 shadow-md transition-all active:scale-95"
+              className="lg:hidden bg-amber-900/60 hover:bg-amber-900/80 text-amber-100 p-2 rounded-full border border-amber-400/40 shadow-md transition-all active:scale-95"
               aria-label="Toggle Navigation Menu"
             >
               {isMobileMenuOpen ? (
@@ -344,7 +363,7 @@ const Navbar = () => {
 
       {/* Modern UI/UX Slide-Over Mobile Toggle Menu Drawer */}
       {isMobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-slate-950/70 backdrop-blur-md transition-opacity animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex justify-end bg-slate-950/70 backdrop-blur-md transition-opacity animate-fade-in">
           {/* Backdrop Click Dismiss */}
           <div 
             className="absolute inset-0"
@@ -383,7 +402,7 @@ const Navbar = () => {
                   >
                     <div className="flex items-center space-x-3 rtl:space-x-reverse">
                       <Icon className="w-4 h-4 text-amber-400 group-hover:text-white flex-shrink-0" />
-                      <span>{t(btn.titleKey)}</span>
+                      <span>{t(btn.titleKey) !== btn.titleKey ? t(btn.titleKey) : (btn.labelFallback || t(btn.titleKey))}</span>
                     </div>
                     <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-white transition-transform group-hover:translate-x-0.5" />
                   </Link>

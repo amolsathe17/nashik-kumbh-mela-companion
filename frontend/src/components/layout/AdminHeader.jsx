@@ -95,7 +95,7 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
 
       {/* QUICK SEARCH INTERACTIVE MODAL OVERLAY */}
       {isSearchOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
           <div className="absolute inset-0" onClick={() => setIsSearchOpen(false)} />
           <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl p-5 border border-slate-200 z-10 space-y-4">
             <div className="flex items-center justify-between border-b pb-3">
@@ -120,7 +120,7 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
               autoFocus
             />
 
-            <div className="max-h-60 overflow-y-auto space-y-1 text-xs">
+            <div className="max-h-60 overflow-y-auto space-y-1.5 text-xs custom-scrollbar pr-1">
               {searchResults.length > 0 ? (
                 searchResults.map((item, idx) => (
                   <div 
@@ -129,11 +129,11 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
                       setIsSearchOpen(false);
                       navigate(item.path);
                     }}
-                    className="p-3 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-100 flex items-center justify-between cursor-pointer transition-colors"
+                    className="p-3.5 rounded-2xl bg-slate-50/80 hover:bg-amber-50 border border-slate-100 flex items-center justify-between cursor-pointer transition-all hover:scale-[1.01]"
                   >
                     <div>
                       <h4 className="font-bold text-slate-900">{item.title}</h4>
-                      <p className="text-[10px] text-slate-500">{item.type}</p>
+                      <p className="text-[10px] text-slate-500 font-medium">{item.type}</p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-amber-600" />
                   </div>

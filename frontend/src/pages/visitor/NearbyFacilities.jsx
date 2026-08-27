@@ -1,25 +1,66 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   Building2, CheckCircle, MapPin, Phone, Search, Utensils, Home as HomeIcon, 
   HeartPulse, Droplets, Navigation, Clock, Compass, Shield, Sparkles,
-  Info, ExternalLink, X, Bus, HelpCircle
+  Info, ExternalLink, X, Bus, HelpCircle, ChevronLeft, ChevronRight, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
 
 const NearbyFacilities = () => {
+  const tabsRef = useRef(null);
+  const [viewMode, setViewMode] = useState('list');
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = () => {
+    const el = tabsRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 5);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 5);
+  };
+
+  const scrollTabs = (direction) => {
+    if (tabsRef.current) {
+      const scrollAmount = direction === 'left' ? -240 : 240;
+      tabsRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
   const { t } = useLanguage();
-  const [selectedCat, setSelectedCat] = useState('All');
+  const [selectedCat, setSelectedCat] = useState('Accommodation');
   const [search, setSearch] = useState('');
   const [facilities, setFacilities] = useState([]);
+
+  useEffect(() => {
+    checkScroll();
+    window.addEventListener('resize', checkScroll);
+    return () => window.removeEventListener('resize', checkScroll);
+  }, [facilities]);
   const [loading, setLoading] = useState(true);
   const [selectedFacility, setSelectedFacility] = useState(null);
 
-  // Removed Medical tab as requested
+  // Categories without All tab chip
   const categories = [
-    'All', 'Accommodation', 'Food Area', 'Drinking Water', 'Toilet', 
+    'Accommodation', 'Food Area', 'Drinking Water', 'Toilet', 
     'Pharmacy', 'Parking', 'Police Centre', 'Transport'
   ];
+
+  const getCatEmoji = (cat) => {
+    switch (cat) {
+      case 'All': return '📋';
+      case 'Accommodation': return '🎪';
+      case 'Food Area': return '🍛';
+      case 'Drinking Water': return '🚰';
+      case 'Toilet': return '🚻';
+      case 'Pharmacy': return '💊';
+      case 'Parking': return '🅿️';
+      case 'Police Centre': return '👮';
+      case 'Transport': return '🚌';
+      default: return '✨';
+    }
+  };
 
   // Comprehensive Authentic Dataset of Nearby Kumbh Facilities (Strictly Local Nashik Kumbh Images & No Medical Tab)
   const defaultFacilities = [
@@ -184,18 +225,18 @@ const NearbyFacilities = () => {
     },
     {
       _id: 'fac-12',
-      name: 'Nashik Road Railway Station Shuttle Bus Hub',
+      name: 'Nashik Road Railway Station Pilgrim Shuttle Bus Terminal (नाशिक रोड रेल्वे स्टेशन शटल टर्मिनल)',
       category: 'Transport',
-      address: 'Nashik Road Railway Station Compound 422101',
-      location: 'Nashik Road Railway Station Compound 422101',
+      address: 'Nashik Road Railway Station Exit Gate 1, Nashik 422101',
+      location: 'Nashik Road Railway Station Exit Gate 1, Nashik 422101',
       searchQuery: 'Nashik Road Railway Station, Maharashtra',
-      description: 'Continuous MSRTC & Electric City Shuttle bus departure terminal transporting arriving train passengers directly to outer parking hubs and ghats.',
+      description: 'Official 24/7 MSRTC & Electric City Bus hub providing free direct shuttle buses connecting train passengers to Tapovan Sadhugram, Ramkund Ghats, and outer satellite parking.',
       image: '/kumbh-bg.jpg',
-      timings: 'Open 24/7',
-      distance: 'At Railway Station Exit',
+      timings: 'Continuous 24/7 Service (Buses every 3 mins)',
+      distance: '10 meters from Railway Station Main Exit',
       contactNumber: '0253-2465432',
       verified: true,
-      facilities: ['Continuous Bus Frequency', 'Ticket Tokens', 'Tourist Desk', 'Luggage Assistance']
+      facilities: ['Free Electric Shuttles', '24/7 Ticket Counters', 'Baggage Holding Counter', 'Tourist Police Desk', 'Wheelchair Support']
     },
 
     // --- 7. POLICE CENTRE ---
@@ -213,20 +254,56 @@ const NearbyFacilities = () => {
       contactNumber: '112',
       verified: true,
       facilities: ['Lost & Found Registration', 'Public Announcement System', 'RFID Tagging']
+    },
+    {
+      _id: 'fac-14',
+      name: 'Nashik Central CBS Bus Depot Transit Terminal (नाशिक मध्यवर्ती बस स्थानक शटल टर्मिनल)',
+      category: 'Transport',
+      address: 'CBS Circle, Shalimar, Nashik 422001',
+      location: 'CBS Circle, Shalimar, Nashik 422001',
+      searchQuery: 'CBS Bus Stand, Nashik, Maharashtra',
+      description: 'Central MSRTC transport interchange hub with non-stop express buses running to Trimbakeshwar Jyotirlinga, Tapovan Tent City, and Mumbai/Pune highways.',
+      image: '/kumbh-bg1.jpg',
+      timings: 'Continuous 24/7 Departure',
+      distance: '2.2 km from Ramkund Ghat',
+      contactNumber: '0253-2575555',
+      verified: true,
+      facilities: ['Non-Stop Express Shuttles', 'Passenger Rest Waiting Hall', 'Multilingual Helpdesk', 'RO Water Dispensers']
+    },
+    {
+      _id: 'fac-15',
+      name: 'Tapovan Electric Shuttle Ring Road Corridor (तपोवन इलेक्ट्रिक बस मार्ग)',
+      category: 'Transport',
+      address: 'Tapovan Sector 1 Shuttle Station, Nashik 422003',
+      location: 'Tapovan Sector 1 Shuttle Station, Nashik 422003',
+      searchQuery: 'Tapovan Sadhugram, Nashik, Maharashtra',
+      description: 'Zero-emission electric shuttle corridor connecting outer satellite parking terminals to Ramkund bathing ghats during peak Shahi Snan days.',
+      image: '/shahi-snan.jpg',
+      timings: '4:00 AM - 11:30 PM (Peak Frequencies)',
+      distance: 'Direct Express Route to Ghats',
+      contactNumber: '0253-2578899',
+      verified: true,
+      facilities: ['100% Electric Fleet', 'Zero Pilgrim Fare', 'Low-Floor Accessibility', 'Dedicated Traffic Lane']
     }
   ];
 
   useEffect(() => {
     const fetchFacilities = async () => {
       try {
-        const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
-        const customItems = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+        const deletedIds = [
+          ...JSON.parse(localStorage.getItem('kumbh_deleted_facilities') || '[]'),
+          ...JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]')
+        ];
+        const customItems = [
+          ...JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]'),
+          ...JSON.parse(localStorage.getItem('kumbh_custom_facilities') || '[]')
+        ];
 
         const res = await api.get('/facilities').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-        // Combine API items, custom local items, and default items
-        const allItems = [...customItems, ...apiItems, ...defaultFacilities];
+        // If customItems exists in localStorage, display strictly admin-managed cards
+        const allItems = customItems.length > 0 ? [...customItems, ...apiItems] : [...apiItems, ...defaultFacilities];
         const filtered = allItems.filter(item => 
           item && 
           item.category !== 'Medical' && 
@@ -277,7 +354,18 @@ const NearbyFacilities = () => {
           });
         }
 
-        setFacilities(uniqueFacilities);
+        // Filter strictly to valid facility categories (Accommodation, Food, Water, Sanitation, Transport, etc.)
+        const isFacilityCategory = (catStr) => {
+          if (!catStr) return false;
+          const s = String(catStr).trim().toLowerCase();
+          return s.includes('accommodation') || s.includes('camp') || s.includes('food') || 
+                 s.includes('water') || s.includes('toilet') || s.includes('pharmacy') || 
+                 s.includes('medical') || s.includes('parking') || s.includes('police') || 
+                 s.includes('help') || s.includes('transport') || s.includes('shuttle') || s.includes('bus');
+        };
+
+        const validFacilities = uniqueFacilities.filter(item => isFacilityCategory(item.category));
+        setFacilities(validFacilities);
       } catch (err) {
         setFacilities(defaultFacilities);
       } finally {
@@ -326,6 +414,7 @@ const NearbyFacilities = () => {
 
   const getCatIcon = (cat) => {
     switch (cat) {
+      case 'All': return '📋';
       case 'Accommodation': return '⛺';
       case 'Food Area': return '🍛';
       case 'Drinking Water': return '💧';
@@ -346,59 +435,146 @@ const NearbyFacilities = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10">
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl flex-shrink-0 shadow-md">
+      <div className="bg-gradient-to-r from-purple-700 via-indigo-700 to-blue-700 text-white p-5 sm:p-6 rounded-[28px] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden min-h-[96px]">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-md border border-white/20">
             📍
           </div>
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('nearbyFacilities')}</h2>
-            <p className="text-xs sm:text-sm text-purple-100 font-medium mt-0.5">
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight truncate">{t('nearbyFacilities')}</h2>
+            <p className="text-xs sm:text-sm text-purple-100 font-medium mt-0.5 truncate">
               Verified Pilgrim Camps, Free Food Arenas, RO Water Stations & Emergency Posts
             </p>
           </div>
         </div>
+
+        {/* Header Right Action Group: List View Badge & Map View Toggle */}
+        <div className="flex items-center gap-3 self-start sm:self-auto z-10 flex-shrink-0">
+          <span className="px-4 py-2.5 rounded-2xl bg-purple-950/60 text-purple-100 border border-purple-400/40 text-xs font-bold shadow-md">
+            📋 List View ({facilities.length})
+          </span>
+          <button
+            onClick={() => setViewMode(prev => prev === 'list' ? 'map' : 'list')}
+            className="lg:hidden px-4 py-2 rounded-xl bg-purple-950/60 hover:bg-purple-900 text-purple-100 font-bold text-xs border border-purple-400/40 shadow-md transition-all"
+          >
+            {viewMode === 'map' ? '📋 List View' : '🗺️ Map View'}
+          </button>
+        </div>
       </div>
 
-      {/* Search & Category Filter Chips */}
-      <div className="space-y-3">
-        <div className="relative">
+      {/* Interactive Map View Simulation (Hidden on Desktop / Laptop) */}
+      {viewMode === 'map' && (
+        <div className="lg:hidden bg-[#fffbeb] border-2 border-amber-300/80 rounded-[28px] p-6 sm:p-8 text-center shadow-md relative overflow-hidden flex flex-col items-center justify-center space-y-3 animate-fade-in">
+          <div className="w-14 h-14 rounded-2xl bg-amber-200/60 flex items-center justify-center text-amber-900 shadow-sm border border-amber-300/60">
+            <MapIcon className="w-8 h-8 text-amber-900" />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-bold text-amber-950 tracking-tight">Map View Active</h3>
+          <p className="text-xs sm:text-sm text-slate-700 max-w-lg leading-relaxed font-medium">
+            Displaying pin markers on map. Click 'Take Me There' to start live GPS navigation.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2.5 pt-2">
+            <button
+              type="button"
+              onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Tapovan+Sadhugram+Tent+City,+Nashik', '_blank')}
+              className="px-4 py-2 rounded-full bg-cyan-100/90 hover:bg-cyan-200 text-cyan-950 border border-cyan-300 text-xs font-bold shadow-sm inline-flex items-center space-x-1.5 transition-all hover:scale-105"
+            >
+              <span>⛺</span>
+              <span>Sadhugram Tents</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Ramkund+Water+Post,+Nashik', '_blank')}
+              className="px-4 py-2 rounded-full bg-amber-100/90 hover:bg-amber-200 text-amber-950 border border-amber-300 text-xs font-bold shadow-sm inline-flex items-center space-x-1.5 transition-all hover:scale-105"
+            >
+              <span>🚰</span>
+              <span>Ramkund Water Post</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Tapovan+Parking,+Nashik', '_blank')}
+              className="px-4 py-2 rounded-full bg-indigo-100/90 hover:bg-indigo-200 text-indigo-950 border border-indigo-300 text-xs font-bold shadow-sm inline-flex items-center space-x-1.5 transition-all hover:scale-105"
+            >
+              <span>🅿️</span>
+              <span>Tapovan Parking</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Search & Category Filter Chips Row: Search Left, Scrollable Tabs with Circular Arrow Buttons Right */}
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 w-full">
+        {/* Search Bar Input */}
+        <div className="relative lg:w-72 xl:w-80 flex-shrink-0">
           <Search className="w-5 h-5 text-purple-600 absolute left-4 top-3.5 rtl:right-4 rtl:left-auto" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search nearby camps, food arenas, water stations, parking..."
-            className="w-full pl-12 pr-4 py-3.5 bg-white border-2 border-purple-200 rounded-2xl shadow-sm text-sm font-semibold focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none rtl:pr-12 rtl:pl-4"
+            placeholder="Search nearby camps..."
+            className="w-full pl-12 pr-4 py-3 bg-white border-2 border-purple-200 rounded-2xl shadow-sm text-sm font-semibold focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none rtl:pr-12 rtl:pl-4"
           />
         </div>
 
-        {/* Category Horizontal Filter Chips */}
-        <div className="flex gap-2 overflow-x-auto pb-2 text-xs scrollbar-none">
-          {categories.map((cat) => {
-            const count = countForCategory(cat);
-            const isSelected = selectedCat === cat;
+        {/* Category Horizontal Filter Chips placed on the Right Side of Search with Circular Left/Right Arrow Buttons & Scrollbar */}
+        <div className="flex-1 min-w-0 flex items-center gap-1.5">
+          {canScrollLeft && (
+            <button
+              type="button"
+              onClick={() => scrollTabs('left')}
+              className="w-8 h-8 rounded-full bg-white hover:bg-purple-50 border border-slate-300 text-slate-700 shadow-sm flex items-center justify-center flex-shrink-0 transition-all hover:scale-105"
+              title="Scroll Left"
+              aria-label="Scroll Left"
+            >
+              <ChevronLeft className="w-4 h-4 text-purple-700" />
+            </button>
+          )}
 
-            return (
-              <button
-                key={cat}
-                onClick={() => setSelectedCat(cat)}
-                className={`px-4 py-2.5 rounded-full font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-2 rtl:space-x-reverse border ${
-                  isSelected
-                    ? 'bg-purple-700 text-white border-purple-600 shadow-md scale-102'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-purple-50'
-                }`}
-              >
-                <span>{getCatIcon(cat)}</span>
-                <span>{cat}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
-                  isSelected ? 'bg-purple-950/40 text-white' : 'bg-slate-100 text-slate-700'
-                }`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
+          <div
+            ref={tabsRef}
+            onScroll={checkScroll}
+            className="flex-1 min-w-0 overflow-x-auto py-1 text-xs scrollbar-thin scrollbar-thumb-purple-300 scroll-smooth"
+          >
+            <div className="flex items-center gap-2 flex-nowrap min-w-max">
+              {categories.map((cat) => {
+                const count = countForCategory(cat);
+                const isSelected = selectedCat === cat;
+
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedCat(cat)}
+                    className={`px-4 py-2.5 rounded-full font-bold whitespace-nowrap transition-all shadow-sm flex items-center space-x-2 rtl:space-x-reverse border flex-shrink-0 ${
+                      isSelected
+                        ? 'bg-purple-700 text-white border-purple-600 shadow-md scale-102'
+                        : 'bg-white text-slate-700 border-slate-200 hover:bg-purple-50'
+                    }`}
+                  >
+                    <span>{getCatEmoji(cat)}</span>
+                    <span>{cat === 'All' ? 'All Facilities' : cat}</span>
+                    <span className={`px-2 py-0.5 rounded-full text-[11px] font-mono font-bold ${
+                      isSelected ? 'bg-purple-950/40 text-white' : 'bg-slate-100 text-slate-700'
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {canScrollRight && (
+            <button
+              type="button"
+              onClick={() => scrollTabs('right')}
+              className="w-8 h-8 rounded-full bg-white hover:bg-purple-50 border border-slate-300 text-slate-700 shadow-sm flex items-center justify-center flex-shrink-0 transition-all hover:scale-105"
+              title="Scroll Right"
+              aria-label="Scroll Right"
+            >
+              <ChevronRight className="w-4 h-4 text-purple-700" />
+            </button>
+          )}
         </div>
       </div>
 
@@ -408,7 +584,7 @@ const NearbyFacilities = () => {
           Loading nearby Kumbh facilities...
         </div>
       ) : filteredFacilities.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className={`${viewMode === 'map' ? 'hidden lg:grid' : 'grid'} grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5`}>
           {filteredFacilities.map((fac) => {
             const displayAddress = fac.address || fac.location || 'Panchavati, Nashik, Maharashtra 422003';
             const displayDesc = fac.description || fac.capacityNotes || fac.details || fac.notes || 'Verified pilgrim assistance facility equipped with essential infrastructure for Simhastha Kumbh 2026-2027.';
@@ -419,51 +595,55 @@ const NearbyFacilities = () => {
             return (
               <div 
                 key={fac._id}
-                className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all flex flex-col justify-between"
+                className="bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-md hover:shadow-xl transition-all flex flex-col h-full"
               >
-                <div>
-                  <div className="relative h-44 bg-slate-900 overflow-hidden">
-                    <img 
-                      src={displayImage} 
-                      alt={fac.name}
-                      onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
-                      className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
-                    />
-                    <div className="absolute top-3 left-3 bg-purple-900/80 backdrop-blur-md text-purple-200 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-purple-400/40 flex items-center space-x-1">
-                      <span>{getCatIcon(fac.category)}</span>
-                      <span>{fac.category}</span>
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    <div className="relative h-44 bg-slate-900 overflow-hidden">
+                      <img 
+                        src={displayImage} 
+                        alt={fac.name}
+                        onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
+                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
+                      />
+                      <div className="absolute top-3 left-3 bg-purple-900/80 backdrop-blur-md text-purple-200 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-purple-400/40 flex items-center space-x-1">
+                        <span>{getCatIcon(fac.category)}</span>
+                        <span>{fac.category}</span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="p-5 space-y-3">
-                    <h3 className="font-bold text-base text-slate-900 leading-snug">{fac.name}</h3>
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{displayDesc}</p>
+                    <div className="p-5 space-y-3">
+                      <h3 className="font-bold text-base text-slate-900 leading-snug">{fac.name}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed line-clamp-3">{displayDesc}</p>
 
-                    <div className="space-y-1.5 pt-1 text-xs">
-                      <div className="flex items-center space-x-2 text-slate-500 font-medium">
-                        <MapPin className="w-3.5 h-3.5 text-purple-600 flex-shrink-0" />
-                        <span className="truncate">{displayAddress}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-slate-500 font-medium">
-                        <Clock className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
-                        <span>{displayTimings}</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-purple-700 font-bold">
-                        <Navigation className="w-3.5 h-3.5 text-purple-600 flex-shrink-0" />
-                        <span>{displayDistance}</span>
+                      <div className="space-y-1.5 pt-1 text-xs">
+                        <div className="flex items-center space-x-2 text-slate-500 font-medium">
+                          <MapPin className="w-3.5 h-3.5 text-purple-600 flex-shrink-0" />
+                          <span className="truncate">{displayAddress}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-slate-500 font-medium">
+                          <Clock className="w-3.5 h-3.5 text-blue-600 flex-shrink-0" />
+                          <span>{displayTimings}</span>
+                        </div>
+                        <div className="flex items-center space-x-2 text-purple-700 font-bold">
+                          <Navigation className="w-3.5 h-3.5 text-purple-600 flex-shrink-0" />
+                          <span>{displayDistance}</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="p-5 pt-0">
+                {/* Perfectly Aligned Pill-Shaped Get Direction Button */}
+                <div className="p-5 pt-0 mt-auto flex justify-start">
                   <a
                     href={getGoogleMapsDirectionsUrl(fac)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full py-2.5 bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center justify-center gap-1"
+                    className="px-5 py-2 rounded-full bg-purple-700 hover:bg-purple-800 text-white font-bold text-xs shadow-md inline-flex items-center space-x-2 transition-all hover:scale-105 border border-purple-500 flex-shrink-0"
                   >
-                    <Navigation className="w-3.5 h-3.5" /> Directions
+                    <Navigation className="w-3.5 h-3.5" />
+                    <span>Get Direction</span>
                   </a>
                 </div>
               </div>

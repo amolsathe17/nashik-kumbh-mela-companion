@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { HelpCircle, CheckCircle, Clock, AlertCircle, MessageSquare, Send, Trash2, Phone, User, MapPin } from 'lucide-react';
+import { HelpCircle, CheckCircle, Clock, AlertCircle, MessageSquare, Send, Trash2, Phone, User, MapPin, X, AlertTriangle } from 'lucide-react';
 import api from '../../services/api';
 
 const AssistanceMgmt = () => {
@@ -8,6 +8,7 @@ const AssistanceMgmt = () => {
   const [smsModalItem, setSmsModalItem] = useState(null);
   const [smsMessage, setSmsMessage] = useState('');
   const [sendingSms, setSendingSms] = useState(false);
+  const [deleteConfirmId, setDeleteConfirmId] = useState(null);
 
   useEffect(() => {
     fetchRequests();
@@ -33,13 +34,19 @@ const AssistanceMgmt = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this help request?')) return;
+  const handleDelete = (id) => {
+    setDeleteConfirmId(id);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteConfirmId) return;
     try {
-      const res = await api.delete(`/assistance/${id}`);
+      const res = await api.delete(`/assistance/${deleteConfirmId}`);
       if (res.data.success) fetchRequests();
     } catch (err) {
       alert('Error deleting assistance request');
+    } finally {
+      setDeleteConfirmId(null);
     }
   };
 
@@ -169,58 +176,117 @@ const AssistanceMgmt = () => {
       </div>
 
       {/* Send SMS Modal */}
-      {smsModalItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-2xl border border-blue-500/30">
-            <div className="flex items-center justify-between border-b pb-3">
-              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                <Send className="w-5 h-5 text-blue-600" /> Send SMS Response to Pilgrim
-              </h3>
+      {smsModalItem && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+          <div className="bg-white rounded-3xl max-w-md w-full max-h-[85vh] shadow-2xl border border-slate-100 overflow-hidden flex flex-col">
+            {/* Fixed Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-white flex-shrink-0">
+              <div className="flex items-center space-x-3 rtl:space-x-reverse">
+                <div className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold shadow-sm">
+                  <Send className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-slate-900 leading-tight">Send SMS Advisory</h3>
+                  <p className="text-xs text-slate-500 font-normal mt-0.5">Send direct update to pilgrim's mobile</p>
+                </div>
+              </div>
               <button 
                 onClick={() => setSmsModalItem(null)}
-                className="text-slate-400 hover:text-slate-600 text-sm font-bold"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 flex items-center justify-center transition-colors"
+                title="Close"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded-2xl border text-xs space-y-1">
-              <div className="font-bold text-slate-900">Recipient: {smsModalItem.requesterName}</div>
-              <div className="font-mono text-slate-600">Mobile No: {smsModalItem.contactInfo}</div>
-              <div className="text-[11px] text-slate-500">Category: {smsModalItem.requestType}</div>
-            </div>
+            <form onSubmit={handleSendSms} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-6 overflow-y-auto flex-1 space-y-4 text-xs custom-scrollbar">
+                <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-1">
+                  <div className="flex items-center justify-between font-bold text-slate-900">
+                    <span className="flex items-center gap-1.5">
+                      <User className="w-4 h-4 text-blue-600" /> {smsModalItem.requesterName || 'Pilgrim'}
+                    </span>
+                    <span className="font-mono text-blue-600 flex items-center gap-1">
+                      <Phone className="w-3.5 h-3.5" /> {smsModalItem.contactInfo}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 font-medium truncate">
+                    Inquiry: {smsModalItem.description}
+                  </p>
+                </div>
 
-            <form onSubmit={handleSendSms} className="space-y-3 text-xs">
-              <div>
-                <label className="block font-bold text-slate-700 mb-1">SMS Message Content</label>
-                <textarea
-                  required
-                  rows={4}
-                  value={smsMessage}
-                  onChange={(e) => setSmsMessage(e.target.value)}
-                  className="w-full p-3 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 font-medium"
-                />
+                <div>
+                  <label className="block font-bold text-slate-700 text-xs mb-1.5">Response / Advisory SMS Message</label>
+                  <textarea
+                    rows={4}
+                    required
+                    value={smsMessage}
+                    onChange={(e) => setSmsMessage(e.target.value)}
+                    placeholder="Enter official assistance reply, helpline instructions, or sector directions..."
+                    className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 font-medium text-xs outline-none transition-all placeholder:text-slate-400"
+                  />
+                </div>
               </div>
 
-              <div className="flex justify-end gap-2 pt-3 border-t">
+              <div className="px-6 py-4 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-3 flex-shrink-0">
                 <button
                   type="button"
                   onClick={() => setSmsModalItem(null)}
-                  className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl"
+                  className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={sendingSms}
-                  className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow flex items-center gap-1.5"
+                  className="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center gap-1.5"
                 >
-                  <Send className="w-4 h-4" /> {sendingSms ? 'Dispatched...' : 'Dispatch SMS'}
+                  <Send className="w-4 h-4" /> {sendingSms ? 'Sending...' : 'Send SMS Now'}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
+      )}
+
+      {/* CUSTOM CENTER DELETE CONFIRMATION MODAL POPUP */}
+      {deleteConfirmId && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+          <div className="absolute inset-0" onClick={() => setDeleteConfirmId(null)} />
+
+          <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 p-6 z-10 space-y-5 text-center">
+            <div className="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto shadow-inner border border-red-200">
+              <AlertTriangle className="w-7 h-7" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug">Confirm Deletion</h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                Are you sure you want to delete this help request?
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setDeleteConfirmId(null)}
+                className="px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors"
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md transition-all hover:scale-102"
+              >
+                Yes, Delete
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
     </div>
   );

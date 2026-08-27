@@ -39,16 +39,18 @@ const HelpSafety = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-red-600 to-amber-700 text-white p-6 rounded-3xl shadow-lg flex items-center space-x-3 rtl:space-x-reverse">
-        <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-          🆘
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">{t('helpSafety')}</h2>
-          <p className="text-xs text-red-100 font-medium">
-            {t('helpSafetyDesc') || 'Lost & Found, Pilgrim Support & Official Helplines'}
-          </p>
+      {/* Page Header Banner */}
+      <div className="bg-gradient-to-r from-red-600 via-orange-600 to-amber-700 text-white p-5 sm:p-6 rounded-[28px] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden min-h-[96px]">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-md border border-white/20">
+            🆘
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight truncate">{t('helpSafety')}</h2>
+            <p className="text-xs sm:text-sm text-red-100 font-medium mt-0.5 truncate">
+              {t('helpSafetyDesc') || 'Lost & Found, Pilgrim Support & Official Helplines'}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -141,14 +143,16 @@ const HelpSafety = () => {
               ></textarea>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-transform hover:scale-101 disabled:opacity-50"
-            >
-              <Send className="w-4 h-4" />
-              <span>{loading ? (t('submitting') || 'Submitting...') : t('submitRequest')}</span>
-            </button>
+            <div className="pt-2 flex justify-start">
+              <button
+                type="submit"
+                disabled={loading}
+                className="px-6 py-3.5 bg-red-600 hover:bg-red-700 text-white font-bold text-xs sm:text-sm rounded-2xl shadow-md inline-flex items-center space-x-2 transition-transform hover:scale-101 disabled:opacity-50"
+              >
+                <Send className="w-4 h-4" />
+                <span>{loading ? (t('submitting') || 'Submitting...') : t('submitRequest')}</span>
+              </button>
+            </div>
           </form>
         )}
       </div>

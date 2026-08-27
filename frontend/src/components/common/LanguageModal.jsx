@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useLanguage } from '../../context/LanguageContext';
 import { Globe, X, Check, Search } from 'lucide-react';
 
@@ -18,11 +19,11 @@ const LanguageModal = ({ isOpen, onClose }) => {
     return matchesSearch && matchesRegion;
   });
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 animate-fade-in">
-      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-amber-200 overflow-hidden">
+  return createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+      <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl border border-slate-100 overflow-hidden">
         {/* Modal Header */}
-        <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white p-5 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white p-5 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center space-x-3 rtl:space-x-reverse">
             <Globe className="w-8 h-8 text-amber-100 animate-pulse" />
             <div>
@@ -32,15 +33,15 @@ const LanguageModal = ({ isOpen, onClose }) => {
           </div>
           <button 
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/20 text-white transition-colors"
+            className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition-colors"
             aria-label="Close"
           >
-            <X className="w-6 h-6" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="p-4 bg-amber-50/50 border-b border-amber-100 flex flex-col gap-3">
+        <div className="p-4 bg-amber-50/50 border-b border-amber-100 flex flex-col gap-3 flex-shrink-0">
           <div className="relative">
             <Search className="w-5 h-5 text-gray-400 absolute left-3 top-3 rtl:right-3 rtl:left-auto" />
             <input
@@ -69,7 +70,7 @@ const LanguageModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Languages Grid */}
-        <div className="p-4 overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[50vh]">
+        <div className="p-4 overflow-y-auto flex-1 custom-scrollbar grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-[50vh]">
           {filteredLangs.map((lang) => {
             const isSelected = langCode === lang.code;
             return (
@@ -100,7 +101,7 @@ const LanguageModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Modal Footer */}
-        <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end">
+        <div className="p-4 bg-gray-50 border-t border-gray-100 flex justify-end flex-shrink-0">
           <button
             onClick={onClose}
             className="px-6 py-2.5 bg-amber-600 text-white font-medium rounded-xl hover:bg-amber-700 shadow-md transition-all text-sm"
@@ -109,7 +110,8 @@ const LanguageModal = ({ isOpen, onClose }) => {
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

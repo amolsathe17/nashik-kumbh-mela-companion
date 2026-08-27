@@ -35,6 +35,7 @@ const FamilyGroup = () => {
   const [newMemberName, setNewMemberName] = useState('');
   const [newMemberRole, setNewMemberRole] = useState('Member');
   const [showAddMember, setShowAddMember] = useState(false);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
 
   useEffect(() => {
     if (group) {
@@ -120,42 +121,43 @@ const FamilyGroup = () => {
     };
 
     setGroup(newGroup);
+    setHostName('');
+    setGroupNameInput('');
+    setActiveView('active');
   };
 
   // Handle Joining Group
   const handleJoinGroupSubmit = (e) => {
     e.preventDefault();
-    const formattedCode = joinCodeInput.trim().toUpperCase();
-    if (!formattedCode) return;
+    if (!joinCodeInput.trim()) return;
 
-    const joinedName = memberNameInput.trim() || 'New Member';
-    const newGroup = {
-      code: formattedCode,
-      name: `Joined Group (${formattedCode})`,
+    const joinedGroup = {
+      code: joinCodeInput.trim().toUpperCase(),
+      name: 'Nashik Kumbh Yatra Group',
       createdAt: new Date().toISOString(),
       meetingPoint: 'Ramkund Main Clock Tower Gate #2',
-      host: 'Group Leader',
+      host: 'Rajesh Sharma',
       members: [
         {
-          id: 'mem-you',
-          name: `${joinedName} (You)`,
-          role: 'Member',
+          id: 'mem-1',
+          name: 'Rajesh Sharma (Host)',
+          role: 'Host',
           sharing: true,
           battery: '88%',
-          locationName: 'Ramkund Main Entry',
-          distance: '0 meters (You)',
+          locationName: 'Ramkund Ghat #1',
+          distance: '120 meters away',
           status: 'Online',
           lastSeen: 'Just now',
           color: 'bg-indigo-500'
         },
         {
-          id: 'mem-host',
-          name: 'Group Host',
-          role: 'Host',
+          id: 'mem-2',
+          name: `${memberNameInput.trim() || 'You'} (Member)`,
+          role: 'Member',
           sharing: true,
-          battery: '91%',
-          locationName: 'Tapovan Bus Terminal',
-          distance: '1.2 km away',
+          battery: '95%',
+          locationName: 'Tapovan Parking',
+          distance: '0 meters (You)',
           status: 'Online',
           lastSeen: 'Just now',
           color: 'bg-amber-500'
@@ -163,7 +165,10 @@ const FamilyGroup = () => {
       ]
     };
 
-    setGroup(newGroup);
+    setGroup(joinedGroup);
+    setJoinCodeInput('');
+    setMemberNameInput('');
+    setActiveView('active');
   };
 
   // Add Member
@@ -220,13 +225,12 @@ const FamilyGroup = () => {
     if (!presetText) setCustomMsgInput('');
   };
 
-  // Leave Group
-  const handleLeaveGroup = () => {
-    if (window.confirm('Are you sure you want to leave / disband this family group?')) {
-      setGroup(null);
-      setMessages([]);
-      setActiveView('welcome');
-    }
+  // Leave Group Handler
+  const handleConfirmLeaveGroup = () => {
+    setGroup(null);
+    setMessages([]);
+    setActiveView('welcome');
+    setShowLeaveModal(false);
   };
 
   // Toggle Member Location Sharing
@@ -241,28 +245,74 @@ const FamilyGroup = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-amber-700 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10">
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-3xl flex-shrink-0 shadow-md">
+      {/* Leave / Disband Family Group Confirmation Modal in Center of Page */}
+      {showLeaveModal && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fade-in"
+          onClick={() => setShowLeaveModal(false)}
+        >
+          <div 
+            className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl border border-slate-200 text-center space-y-5 animate-scale-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 rounded-2xl bg-red-100 text-red-600 mx-auto flex items-center justify-center text-3xl shadow-sm border border-red-200">
+              <LogOut className="w-8 h-8 text-red-600" />
+            </div>
+
+            <div className="space-y-2">
+              <h3 className="text-xl font-bold text-slate-900">Leave / Disband Group</h3>
+              <p className="text-sm font-semibold text-slate-600 leading-relaxed">
+                Are you sure you want to leave / disband this family group?
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-3 pt-2">
+              <button 
+                type="button"
+                onClick={() => setShowLeaveModal(false)} 
+                className="px-5 py-2.5 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all border border-slate-300"
+              >
+                Cancel
+              </button>
+              <button 
+                type="button"
+                onClick={handleConfirmLeaveGroup} 
+                className="px-6 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white font-bold text-xs shadow-md transition-all border border-red-500 hover:scale-105"
+              >
+                Yes, Leave / Disband
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Page Header Banner */}
+      <div className="bg-gradient-to-r from-indigo-700 via-purple-700 to-amber-700 text-white p-5 sm:p-6 rounded-[28px] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden min-h-[96px]">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-md border border-white/20">
             👨‍👩‍👧‍👦
           </div>
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('familyGroup')}</h2>
-            <p className="text-xs sm:text-sm text-indigo-100 font-medium mt-0.5">
-              {t('familyGroupDesc') || 'Real-time Opt-In Family Coordination, Emergency Meeting Point & SOS Broadcasts'}
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight truncate">{t('familyGroupTitle') || 'Family & Group Safety Tracker'}</h2>
+            <p className="text-xs sm:text-sm text-indigo-100 font-medium mt-0.5 truncate">
+              {t('familyGroupSubtitle') || 'Private Family Code, Real-Time Location Sharing & Kumbh Broadcasts'}
             </p>
           </div>
         </div>
 
         {group && (
-          <button
-            onClick={handleLeaveGroup}
-            className="px-4 py-2 bg-red-600/80 hover:bg-red-700 text-white font-bold text-xs rounded-xl shadow border border-red-400/40 flex items-center space-x-1.5 self-start sm:self-auto transition-transform hover:scale-102 z-10"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Leave Group</span>
-          </button>
+          <div className="flex items-center gap-3 self-start sm:self-auto z-10 flex-shrink-0">
+            <span className="px-4 py-2 rounded-xl bg-indigo-950/60 text-indigo-100 border border-indigo-400/40 text-xs font-bold shadow-md">
+              📋 List View ({group.members.length} Members)
+            </span>
+            <button
+              onClick={() => setShowLeaveModal(true)}
+              className="px-4 py-2 rounded-xl bg-red-600/80 hover:bg-red-600 text-white font-bold text-xs shadow-md border border-red-400/40 flex items-center space-x-1.5 transition-all"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Leave Group</span>
+            </button>
+          </div>
         )}
       </div>
 

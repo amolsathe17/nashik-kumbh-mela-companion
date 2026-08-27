@@ -16,17 +16,25 @@ const Login = () => {
   const [email, setEmail] = useState(stored.email || 'admin@gmail.com');
   const [password, setPassword] = useState(stored.password || '123');
   const [errorMsg, setErrorMsg] = useState('');
-  const { login, loading } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMsg('');
-    const res = await login(email, password);
-    if (res.success) {
-      navigate('/admin/overview');
-    } else {
-      setErrorMsg(res.message);
+    setIsSubmitting(true);
+    try {
+      const res = await login(email, password);
+      if (res.success) {
+        navigate('/admin/overview');
+      } else {
+        setErrorMsg(res.message);
+      }
+    } catch (err) {
+      setErrorMsg('Login request failed. Please check credentials.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -88,10 +96,10 @@ const Login = () => {
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-bold text-sm rounded-xl shadow-xl transition-transform hover:scale-101 active:scale-99 border border-amber-300/40"
+            disabled={isSubmitting}
+            className="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-slate-950 font-bold text-sm rounded-xl shadow-xl transition-transform hover:scale-101 active:scale-99 border border-amber-300/40 cursor-pointer disabled:opacity-70"
           >
-            {loading ? 'Authenticating...' : 'Sign In to Dashboard'}
+            {isSubmitting ? 'Authenticating...' : 'Sign In to Dashboard'}
           </button>
         </form>
       </div>

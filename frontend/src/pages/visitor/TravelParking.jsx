@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../context/LanguageContext';
 import { 
   Bus, Car, Footprints, AlertTriangle, ArrowRight, MapPin, 
-  Compass, Navigation, Clock, ShieldAlert, CheckCircle, Sparkles
+  Compass, Navigation, Clock, ShieldAlert, CheckCircle, Sparkles, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
 
 const TravelParking = () => {
   const { t } = useLanguage();
+  const [viewMode, setViewMode] = useState('list');
   const [travelData, setTravelData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,6 +18,7 @@ const TravelParking = () => {
   const [journeyResult, setJourneyResult] = useState(null);
 
   const defaultTravelData = [
+    // --- JOURNEY ROUTES ---
     {
       _id: 'trv-1',
       id: 'trv-1',
@@ -70,6 +72,158 @@ const TravelParking = () => {
       walkingPathInfo: 'Paved queue walkway from Trimbak Outer Bus Stand to Kushavarta Kund (1.2 km).',
       status: 'Moderate Traffic',
       description: 'Inter-city pilgrimage route connecting central Nashik railway/bus station to Trimbakeshwar temple.'
+    },
+
+    // --- PARKING SLOTS ---
+    {
+      _id: 'trv-4',
+      id: 'trv-4',
+      fromLocation: 'Adgaon Highway Entrance',
+      toLocation: 'Panchavati Promenade',
+      title: 'Adgaon NH-3 Outer Highway Mega Parking Hub B',
+      routeType: 'Parking Slot',
+      estimatedTime: '15 - 20 Mins Shuttle',
+      distance: '5.8 km',
+      nearestParking: 'Adgaon Outer Highway Parking Complex B',
+      parkingSlotsTotal: 15000,
+      parkingSlotsAvailable: 11400,
+      shuttleServiceInfo: 'Electric Shuttle Bus Route #7 running to Panchavati Karanja every 5 mins.',
+      privateVehicleInfo: 'Heavy vehicles and private cars diverted at Adgaon Naka. Mandatory parking at Adgaon Complex.',
+      walkingPathInfo: 'Dedicated shaded walkway with medical aid stations along Mumbai-Agra road.',
+      status: 'Clear',
+      description: 'Highway ingress holding area for private cars and outstation tourist buses from Mumbai and Dhule.'
+    },
+    {
+      _id: 'trv-5',
+      id: 'trv-5',
+      fromLocation: 'Aurangabad Road',
+      toLocation: 'Tapovan City',
+      title: 'Tapovan Satellite Mega Parking Hub A',
+      routeType: 'Parking Slot',
+      estimatedTime: '5 Mins Shuttle Transfer',
+      distance: '3.0 km',
+      nearestParking: 'Tapovan Satellite Parking Hub A',
+      parkingSlotsTotal: 25000,
+      parkingSlotsAvailable: 19800,
+      shuttleServiceInfo: 'Free 24/7 E-Shuttles running every 3 minutes directly to Ramkund.',
+      privateVehicleInfo: 'Primary satellite parking lot equipped with EV charging stations and driver rest rooms.',
+      walkingPathInfo: 'Direct lighted walkway leading to Sadhugram Akhara tent city.',
+      status: 'Clear',
+      description: 'Largest 50-acre parking facility servicing eastern approach to Nashik Kumbh Mela.'
+    },
+
+    // --- SHUTTLE BUS ---
+    {
+      _id: 'trv-6',
+      id: 'trv-6',
+      fromLocation: 'Tapovan Satellite Hub',
+      toLocation: 'Ramkund Main Ghat',
+      title: 'Ramkund Express Electric Shuttle Bus Fleet #1',
+      routeType: 'Shuttle Bus',
+      estimatedTime: '8 - 10 Mins (Continuous Loop)',
+      distance: '2.5 km',
+      nearestParking: 'Tapovan Satellite Parking Hub A',
+      parkingSlotsTotal: 25000,
+      parkingSlotsAvailable: 18200,
+      shuttleServiceInfo: '150 Low-Floor AC Electric Buses operating non-stop 24/7 (Zero Fare / Free for Pilgrims).',
+      privateVehicleInfo: 'Shuttle buses have exclusive dedicated traffic lane on Godavari Riverbank Road.',
+      walkingPathInfo: 'Shuttle drop-off point is 100 meters from Ramkund main bathing ghat entrance.',
+      status: 'Clear',
+      description: 'High-frequency eco-friendly shuttle bus connecting outer parking directly to central Shahi Snan ghats.'
+    },
+    {
+      _id: 'trv-7',
+      id: 'trv-7',
+      fromLocation: 'Nashik Road Railway Station',
+      toLocation: 'Panchavati & Tapovan',
+      title: 'Nashik Road Station Pilgrim Express Shuttle Fleet #3',
+      routeType: 'Shuttle Bus',
+      estimatedTime: '20 Mins Direct Shuttle',
+      distance: '9.5 km',
+      nearestParking: 'Nashik Road Station Parking',
+      parkingSlotsTotal: 3500,
+      parkingSlotsAvailable: 2100,
+      shuttleServiceInfo: 'Direct MSRTC Kumbh Electric Buses running every 5 minutes from Railway Station Exit.',
+      privateVehicleInfo: 'Dedicated transit corridor for public buses bypassing city traffic congestions.',
+      walkingPathInfo: 'Covered queue complex at Railway Station Exit 1.',
+      status: 'Clear',
+      description: 'Direct shuttle bus link for train passengers arriving at Nashik Road Station.'
+    },
+
+    // --- PRIVATE VEHICLE ADVISORY ---
+    {
+      _id: 'trv-8',
+      id: 'trv-8',
+      fromLocation: 'Outer City Ring Road',
+      toLocation: 'Panchavati Core Zone',
+      title: 'Panchavati Core Ghat Zone Vehicle Restriction Advisory',
+      routeType: 'Private Vehicle Advisory',
+      estimatedTime: 'Advisory Active 24/7',
+      distance: '0 km Inner Radius',
+      nearestParking: 'Tapovan Hub A & Adgaon Hub B',
+      parkingSlotsTotal: 40000,
+      parkingSlotsAvailable: 29600,
+      shuttleServiceInfo: 'Mandatory transfer to Free Electric Shuttles at outer parking checkposts.',
+      privateVehicleInfo: 'STRICT VEHICLE PROHIBITION: All private 2-wheelers, cars, and buses prohibited within 3 km radius of Ramkund (4:00 AM to 11:00 PM).',
+      walkingPathInfo: 'Pedestrian-only green zones established throughout Panchavati, Kalaram Temple & Ramkund.',
+      status: 'Clear',
+      description: 'Official traffic police advisory restricting private vehicle entry into core Shahi Snan zones.'
+    },
+    {
+      _id: 'trv-9',
+      id: 'trv-9',
+      fromLocation: 'Nashik-Trimbak Highway',
+      toLocation: 'Trimbakeshwar Temple Town',
+      title: 'Trimbakeshwar Inner Temple Town Traffic Advisory',
+      routeType: 'Private Vehicle Advisory',
+      estimatedTime: 'Advisory Active on Snan Days',
+      distance: '5 km Temple Radius',
+      nearestParking: 'Trimbak Outer Ring Parking C',
+      parkingSlotsTotal: 8000,
+      parkingSlotsAvailable: 5400,
+      shuttleServiceInfo: 'Free mini-shuttle vans operating from Ring Road Checkpoint to Kushavarta Kund.',
+      privateVehicleInfo: 'No private cars permitted inside Trimbakeshwar municipal limits during peak Kumbh Snan dates.',
+      walkingPathInfo: 'Pilgrim walking tracks equipped with misters and drinking water stations.',
+      status: 'Moderate Traffic',
+      description: 'Traffic restriction advisory for pilgrims traveling to Trimbakeshwar Jyotirlinga.'
+    },
+
+    // --- ROAD DIVERSION ---
+    {
+      _id: 'trv-10',
+      id: 'trv-10',
+      fromLocation: 'Dwarka Circle',
+      toLocation: 'Panchavati Karanja',
+      title: 'Shahi Snan Days One-Way Traffic Diversion Scheme',
+      routeType: 'Road Diversion',
+      estimatedTime: 'Diversion in Effect',
+      distance: '4.2 km Loop',
+      nearestParking: 'Tapovan Satellite Hub A',
+      parkingSlotsTotal: 25000,
+      parkingSlotsAvailable: 19800,
+      shuttleServiceInfo: 'Shuttles follow clockwise one-way loop: Dwarka -> Kathe Gali -> Tapovan -> Panchavati -> CBS.',
+      privateVehicleInfo: 'Dwarka Circle to Panchavati route converted to strict One-Way traffic during main royal bath days.',
+      walkingPathInfo: 'Segregated pedestrian paths along both sides of Godavari river bridges.',
+      status: 'Clear',
+      description: 'Official traffic diversion scheme implemented by Nashik City Traffic Police during major Shahi Snan dates.'
+    },
+    {
+      _id: 'trv-11',
+      id: 'trv-11',
+      fromLocation: 'Mumbai-Agra NH3 Highway',
+      toLocation: 'Gujarat Highway Bypass',
+      title: 'Outstation Heavy Commercial Vehicle Bypass Diversion',
+      routeType: 'Road Diversion',
+      estimatedTime: 'Continuous Bypass',
+      distance: '18 km Bypass',
+      nearestParking: 'Adgaon Outer Highway Parking B',
+      parkingSlotsTotal: 15000,
+      parkingSlotsAvailable: 11400,
+      shuttleServiceInfo: 'N/A (Commercial Freight Bypass)',
+      privateVehicleInfo: 'All non-Kumbh commercial trucks diverted via Outer Ring Expressway bypassing Nashik city completely.',
+      walkingPathInfo: 'N/A',
+      status: 'Clear',
+      description: 'Freight traffic diversion keeping city roads clear for Kumbh Mela passenger transport.'
     }
   ];
 
@@ -211,19 +365,74 @@ const TravelParking = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
       {/* Page Title Header Banner */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10">
-          <div className="w-14 h-14 rounded-2xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-3xl flex-shrink-0 shadow-md">
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 text-white p-5 sm:p-6 rounded-[28px] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden min-h-[96px]">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-md border border-white/20">
             🚌
           </div>
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t('travelParking') || 'Travel & Parking'}</h2>
-            <p className="text-xs sm:text-sm text-blue-100 font-medium mt-0.5">
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight truncate">{t('travelParking') || 'Travel & Parking'}</h2>
+            <p className="text-xs sm:text-sm text-blue-100 font-medium mt-0.5 truncate">
               Shuttles, Routes, Parking Availability & Live Travel Advisories
             </p>
           </div>
+        </div>        {/* List View / Map View Toggle Buttons (Hidden on Desktop / Laptop) */}
+        <div className="flex lg:hidden bg-blue-950/60 p-1.5 rounded-2xl border border-blue-400/40 text-xs self-start sm:self-auto z-10 flex-shrink-0">
+          <button
+            onClick={() => setViewMode('list')}
+            className={`px-4 py-2 rounded-xl font-bold transition-all ${viewMode === 'list' ? 'bg-white text-blue-950 shadow-md' : 'text-blue-100 hover:text-white'}`}
+          >
+            📋 List View ({travelData.length})
+          </button>
+          <button
+            onClick={() => setViewMode('map')}
+            className={`px-4 py-2 rounded-xl font-bold transition-all ${viewMode === 'map' ? 'bg-white text-blue-950 shadow-md' : 'text-blue-100 hover:text-white'}`}
+          >
+            🗺️ Map View
+          </button>
         </div>
       </div>
+
+      {/* Interactive Map View Simulation (Hidden on Desktop / Laptop) */}
+      {viewMode === 'map' && (
+        <div className="lg:hidden bg-[#fffbeb] border-2 border-amber-300/80 rounded-[28px] p-6 sm:p-8 text-center shadow-md relative overflow-hidden flex flex-col items-center justify-center space-y-3 animate-fade-in">
+          <div className="w-14 h-14 rounded-2xl bg-amber-200/60 flex items-center justify-center text-amber-900 shadow-sm border border-amber-300/60">
+            <MapIcon className="w-8 h-8 text-amber-900" />
+          </div>
+          <h3 className="text-xl sm:text-2xl font-bold text-amber-950 tracking-tight">Map View Active</h3>
+          <p className="text-xs sm:text-sm text-slate-700 max-w-lg leading-relaxed font-medium">
+            Displaying pin markers on map. Click 'Take Me There' to start live GPS navigation.
+          </p>
+          <div className="flex flex-wrap justify-center gap-2.5 pt-2">
+            <button
+              type="button"
+              onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Tapovan+Satellite+Parking,+Nashik', '_blank')}
+              className="px-4 py-2 rounded-full bg-cyan-100/90 hover:bg-cyan-200 text-cyan-950 border border-cyan-300 text-xs font-bold shadow-sm inline-flex items-center space-x-1.5 transition-all hover:scale-105"
+            >
+              <span>🅿️</span>
+              <span>Tapovan Satellite Hub</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Ramkund+Shuttle+Drop,+Nashik', '_blank')}
+              className="px-4 py-2 rounded-full bg-amber-100/90 hover:bg-amber-200 text-amber-950 border border-amber-300 text-xs font-bold shadow-sm inline-flex items-center space-x-1.5 transition-all hover:scale-105"
+            >
+              <span>🚌</span>
+              <span>Ramkund E-Shuttle Drop</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Adgaon+Highway+Parking,+Nashik', '_blank')}
+              className="px-4 py-2 rounded-full bg-indigo-100/90 hover:bg-indigo-200 text-indigo-950 border border-indigo-300 text-xs font-bold shadow-sm inline-flex items-center space-x-1.5 transition-all hover:scale-105"
+            >
+              <span>🚧</span>
+              <span>Adgaon Outer Checkpost</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Journey Planner Card */}
       <div className="bg-white rounded-3xl p-6 border-2 border-blue-200 shadow-lg space-y-5">
@@ -266,75 +475,78 @@ const TravelParking = () => {
             </div>
           </div>
 
-          <div className="md:col-span-2 pt-2">
+          <div className="md:col-span-2 pt-2 flex justify-start">
             <button
               type="submit"
-              className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl shadow-md flex items-center justify-center space-x-2 transition-all hover:scale-101 border border-blue-500"
+              className="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs rounded-full shadow-md flex items-center space-x-2 transition-all hover:scale-102 border border-blue-500 flex-shrink-0"
             >
-              <span>Show Route & Transport Options</span>
-              <ArrowRight className="w-4 h-4" />
+              <Compass className="w-4 h-4" />
+              <span>Check Route & Parking Availability</span>
             </button>
           </div>
         </form>
 
         {/* Detailed Journey Planner Results (Synchronized from Admin TravelMgmt.jsx) */}
         {journeyResult && (
-          <div className="mt-6 p-6 rounded-3xl bg-gradient-to-br from-blue-50 via-indigo-50 to-slate-50 border-2 border-blue-300 space-y-4 text-xs text-slate-800 shadow-md animate-fade-in">
+          <div className="p-5 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-2xl space-y-4 animate-fade-in">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-blue-200 pb-3">
               <div>
-                <span className="text-[10px] font-bold uppercase bg-blue-600 text-white px-2.5 py-0.5 rounded-full shadow-sm">
-                  Recommended Travel Route
+                <span className="text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full bg-blue-200 text-blue-900">
+                  Optimal Route Advisories
                 </span>
                 <h4 className="font-bold text-base text-blue-950 mt-1">{journeyResult.matchedTitle}</h4>
               </div>
-              <div className="flex items-center space-x-2 text-xs font-bold text-blue-900 bg-white px-3 py-1.5 rounded-xl border border-blue-200 shadow-sm">
-                <Clock className="w-4 h-4 text-blue-600" />
-                <span>Travel Time: {journeyResult.estimatedTime} ({journeyResult.distance})</span>
+              <div className="flex items-center space-x-2 text-xs font-bold text-blue-900">
+                <span className="bg-white px-3 py-1 rounded-full border border-blue-200 shadow-sm flex items-center gap-1">
+                  ⏱️ {journeyResult.estimatedTime}
+                </span>
+                <span className="bg-white px-3 py-1 rounded-full border border-blue-200 shadow-sm flex items-center gap-1">
+                  📍 {journeyResult.distance}
+                </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Near Parking Availability */}
-              <div className="bg-white p-4 rounded-2xl border border-emerald-300 shadow-sm space-y-2">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+              {/* Shuttle Service Box */}
+              <div className="bg-white p-4 rounded-2xl border border-blue-200 shadow-sm space-y-2">
+                <div className="flex items-center justify-between font-bold text-blue-950 border-b pb-1.5">
+                  <span className="flex items-center gap-1.5">
+                    <Bus className="w-4 h-4 text-blue-600" />
+                    <span className="text-sm">Shuttle Bus Connection</span>
+                  </span>
+                  <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">24/7 Free</span>
+                </div>
+                <p className="font-medium text-slate-700 leading-relaxed text-xs">{journeyResult.shuttleService}</p>
+              </div>
+
+              {/* Parking Hub Availability */}
+              <div className="bg-white p-4 rounded-2xl border border-emerald-200 shadow-sm space-y-2">
                 <div className="flex items-center justify-between font-bold text-emerald-950 border-b pb-1.5">
                   <span className="flex items-center gap-1.5">
                     <Car className="w-4 h-4 text-emerald-600" />
-                    <span className="text-sm">Near Parking Slot Availability</span>
+                    <span className="text-sm">{journeyResult.parkingName}</span>
                   </span>
-                  <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded text-[11px] font-mono">
+                  <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">
                     {journeyResult.parkingFreePct}% Available
                   </span>
                 </div>
-                <p className="font-bold text-slate-900 text-xs">{journeyResult.parkingName}</p>
-                <div className="text-xs font-semibold text-emerald-800 flex items-center justify-between bg-emerald-50 p-2 rounded-xl border border-emerald-200">
-                  <span>Free Slots: {journeyResult.parkingSlotsAvailable.toLocaleString()}</span>
-                  <span>Total Capacity: {journeyResult.parkingSlotsTotal.toLocaleString()}</span>
+                <div className="flex items-center justify-between text-xs font-medium">
+                  <span className="text-slate-600">Real-time Slots Available:</span>
+                  <span className="font-mono text-emerald-800 font-bold text-sm">
+                    {journeyResult.parkingSlotsAvailable.toLocaleString()} / {journeyResult.parkingSlotsTotal.toLocaleString()}
+                  </span>
                 </div>
               </div>
 
-              {/* Shuttle Bus Service Info */}
-              <div className="bg-white p-4 rounded-2xl border border-indigo-300 shadow-sm space-y-2">
-                <div className="flex items-center justify-between font-bold text-indigo-950 border-b pb-1.5">
-                  <span className="flex items-center gap-1.5">
-                    <Bus className="w-4 h-4 text-indigo-600" />
-                    <span className="text-sm">Shuttle Bus Service Info</span>
-                  </span>
-                  <span className="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded text-[11px]">
-                    Free Service
-                  </span>
-                </div>
-                <p className="font-medium text-slate-800 leading-relaxed text-xs">{journeyResult.shuttleService}</p>
-              </div>
-
-              {/* Private Vehicle Info & Advisory */}
-              <div className="bg-white p-4 rounded-2xl border border-amber-300 shadow-sm space-y-2">
+              {/* Private Vehicle Advisory */}
+              <div className="bg-white p-4 rounded-2xl border border-amber-200 shadow-sm space-y-2">
                 <div className="flex items-center justify-between font-bold text-amber-950 border-b pb-1.5">
                   <span className="flex items-center gap-1.5">
                     <ShieldAlert className="w-4 h-4 text-amber-600" />
                     <span className="text-sm">Private Vehicle Advisory</span>
                   </span>
                 </div>
-                <p className="font-medium text-amber-900 leading-relaxed text-xs">{journeyResult.privateVehicleInfo}</p>
+                <p className="font-medium text-slate-700 leading-relaxed text-xs">{journeyResult.privateVehicleInfo}</p>
               </div>
 
               {/* Walking Corridor / Pedestrian Pathway */}
@@ -345,7 +557,7 @@ const TravelParking = () => {
                     <span className="text-sm">Walking Path & Promenade</span>
                   </span>
                 </div>
-                <p className="font-medium text-slate-700 leading-relaxed text-xs">{journeyResult.walkingPath}</p>
+                <p className="font-medium text-slate-700 leading-relaxed text-xs">{journeyResult.walkingPathInfo || journeyResult.walkingPath}</p>
               </div>
             </div>
           </div>
@@ -367,37 +579,54 @@ const TravelParking = () => {
               const freePct = Math.round((item.parkingSlotsAvailable / item.parkingSlotsTotal) * 100) || 75;
 
               return (
-                <div key={item._id || item.id} className="bg-white rounded-3xl p-5 border border-slate-200 shadow-md space-y-3 hover:shadow-lg transition-shadow">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-900 rounded-full">
-                      {item.routeType}
-                    </span>
-                    <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
-                      item.status === 'Clear' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-900 border-amber-200'
-                    }`}>
-                      {item.status}
-                    </span>
+                <div key={item._id || item.id} className="bg-white rounded-3xl p-5 border border-slate-200 shadow-md flex flex-col justify-between h-full space-y-3 hover:shadow-lg transition-shadow">
+                  <div className="flex-1 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-900 rounded-full">
+                        {item.routeType}
+                      </span>
+                      <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${
+                        item.status === 'Clear' ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-amber-50 text-amber-900 border-amber-200'
+                      }`}>
+                        {item.status}
+                      </span>
+                    </div>
+
+                    <h4 className="font-bold text-base text-slate-900">{item.title}</h4>
+                    <p className="text-xs text-slate-600 leading-relaxed">{item.description}</p>
+
+                    <div className="space-y-2 pt-2 border-t text-xs">
+                      <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded-xl border border-blue-200 text-blue-950 font-medium">
+                        <span className="flex items-center gap-1 font-bold">
+                          <Bus className="w-3.5 h-3.5 text-blue-600" /> Shuttle Bus:
+                        </span>
+                        <span className="text-blue-900">{item.shuttleServiceInfo}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-emerald-950 font-medium">
+                        <span className="flex items-center gap-1 font-bold">
+                          <Car className="w-3.5 h-3.5 text-emerald-600" /> Parking Free:
+                        </span>
+                        <span className="font-mono text-emerald-800 font-bold">
+                          {item.parkingSlotsAvailable.toLocaleString()} / {item.parkingSlotsTotal.toLocaleString()} Slots ({freePct}% Available)
+                        </span>
+                      </div>
+                    </div>
                   </div>
 
-                  <h4 className="font-bold text-base text-slate-900">{item.title}</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">{item.description}</p>
-
-                  <div className="space-y-2 pt-2 border-t text-xs">
-                    <div className="flex items-center justify-between bg-blue-50 p-2.5 rounded-xl border border-blue-200 text-blue-950 font-medium">
-                      <span className="flex items-center gap-1 font-bold">
-                        <Bus className="w-3.5 h-3.5 text-blue-600" /> Shuttle Bus:
-                      </span>
-                      <span className="text-blue-900">{item.shuttleServiceInfo}</span>
-                    </div>
-
-                    <div className="flex items-center justify-between bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-emerald-950 font-medium">
-                      <span className="flex items-center gap-1 font-bold">
-                        <Car className="w-3.5 h-3.5 text-emerald-600" /> Parking Free:
-                      </span>
-                      <span className="font-mono text-emerald-800 font-bold">
-                        {item.parkingSlotsAvailable.toLocaleString()} / {item.parkingSlotsTotal.toLocaleString()} Slots ({freePct}% Available)
-                      </span>
-                    </div>
+                  {/* Perfectly Aligned Pill-Shaped Get Direction Button */}
+                  <div className="pt-2 mt-auto flex justify-start">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const destinationQuery = encodeURIComponent((item.nearestParking || item.title) + ', Nashik');
+                        window.open(`https://www.google.com/maps/dir/?api=1&destination=${destinationQuery}`, '_blank');
+                      }}
+                      className="px-5 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md inline-flex items-center space-x-2 transition-all hover:scale-105 border border-blue-500 flex-shrink-0"
+                    >
+                      <Navigation className="w-3.5 h-3.5" />
+                      <span>Get Direction</span>
+                    </button>
                   </div>
                 </div>
               );

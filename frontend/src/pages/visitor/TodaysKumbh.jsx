@@ -26,16 +26,18 @@ const TodaysKumbh = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 space-y-6">
-      {/* Page Title Header */}
-      <div className="flex items-center space-x-3 rtl:space-x-reverse bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-6 rounded-3xl shadow-lg">
-        <div className="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-2xl">
-          📅
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">{t('todaysKumbh')}</h2>
-          <p className="text-xs text-emerald-100 font-medium">
-            {t('todaysKumbhSub') || 'Daily Official Schedule, Bathing Timings & Events'}
-          </p>
+      {/* Page Header Banner */}
+      <div className="bg-gradient-to-r from-emerald-600 via-teal-700 to-emerald-800 text-white p-5 sm:p-6 rounded-[28px] shadow-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative overflow-hidden min-h-[96px]">
+        <div className="flex items-center space-x-4 rtl:space-x-reverse z-10 min-w-0">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-2xl sm:text-3xl flex-shrink-0 shadow-md border border-white/20">
+            📅
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white leading-tight truncate">{t('todaysKumbh')}</h2>
+            <p className="text-xs sm:text-sm text-emerald-100 font-medium mt-0.5 truncate">
+              {t('todaysKumbhSub') || 'Daily Official Schedule, Bathing Timings & Events'}
+            </p>
+          </div>
         </div>
       </div>
 

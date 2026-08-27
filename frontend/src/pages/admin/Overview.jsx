@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { 
   Users, Bell, AlertTriangle, Calendar, MapPin, Bus, CheckCircle, 
@@ -692,8 +693,8 @@ const Overview = () => {
       </div>
 
       {/* QUICK SEARCH INTERACTIVE MODAL OVERLAY */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
+      {isSearchOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-950/70 backdrop-blur-md p-4 animate-fade-in">
           <div className="absolute inset-0" onClick={() => setIsSearchOpen(false)} />
           <div className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl p-5 border border-slate-200 z-10 space-y-4">
             <div className="flex items-center justify-between border-b pb-3">
@@ -711,39 +712,39 @@ const Overview = () => {
 
             <input 
               type="text"
+              autoFocus
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search Ramkund, Medical, Facilities, Notices..."
-              className="w-full px-4 py-3 rounded-2xl bg-slate-100 border border-slate-200 text-slate-900 font-medium text-xs focus:outline-none focus:border-amber-500"
-              autoFocus
+              className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs font-semibold focus:outline-none focus:border-amber-500 focus:bg-white"
             />
 
-            <div className="max-h-60 overflow-y-auto space-y-1 text-xs">
-              {searchResults.length > 0 ? (
-                searchResults.map((item, idx) => (
-                  <div 
-                    key={idx}
-                    onClick={() => {
-                      setIsSearchOpen(false);
-                      navigate(item.path);
-                    }}
-                    className="p-3 rounded-xl bg-slate-50 hover:bg-amber-50 border border-slate-100 flex items-center justify-between cursor-pointer transition-colors"
-                  >
-                    <div>
-                      <h4 className="font-bold text-slate-900">{item.title}</h4>
-                      <p className="text-[10px] text-slate-500">{item.type}</p>
-                    </div>
-                    <ChevronRight className="w-4 h-4 text-amber-600" />
+            <div className="space-y-1.5 max-h-60 overflow-y-auto">
+              {searchResults.map((res, idx) => (
+                <div
+                  key={idx}
+                  onClick={() => {
+                    navigate(res.path);
+                    setIsSearchOpen(false);
+                  }}
+                  className="p-3 bg-slate-50 hover:bg-amber-50 rounded-2xl cursor-pointer transition-colors flex items-center justify-between group"
+                >
+                  <div>
+                    <h4 className="font-bold text-xs text-slate-900 group-hover:text-amber-800">{res.title}</h4>
+                    <span className="text-[10px] text-slate-500 font-medium">{res.type}</span>
                   </div>
-                ))
-              ) : (
+                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-amber-600" />
+                </div>
+              ))}
+              {searchResults.length === 0 && (
                 <div className="p-4 text-center text-slate-400 text-xs font-medium">
                   No matching results found.
                 </div>
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
     </div>

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
 import Navbar from './components/layout/Navbar';
+import VisitorSidebar from './components/layout/VisitorSidebar';
 import Footer from './components/layout/Footer';
 import AdminSidebar from './components/layout/AdminSidebar';
 import AdminHeader from './components/layout/AdminHeader';
@@ -19,6 +20,7 @@ import TravelParking from './pages/visitor/TravelParking';
 import PilgrimGuide from './pages/visitor/PilgrimGuide';
 import NearbyFacilities from './pages/visitor/NearbyFacilities';
 import HelpSafety from './pages/visitor/HelpSafety';
+import TravelSafetyTips from './pages/visitor/TravelSafetyTips';
 import NotificationCentre from './pages/visitor/NotificationCentre';
 import FamilyGroup from './pages/visitor/FamilyGroup';
 
@@ -116,12 +118,18 @@ const App = () => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="min-h-screen w-full flex flex-col selection:bg-amber-200 selection:text-amber-900 bg-[#e5ecf6] relative overflow-x-hidden">
-      {!isSplashLanguagePage && !isAdminArea && <Navbar />}
+    <div className="min-h-screen w-full flex selection:bg-amber-200 selection:text-amber-900 bg-[#e5ecf6] relative overflow-x-clip">
+      {/* Fixed Desktop/Laptop Sidebar for Visitor Pages (except Home landing page) */}
+      {!isSplashLanguagePage && !isAdminArea && !isAdminLogin && !isHomePage && <VisitorSidebar />}
 
-      <div 
-        className={`flex-1 min-h-[calc(100vh-70px)] relative ${isHomePage ? 'kumbh-landing-bg' : 'bg-[#e5ecf6]'}`}
-      >
+      <div className={`flex-1 flex flex-col min-w-0 transition-all ${
+        !isSplashLanguagePage && !isAdminArea && !isAdminLogin && !isHomePage ? 'lg:pl-64' : ''
+      }`}>
+        {!isSplashLanguagePage && !isAdminArea && <Navbar />}
+
+        <div 
+          className={`flex-1 min-h-[calc(100vh-70px)] relative ${isHomePage ? 'kumbh-landing-bg' : 'bg-[#e5ecf6]'}`}
+        >
         {isHomePage && (
           <>
             {/* Fixed Background Image for Desktop / Laptop View (matching Admin Login page) */}
@@ -145,6 +153,7 @@ const App = () => {
           <Route path="/find-places" element={<FindPlaces />} />
           <Route path="/travel-parking" element={<TravelParking />} />
           <Route path="/pilgrim-guide" element={<PilgrimGuide />} />
+          <Route path="/travel-safety-tips" element={<TravelSafetyTips />} />
           <Route path="/nearby-facilities" element={<NearbyFacilities />} />
           <Route path="/help-safety" element={<HelpSafety />} />
           <Route path="/notifications" element={<NotificationCentre />} />
@@ -159,8 +168,8 @@ const App = () => {
           <Route path="/admin/announcements" element={<ProtectedAdminRoute><AnnouncementsMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/locations" element={<ProtectedAdminRoute><LocationsMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/travel" element={<ProtectedAdminRoute><TravelMgmt /></ProtectedAdminRoute>} />
-          <Route path="/admin/guide" element={<ProtectedAdminRoute><PilgrimGuideMgmt /></ProtectedAdminRoute>} />
-          <Route path="/admin/facilities" element={<ProtectedAdminRoute><FacilitiesMgmt /></ProtectedAdminRoute>} />
+          <Route path="/admin/guide" element={<Navigate to="/admin/locations" replace />} />
+          <Route path="/admin/facilities" element={<Navigate to="/admin/locations" replace />} />
           <Route path="/admin/assistance" element={<ProtectedAdminRoute><AssistanceMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/languages" element={<ProtectedAdminRoute><LanguagesMgmt /></ProtectedAdminRoute>} />
           <Route path="/admin/reports" element={<ProtectedAdminRoute><ReportsAnalytics /></ProtectedAdminRoute>} />
@@ -171,11 +180,13 @@ const App = () => {
         </Routes>
       </div>
 
-      {!isSplashLanguagePage && !isAdminArea && !isAdminLogin && (
-        <div className={isHomePage ? "block lg:hidden" : "block"}>
-          <Footer />
-        </div>
-      )}
+        {!isSplashLanguagePage && !isAdminArea && !isAdminLogin && (
+          <div className={isHomePage ? "block lg:hidden" : "block"}>
+            <Footer />
+          </div>
+        )}
+      </div>
+
       <ScrollToTop />
     </div>
   );

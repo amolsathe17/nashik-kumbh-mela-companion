@@ -52,6 +52,7 @@ export const AuthProvider = ({ children }) => {
         setAdminUser(userObj);
         localStorage.setItem('kumbh_admin_token', tokenVal);
         localStorage.setItem('kumbh_admin_user', JSON.stringify(userObj));
+        setLoading(false);
         return { success: true };
       }
     } catch (err) {
@@ -125,6 +126,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken(null);
     setAdminUser(null);
+    setLoading(false);
     localStorage.removeItem('kumbh_admin_token');
     localStorage.removeItem('kumbh_admin_user');
   };
