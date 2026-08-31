@@ -6,7 +6,7 @@ import {
   Info, ExternalLink, X, Building2, Droplets, Utensils, HeartPulse, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import api from '../../services/api';
-import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations, matchCategory } from '../../data/initialLocations';
 
 const FindPlaces = () => {
   const tabsRef = useRef(null);
@@ -122,20 +122,6 @@ const FindPlaces = () => {
     if (!catStr) return false;
     const s = String(catStr).trim().toLowerCase();
     return s.includes('ghat') || s.includes('temple') || s.includes('mandir');
-  };
-
-  const matchCategory = (itemCat, targetCat) => {
-    if (!itemCat || !isPlaceCategory(itemCat)) return false;
-    if (!targetCat || targetCat === 'All') return true;
-
-    const normalize = (catStr) => {
-      const s = String(catStr || '').trim().toLowerCase();
-      if (s.includes('ghat')) return 'ghat';
-      if (s.includes('temple') || s.includes('mandir')) return 'temple';
-      return s;
-    };
-
-    return normalize(itemCat) === normalize(targetCat);
   };
 
   const filteredLocations = locations.filter(loc => {

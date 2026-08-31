@@ -6,7 +6,7 @@ import {
   Info, ExternalLink, X, Bus, HelpCircle, ChevronLeft, ChevronRight, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
-import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations, matchCategory } from '../../data/initialLocations';
 
 const NearbyFacilities = () => {
   const tabsRef = useRef(null);
@@ -130,48 +130,15 @@ const NearbyFacilities = () => {
           });
         }
 
-        // Filter strictly to valid facility categories (Accommodation, Food, Water, Sanitation, Transport, etc.)
-        const isFacilityCategory = (catStr) => {
-          if (!catStr) return false;
-          const s = String(catStr).trim().toLowerCase();
-          return s.includes('accommodation') || s.includes('camp') || s.includes('food') || 
-                 s.includes('water') || s.includes('toilet') || s.includes('pharmacy') || 
-                 s.includes('medical') || s.includes('parking') || s.includes('police') || 
-                 s.includes('help') || s.includes('transport') || s.includes('shuttle') || s.includes('bus');
-        };
-
-        const validFacilities = uniqueFacilities.filter(item => isFacilityCategory(item.category));
-        setFacilities(validFacilities);
+        setFacilities(uniqueFacilities);
       } catch (err) {
-        setFacilities(defaultFacilities);
+        setFacilities(defaultLocations);
       } finally {
         setLoading(false);
       }
     };
     fetchFacilities();
   }, []);
-
-  const matchCategory = (itemCat, targetCat) => {
-    if (!targetCat || targetCat === 'All') return true;
-    if (!itemCat) return false;
-
-    const normalize = (catStr) => {
-      const s = String(catStr || '').trim().toLowerCase();
-      if (s.includes('ghat')) return 'ghat';
-      if (s.includes('temple') || s.includes('mandir')) return 'temple';
-      if (s.includes('toilet') || s.includes('sanitation') || s.includes('washroom') || s.includes('restroom')) return 'toilet';
-      if (s.includes('water')) return 'drinking water';
-      if (s.includes('food') || s.includes('annadan') || s.includes('meal')) return 'food area';
-      if (s.includes('police') || s.includes('help centre') || s.includes('help center') || s.includes('helpdesk')) return 'police centre';
-      if (s.includes('camp') || s.includes('accommodation') || s.includes('tent') || s.includes('yatri niwas')) return 'accommodation';
-      if (s.includes('parking')) return 'parking';
-      if (s.includes('pharmacy') || s.includes('medical')) return 'pharmacy';
-      if (s.includes('transport') || s.includes('shuttle') || s.includes('bus')) return 'transport';
-      return s;
-    };
-
-    return normalize(itemCat) === normalize(targetCat);
-  };
 
   const filteredFacilities = facilities.filter(fac => {
     const matchesCategory = matchCategory(fac.category, selectedCat);

@@ -7,7 +7,7 @@ import {
 import api from '../../services/api';
 import MediaUploader from '../../components/common/MediaUploader';
 import { deleteFromCloudinary } from '../../services/cloudinaryService';
-import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations, matchCategory } from '../../data/initialLocations';
 
 const LocationsMgmt = () => {
   const tabsRef = useRef(null);
@@ -348,29 +348,6 @@ const LocationsMgmt = () => {
     } finally {
       setDeleteConfirmItem(null);
     }
-  };
-
-  const matchCategory = (itemCat, targetCat) => {
-    if (!targetCat || targetCat === 'All') return true;
-    if (!itemCat) return false;
-
-    const normalize = (catStr) => {
-      const s = String(catStr || '').trim().toLowerCase();
-      if (s.includes('ghat')) return 'ghat';
-      if (s.includes('temple') || s.includes('mandir')) return 'temple';
-      if (s.includes('toilet') || s.includes('sanitation') || s.includes('washroom') || s.includes('restroom')) return 'toilet';
-      if (s.includes('water')) return 'drinking water';
-      if (s.includes('food') || s.includes('annadan') || s.includes('meal')) return 'food area';
-      if (s.includes('police') || s.includes('help centre') || s.includes('help center') || s.includes('helpdesk')) return 'police / help centre';
-      if (s.includes('camp') || s.includes('accommodation') || s.includes('tent') || s.includes('yatri niwas')) return 'accommodation';
-      if (s.includes('parking')) return 'parking';
-      if (s.includes('pharmacy') || s.includes('medical')) return 'pharmacy';
-      if (s.includes('transport') || s.includes('shuttle') || s.includes('bus')) return 'transport';
-      if (s.includes('info')) return 'info / help';
-      return s;
-    };
-
-    return normalize(itemCat) === normalize(targetCat);
   };
 
   const filteredLocations = locations.filter(loc => {

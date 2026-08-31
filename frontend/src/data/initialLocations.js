@@ -1,5 +1,5 @@
-// Master Synchronized Baseline Dataset for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
-export const DATA_VERSION = 'v3.0_FULL_SYNC';
+// Master Synchronized Baseline Dataset & Category Matching Engine for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
+export const DATA_VERSION = 'v4.0_FULL_SYNC_CATEGORIES';
 
 export const defaultLocations = [
   // --- GHATS (4 Main Bathing Ghats) ---
@@ -156,6 +156,442 @@ export const defaultLocations = [
     distance: '7 km West of Panchavati'
   },
 
+  // --- ACCOMMODATION (5 Pilgrim Accommodations) ---
+  {
+    _id: 'loc-acc-1',
+    id: 'loc-acc-1',
+    name: 'Tapovan Sadhugram Pilgrim Tent City (तपोवन साधुग्राम टेंट सिटी)',
+    category: 'Accommodation',
+    address: 'Tapovan, Nashik, Maharashtra 422003',
+    location: 'Tapovan, Nashik, Maharashtra 422003',
+    description: 'World-famous sprawling tent township housing thousands of Sadhus, Akhara leaders, Mahants, and international devotees.',
+    status: 'Active',
+    contactNumber: '0253-2571000',
+    image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Free Pilgrim Tents', 'Satsang Halls', 'Security Patrol', 'Medical Booths'],
+    distance: '3.5 km East of Ramkund'
+  },
+  {
+    _id: 'loc-acc-2',
+    id: 'loc-acc-2',
+    name: 'Panchavati Yatri Niwas & Pilgrim Lodge (पंचवटी यात्री निवास)',
+    category: 'Accommodation',
+    address: 'Sardar Patel Road, Panchavati, Nashik 422003',
+    location: 'Sardar Patel Road, Panchavati, Nashik 422003',
+    description: 'Government registered pilgrim lodge offering clean dormitories and family rooms at subsidized rates.',
+    status: 'Active',
+    contactNumber: '0253-2514455',
+    image: '/kumbh-bg1.jpg',
+    timings: 'Check-in 24 Hours',
+    facilities: ['24/7 Hot Water', 'Luggage Lockers', 'RO Water Dispensers', 'Canteen'],
+    distance: '1.2 km from Ramkund'
+  },
+  {
+    _id: 'loc-acc-3',
+    id: 'loc-acc-3',
+    name: 'Trimbakeshwar Bhakta Niwas & Ashram Complex (त्रिंबकेश्वर भक्त निवास)',
+    category: 'Accommodation',
+    address: 'Near Kushavarta Kund, Trimbakeshwar 422212',
+    location: 'Near Kushavarta Kund, Trimbakeshwar 422212',
+    description: 'Spiritual rest house complex with clean dormitory halls and family rooms near Kushavarta Kund.',
+    status: 'Active',
+    contactNumber: '02594-233215',
+    image: '/dhwajarohan.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Family Rooms', 'Attached Bathrooms', 'Subsidized Meals'],
+    distance: '500m from Kushavarta'
+  },
+  {
+    _id: 'loc-acc-4',
+    id: 'loc-acc-4',
+    name: 'Tapovan Sector 3 Sadhu Camp Township (तपोवन साधुग्राम शिविर 3)',
+    category: 'Accommodation',
+    address: 'Tapovan Sector 3, Nashik 422003',
+    location: 'Tapovan Sector 3, Nashik 422003',
+    description: 'Special Akhara guest tenting complex offering community dining, charging points, and 24-hour security.',
+    status: 'Active',
+    contactNumber: '0253-2571002',
+    image: '/nagarpradakshina.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Community Tents', 'Clean Bedding', 'Security Guard', 'Pure Drinking Water'],
+    distance: '3.8 km East of Ramkund'
+  },
+  {
+    _id: 'loc-acc-5',
+    id: 'loc-acc-5',
+    name: 'Kumbh Mela Deluxe Tourist Tent City Hub',
+    category: 'Accommodation',
+    address: 'Gangapur Road, Nashik 422013',
+    location: 'Gangapur Road, Nashik 422013',
+    description: 'Premium air-conditioned tent township equipped with private bath facilities, dining pavilion, and cultural event arena.',
+    status: 'Active',
+    contactNumber: '0253-2345678',
+    image: '/kumbh-bg.jpg',
+    timings: 'Check-in 12:00 PM',
+    facilities: ['AC Deluxe Tents', 'Private Bath', 'Buffet Breakfast', 'Cultural Stage'],
+    distance: '6.5 km from Panchavati'
+  },
+
+  // --- FOOD AREA (4 Community Kitchens & Prasadam Centers) ---
+  {
+    _id: 'loc-14',
+    id: 'loc-14',
+    name: 'Tapovan Annadan & Food Arena (तपोवन अन्नछत्र)',
+    category: 'Food Area',
+    address: 'Sector 2, Tapovan Sadhugram, Nashik 422003',
+    location: 'Sector 2, Tapovan Sadhugram, Nashik 422003',
+    description: 'Massive community dining hall serving fresh, wholesome, pure vegetarian Mahaprasad free of cost to over 100,000 pilgrims daily.',
+    status: 'Active',
+    contactNumber: '0253-2572211',
+    image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
+    timings: '7:00 AM - 10:30 PM',
+    facilities: ['Free Mahaprasad', 'Clean Water', 'Shaded Seating'],
+    distance: 'Tapovan Sadhugram'
+  },
+  {
+    _id: 'loc-15',
+    id: 'loc-15',
+    name: 'Ramkund Maha Aarti Prasadam Center (रामकुंड महाप्रसाद केंद्र)',
+    category: 'Food Area',
+    address: 'Ramkund Upper Promenade, Panchavati 422003',
+    location: 'Ramkund Upper Promenade, Panchavati 422003',
+    description: 'Official prasad distribution center serving fresh traditional sweets and packed water.',
+    status: 'Active',
+    contactNumber: '0253-2570001',
+    image: '/goda-aarti-chatg.webp',
+    timings: '6:00 AM - 9:30 PM',
+    facilities: ['Packed Prasadam Boxes', 'Desi Ghee Sweets', 'Clean Counter'],
+    distance: 'At Ramkund Gate'
+  },
+  {
+    _id: 'loc-15b',
+    id: 'loc-15b',
+    name: 'Panchavati ISKCON Mahaprasad Dining Hall',
+    category: 'Food Area',
+    address: 'Panchavati Temple Area, Nashik 422003',
+    location: 'Panchavati Temple Area, Nashik 422003',
+    description: 'Hygienic pure vegetarian prasadam serving nutritious meals to visiting devotees continuously.',
+    status: 'Active',
+    contactNumber: '0253-2511234',
+    image: '/shahi-snan.jpg',
+    timings: '8:00 AM - 10:00 PM',
+    facilities: ['Pure Veg Meals', 'Clean Dining Hall', 'Purified Water'],
+    distance: 'Panchavati Center'
+  },
+  {
+    _id: 'loc-15c',
+    id: 'loc-15c',
+    name: 'Trimbakeshwar Free Community Kitchen (अन्नपूर्णा अन्नछत्र)',
+    category: 'Food Area',
+    address: 'Kushavarta Road, Trimbakeshwar 422212',
+    location: 'Kushavarta Road, Trimbakeshwar 422212',
+    description: 'Charitable trust food center distributing free meals, tea, and breakfast to all pilgrims.',
+    status: 'Active',
+    contactNumber: '02594-233100',
+    image: '/dhwajarohan.webp',
+    timings: '6:00 AM - 11:00 PM',
+    facilities: ['Free Hot Meals', 'Tea & Snacks', 'Seating Benches'],
+    distance: 'Near Kushavarta'
+  },
+
+  // --- TOILET (4 Sanitation Complexes) ---
+  {
+    _id: 'loc-13',
+    id: 'loc-13',
+    name: 'Panchavati Deluxe Smart Sanitation Block #1 (पंचवटी स्मार्ट शौचालय)',
+    category: 'Toilet',
+    address: 'Panchavati Temple Road, Nashik 422003',
+    location: 'Panchavati Temple Road, Nashik 422003',
+    description: 'Eco-friendly, continuously disinfected smart public restroom complex with handicap accessible ramps.',
+    status: 'Active',
+    contactNumber: '0253-2570006',
+    image: '/kumbh-bg.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Separate Male/Female Blocks', 'Wheelchair Accessible', 'Continuous Sanitization'],
+    distance: '150 meters from Kalaram Temple'
+  },
+  {
+    _id: 'loc-13b',
+    id: 'loc-13b',
+    name: 'Ramkund Riverfront Mobile Sanitation Complex #2 (रामकुंड मोबाईल शौचालय)',
+    category: 'Toilet',
+    address: 'Downstream Promenade, Ramkund, Nashik 422003',
+    location: 'Downstream Promenade, Ramkund, Nashik 422003',
+    description: '24-bay high capacity bio-toilet block with running water and dedicated cleaning crew.',
+    status: 'Active',
+    contactNumber: '0253-2570007',
+    image: '/kumbh-bg1.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Running Water Taps', 'Handwash Counters', 'Janitor Desk'],
+    distance: '200 meters from Ramkund'
+  },
+  {
+    _id: 'loc-13c',
+    id: 'loc-13c',
+    name: 'Tapovan Sadhugram Sanitation Station #3 (तपोवन साधुग्राम स्वच्छता गृह)',
+    category: 'Toilet',
+    address: 'Sector 1 Main Ring Road, Tapovan 422003',
+    location: 'Sector 1 Main Ring Road, Tapovan 422003',
+    description: 'High capacity public sanitation complex equipped with hot water shower bays for pilgrims.',
+    status: 'Active',
+    contactNumber: '0253-2570008',
+    image: '/nagarpradakshina.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Hot Water Showers', 'Disinfected Hourly', 'Hand Sanitizer Kiosks'],
+    distance: 'Tapovan Sadhugram'
+  },
+  {
+    _id: 'loc-13d',
+    id: 'loc-13d',
+    name: 'Trimbakeshwar Kushavarta Smart Sanitation Complex #4',
+    category: 'Toilet',
+    address: 'Temple Outer Ring Road, Trimbakeshwar 422212',
+    location: 'Temple Outer Ring Road, Trimbakeshwar 422212',
+    description: 'Modern public restroom block servicing pilgrims visiting Kushavarta Bathing Kund.',
+    status: 'Active',
+    contactNumber: '02594-233215',
+    image: '/shahi-snan-for-kumbh-mela.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Clean Water Flush', 'Wheelchair Access', 'Baby Care Desk'],
+    distance: '100m from Kushavarta'
+  },
+
+  // --- DRINKING WATER (3 RO Stations) ---
+  {
+    _id: 'loc-12',
+    id: 'loc-12',
+    name: 'Ramkund RO Water Dispensing Station #1 (रामकुंड शुध्द जल केंद्र)',
+    category: 'Drinking Water',
+    address: 'Ramkund Upper Bridge Promenade, Nashik 422003',
+    location: 'Ramkund Upper Bridge Promenade, Nashik 422003',
+    description: 'High-capacity RO purified drinking water fountain serving cold and ambient drinking water continuously.',
+    status: 'Active',
+    contactNumber: '0253-2570004',
+    image: '/goda-aarti-chatg.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['RO Purified', 'Chilled Water Fountains', 'Zero Plastic Bottling Station'],
+    distance: 'At Ramkund Ghat Entrance'
+  },
+  {
+    _id: 'loc-12b',
+    id: 'loc-12b',
+    name: 'Tapovan Sadhugram RO Water Distribution Hub #2',
+    category: 'Drinking Water',
+    address: 'Sector 3 Main Avenue, Tapovan, Nashik 422003',
+    location: 'Sector 3 Main Avenue, Tapovan, Nashik 422003',
+    description: 'Solar-powered 10,000 LPH filtration kiosk providing clean drinking water for pilgrim camps.',
+    status: 'Active',
+    contactNumber: '0253-2570005',
+    image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Solar RO Filtration', 'Touchless Taps', 'Cold Water'],
+    distance: 'Inside Tapovan City'
+  },
+  {
+    _id: 'loc-12c',
+    id: 'loc-12c',
+    name: 'Trimbakeshwar Kushavarta RO Drinking Kiosk #3',
+    category: 'Drinking Water',
+    address: 'Main Promenade, Trimbakeshwar Temple Road 422212',
+    location: 'Main Promenade, Trimbakeshwar Temple Road 422212',
+    description: 'High-speed clean drinking water taps continuously serviced during peak holy bath hours.',
+    status: 'Active',
+    contactNumber: '0253-2591241',
+    image: '/shahi-snan-for-kumbh-mela.webp',
+    timings: 'Continuous 24/7',
+    facilities: ['RO Water', 'Touchless Taps', 'Cold Water Dispenser'],
+    distance: '100m from Kushavarta Kund'
+  },
+
+  // --- PHARMACY (3 Generic Pharmacies) ---
+  {
+    _id: 'loc-pharma-1',
+    id: 'loc-pharma-1',
+    name: 'Kumbh 24/7 Generic Jan Aushadhi Pharmacy Post (नाशिक जन औषधि केंद्र)',
+    category: 'Pharmacy',
+    address: 'Ramkund Main Entrance Promenade, Nashik 422003',
+    location: 'Ramkund Main Entrance Promenade, Nashik 422003',
+    description: 'Government subsidised pharmacy dispensing essential emergency medicines, ORS packets, and first-aid supplies round the clock.',
+    status: 'Active',
+    contactNumber: '104',
+    image: '/shahi-snan.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Generic Medicines', 'First-Aid Kits', 'ORS Packets', 'BP Check'],
+    distance: 'Ramkund Gate'
+  },
+  {
+    _id: 'loc-pharma-2',
+    id: 'loc-pharma-2',
+    name: 'Trimbakeshwar Municipal Emergency Pharmacy Counter',
+    category: 'Pharmacy',
+    address: 'Temple Ring Road, Trimbakeshwar 422212',
+    location: 'Temple Ring Road, Trimbakeshwar 422212',
+    description: '24-hour medical supply counter stocked with emergency trauma supplies, pain relief, and hydration salts.',
+    status: 'Active',
+    contactNumber: '0253-2591244',
+    image: '/dhwajarohan.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Free Medicines', 'Oxygen Cylinders', 'Doctor on Duty'],
+    distance: '150 meters from Kushavarta Kund'
+  },
+  {
+    _id: 'loc-pharma-3',
+    id: 'loc-pharma-3',
+    name: 'Tapovan Sadhugram Sector 1 Medical & Pharmacy Kiosk',
+    category: 'Pharmacy',
+    address: 'Tapovan Sector 1 Entrance, Nashik 422003',
+    location: 'Tapovan Sector 1 Entrance, Nashik 422003',
+    description: 'First aid post dispensing essential prescription and OTC remedies for arriving sadhus and pilgrims.',
+    status: 'Active',
+    contactNumber: '0253-2571005',
+    image: '/shahi.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['First Aid Desk', 'Emergency Ambulance Point', 'Essential Drugs'],
+    distance: 'Tapovan Sector 1'
+  },
+
+  // --- PARKING (3 Highway Mega Parking Hubs) ---
+  {
+    _id: 'loc-7',
+    id: 'loc-7',
+    name: 'Tapovan Satellite Highway Mega Parking Hub A (तपोवन पार्किंग अ)',
+    category: 'Parking',
+    address: 'Nashik-Aurangabad Highway, Tapovan, Nashik 422003',
+    location: 'Nashik-Aurangabad Highway, Tapovan, Nashik 422003',
+    description: 'Sprawling 50-acre satellite holding area for 25,000 private vehicles and outstation tourist buses.',
+    status: 'Active',
+    contactNumber: '0253-2578899',
+    image: '/kumbh-bg1.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Free Electric Shuttles', 'CCTV Security', 'EV Charging Posts'],
+    distance: '4.5 km East of Ramkund'
+  },
+  {
+    _id: 'loc-8',
+    id: 'loc-8',
+    name: 'Adgaon Outer Highway Mega Parking Hub B (आडगाव पार्किंग ब)',
+    category: 'Parking',
+    address: 'Mumbai-Agra NH3 Highway, Adgaon, Nashik 422003',
+    location: 'Mumbai-Agra NH3 Highway, Adgaon, Nashik 422003',
+    description: 'Primary holding area for heavy vehicles and outstation tourist coaches arriving from Mumbai and Dhule highways.',
+    status: 'Active',
+    contactNumber: '0253-2578900',
+    image: '/kumbh-bg.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Shuttle Terminal', 'Canteen', 'Restrooms', 'Security Patrol'],
+    distance: '8 km North of City Center'
+  },
+  {
+    _id: 'loc-8b',
+    id: 'loc-8b',
+    name: 'Trimbakeshwar Highway Outer Satellite Parking Hub C',
+    category: 'Parking',
+    address: 'Nashik-Trimbak Highway Entry Gate, Trimbakeshwar 422212',
+    location: 'Nashik-Trimbak Highway Entry Gate, Trimbakeshwar 422212',
+    description: 'Large parking bay for private cars visiting Kushavarta Kund and Trimbakeshwar temple.',
+    status: 'Active',
+    contactNumber: '0253-2591244',
+    image: '/dhwajarohan.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Shuttle Bus Terminal', 'Rest Bays', 'Drinking Water'],
+    distance: '3 km from Trimbakeshwar Temple'
+  },
+
+  // --- POLICE / HELP CENTRE (3 Command Posts) ---
+  {
+    _id: 'loc-9',
+    id: 'loc-9',
+    name: 'Kumbh Central Police Control Room & Lost Person Desk',
+    category: 'Police / Help Centre',
+    address: 'Panchavati Police Station Compound, Nashik 422003',
+    location: 'Panchavati Police Station Compound, Nashik 422003',
+    description: 'High-tech CCTV command monitoring center, lost & found assistance desk, RFID wristband registering for children and elderly.',
+    status: 'Active',
+    contactNumber: '112',
+    image: '/shahi.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Lost & Found Registration', 'Public Announcement Systems', 'RFID Tagging Desk'],
+    distance: '400 meters from Ghat Main Gate'
+  },
+  {
+    _id: 'loc-9b',
+    id: 'loc-9b',
+    name: 'Trimbakeshwar Kumbh Security Post & Lost Found Desk',
+    category: 'Police / Help Centre',
+    address: 'Temple Main Ring Road, Trimbakeshwar 422212',
+    location: 'Temple Main Ring Road, Trimbakeshwar 422212',
+    description: 'Dedicated police command and family reunion center servicing pilgrims visiting Kushavarta Kund.',
+    status: 'Active',
+    contactNumber: '0253-2591244',
+    image: '/dhwajarohan.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Family Reunion Lounge', 'Lost & Found Cell', 'Emergency Hotline Desk'],
+    distance: '200 meters from Kushavarta Kund'
+  },
+  {
+    _id: 'loc-16',
+    id: 'loc-16',
+    name: 'Ramkund Central Pilgrim Information & Help Desk',
+    category: 'Police / Help Centre',
+    address: 'Ramkund Main Entrance, Panchavati, Nashik 422003',
+    location: 'Ramkund Main Entrance, Panchavati, Nashik 422003',
+    description: 'Official information booth providing free multilingual maps, Snan timing charts, lost person reporting, and shuttle bus schedules.',
+    status: 'Active',
+    contactNumber: '0253-2575555',
+    image: '/goda-aarti-chatg.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Multilingual Staff', 'Free Printed Maps', 'Lost & Found Desk', 'Bus Timetables'],
+    distance: 'At Ramkund Ghat Entrance'
+  },
+
+  // --- TRANSPORT (3 Transit Terminals) ---
+  {
+    _id: 'loc-trans-1',
+    id: 'loc-trans-1',
+    name: 'Central Kumbh Electric Shuttle Bus Terminal (नाशिक रोड इलेक्‍ट्रिक बस)',
+    category: 'Transport',
+    address: 'Outer Ring Road Terminal Hub, Nashik 422004',
+    location: 'Outer Ring Road Terminal Hub, Nashik 422004',
+    description: '24/7 zero-emission electric shuttle fleet connecting outer satellite parking hubs directly to inner Ramkund and Tapovan drop points.',
+    status: 'Active',
+    contactNumber: '0253-2570009',
+    image: '/kumbh-bg1.jpg',
+    timings: 'Continuous 24/7 Shuttle Frequency',
+    facilities: ['100% Electric Fleet', 'Zero Pilgrim Fare', 'Low-Floor Accessibility', 'Dedicated Traffic Lane'],
+    distance: 'Outer Satellite Ring Road'
+  },
+  {
+    _id: 'loc-trans-2',
+    id: 'loc-trans-2',
+    name: 'Nashik Central CBS Bus Depot Transit Terminal (नाशिक मध्यवर्ती बस स्थानक)',
+    category: 'Transport',
+    address: 'CBS Circle, Shalimar, Nashik 422001',
+    location: 'CBS Circle, Shalimar, Nashik 422001',
+    description: 'Central MSRTC transport interchange hub with non-stop express buses running to Trimbakeshwar Jyotirlinga, Tapovan Tent City, and highways.',
+    status: 'Active',
+    contactNumber: '0253-2575555',
+    image: '/kumbh-bg.jpg',
+    timings: 'Continuous 24/7 Departure',
+    facilities: ['Non-Stop Express Shuttles', 'Passenger Rest Waiting Hall', 'Multilingual Helpdesk', 'RO Water Dispensers'],
+    distance: '2.2 km from Ramkund Ghat'
+  },
+  {
+    _id: 'loc-trans-3',
+    id: 'loc-trans-3',
+    name: 'Tapovan Express Electric Bus Ring Corridor (तपोवन इलेक्ट्रिक बस मार्ग)',
+    category: 'Transport',
+    address: 'Tapovan Sector 1 Shuttle Station, Nashik 422003',
+    location: 'Tapovan Sector 1 Shuttle Station, Nashik 422003',
+    description: 'Zero-emission electric shuttle corridor connecting outer satellite parking terminals to Ramkund bathing ghats during peak Shahi Snan days.',
+    status: 'Active',
+    contactNumber: '0253-2578899',
+    image: '/shahi-snan.jpg',
+    timings: '4:00 AM - 11:30 PM (Peak Frequencies)',
+    facilities: ['100% Electric Fleet', 'Zero Pilgrim Fare', 'Low-Floor Accessibility', 'Dedicated Traffic Lane'],
+    distance: 'Direct Express Route to Ghats'
+  },
+
   // --- SHAHI SNAN DATES ---
   {
     _id: 'loc-shahi-1',
@@ -265,189 +701,36 @@ export const defaultLocations = [
     timings: 'Open 24 Hours',
     facilities: ['Silver Chariots', 'Ram Katha', 'Mahaprasadam Distribution'],
     distance: 'Tapovan Sadhugram'
-  },
-
-  // --- ACCOMMODATION ---
-  {
-    _id: 'loc-acc-1',
-    id: 'loc-acc-1',
-    name: 'Tapovan Sadhugram Pilgrim Tent City (तपोवन साधुग्राम टेंट सिटी)',
-    category: 'Accommodation',
-    address: 'Tapovan, Nashik, Maharashtra 422003',
-    location: 'Tapovan, Nashik, Maharashtra 422003',
-    description: 'World-famous sprawling tent township housing thousands of Sadhus, Akhara leaders, Mahants, and international devotees.',
-    status: 'Active',
-    contactNumber: '0253-2571000',
-    image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
-    timings: 'Open 24 Hours',
-    facilities: ['Free Pilgrim Tents', 'Satsang Halls', 'Security Patrol', 'Medical Booths'],
-    distance: '3.5 km East of Ramkund'
-  },
-  {
-    _id: 'loc-acc-2',
-    id: 'loc-acc-2',
-    name: 'Panchavati Yatri Niwas & Pilgrim Lodge (पंचवटी यात्री निवास)',
-    category: 'Accommodation',
-    address: 'Sardar Patel Road, Panchavati, Nashik 422003',
-    location: 'Sardar Patel Road, Panchavati, Nashik 422003',
-    description: 'Government registered pilgrim lodge offering clean dormitories and family rooms at subsidized rates.',
-    status: 'Active',
-    contactNumber: '0253-2514455',
-    image: '/kumbh-bg1.jpg',
-    timings: 'Check-in 24 Hours',
-    facilities: ['24/7 Hot Water', 'Luggage Lockers', 'RO Water Dispensers', 'Canteen'],
-    distance: '1.2 km from Ramkund'
-  },
-  {
-    _id: 'loc-acc-3',
-    id: 'loc-acc-3',
-    name: 'Trimbakeshwar Bhakta Niwas & Ashram Complex',
-    category: 'Accommodation',
-    address: 'Near Kushavarta Kund, Trimbakeshwar 422212',
-    location: 'Near Kushavarta Kund, Trimbakeshwar 422212',
-    description: 'Spiritual rest house complex with clean dormitory halls and family rooms near Kushavarta Kund.',
-    status: 'Active',
-    contactNumber: '02594-233215',
-    image: '/dhwajarohan.webp',
-    timings: 'Open 24 Hours',
-    facilities: ['Family Rooms', 'Attached Bathrooms', 'Subsidized Meals'],
-    distance: '500m from Kushavarta'
-  },
-
-  // --- FOOD AREA ---
-  {
-    _id: 'loc-14',
-    id: 'loc-14',
-    name: 'Tapovan Annadan & Food Arena (तपोवन अन्नछत्र)',
-    category: 'Food Area',
-    address: 'Sector 2, Tapovan Sadhugram, Nashik 422003',
-    location: 'Sector 2, Tapovan Sadhugram, Nashik 422003',
-    description: 'Massive community dining hall serving fresh, wholesome, pure vegetarian Mahaprasad free of cost to over 100,000 pilgrims daily.',
-    status: 'Active',
-    contactNumber: '0253-2572211',
-    image: '/Putrakameshti-Yagna-Explained-A-Ritual-Guide-for-2025.jpeg.jpg.webp',
-    timings: '7:00 AM - 10:30 PM',
-    facilities: ['Free Mahaprasad', 'Clean Water', 'Shaded Seating'],
-    distance: 'Tapovan Sadhugram'
-  },
-  {
-    _id: 'loc-15',
-    id: 'loc-15',
-    name: 'Ramkund Maha Aarti Prasadam Center',
-    category: 'Food Area',
-    address: 'Ramkund Upper Promenade, Panchavati 422003',
-    location: 'Ramkund Upper Promenade, Panchavati 422003',
-    description: 'Official prasad distribution center serving fresh traditional sweets and packed water.',
-    status: 'Active',
-    contactNumber: '0253-2570001',
-    image: '/goda-aarti-chatg.webp',
-    timings: '6:00 AM - 9:30 PM',
-    facilities: ['Packed Prasadam Boxes', 'Desi Ghee Sweets', 'Clean Counter'],
-    distance: 'At Ramkund Gate'
-  },
-
-  // --- DRINKING WATER ---
-  {
-    _id: 'loc-12',
-    id: 'loc-12',
-    name: 'Ramkund RO Water Dispensing Station #1',
-    category: 'Drinking Water',
-    address: 'Ramkund Upper Bridge Promenade, Nashik 422003',
-    location: 'Ramkund Upper Bridge Promenade, Nashik 422003',
-    description: 'High-capacity RO purified drinking water fountain serving cold and ambient drinking water continuously.',
-    status: 'Active',
-    contactNumber: '0253-2570004',
-    image: '/goda-aarti-chatg.webp',
-    timings: 'Open 24 Hours',
-    facilities: ['RO Purified', 'Chilled Water Fountains', 'Zero Plastic Bottling Station'],
-    distance: 'At Ramkund Ghat Entrance'
-  },
-
-  // --- TOILET ---
-  {
-    _id: 'loc-13',
-    id: 'loc-13',
-    name: 'Panchavati Deluxe Smart Sanitation Block #1',
-    category: 'Toilet',
-    address: 'Panchavati Temple Road, Nashik 422003',
-    location: 'Panchavati Temple Road, Nashik 422003',
-    description: 'Eco-friendly, continuously disinfected smart public restroom complex with handicap accessible ramps.',
-    status: 'Active',
-    contactNumber: '0253-2570006',
-    image: '/kumbh-bg.jpg',
-    timings: 'Open 24 Hours',
-    facilities: ['Separate Male/Female Blocks', 'Wheelchair Accessible', 'Continuous Sanitization'],
-    distance: '150 meters from Kalaram Temple'
-  },
-
-  // --- PHARMACY ---
-  {
-    _id: 'loc-pharma-1',
-    id: 'loc-pharma-1',
-    name: 'Kumbh 24/7 Generic Jan Aushadhi Pharmacy Post',
-    category: 'Pharmacy',
-    address: 'Ramkund Main Entrance Promenade, Nashik 422003',
-    location: 'Ramkund Main Entrance Promenade, Nashik 422003',
-    description: 'Government subsidised pharmacy dispensing essential emergency medicines, ORS packets, and first-aid supplies round the clock.',
-    status: 'Active',
-    contactNumber: '104',
-    image: '/shahi-snan.jpg',
-    timings: 'Open 24 Hours',
-    facilities: ['Generic Medicines', 'First-Aid Kits', 'ORS Packets', 'BP Check'],
-    distance: 'Ramkund Gate'
-  },
-
-  // --- PARKING ---
-  {
-    _id: 'loc-7',
-    id: 'loc-7',
-    name: 'Tapovan Satellite Highway Mega Parking Hub A',
-    category: 'Parking',
-    address: 'Nashik-Aurangabad Highway, Tapovan, Nashik 422003',
-    location: 'Nashik-Aurangabad Highway, Tapovan, Nashik 422003',
-    description: 'Sprawling 50-acre satellite holding area for 25,000 private vehicles and outstation tourist buses.',
-    status: 'Active',
-    contactNumber: '0253-2578899',
-    image: '/kumbh-bg1.jpg',
-    timings: 'Open 24 Hours',
-    facilities: ['Free Electric Shuttles', 'CCTV Security', 'EV Charging Posts'],
-    distance: '4.5 km East of Ramkund'
-  },
-
-  // --- POLICE / HELP CENTRE ---
-  {
-    _id: 'loc-9',
-    id: 'loc-9',
-    name: 'Kumbh Central Police Control Room & Lost Person Desk',
-    category: 'Police / Help Centre',
-    address: 'Panchavati Police Station Compound, Nashik 422003',
-    location: 'Panchavati Police Station Compound, Nashik 422003',
-    description: 'High-tech CCTV command monitoring center, lost & found assistance desk, RFID wristband registering for children and elderly.',
-    status: 'Active',
-    contactNumber: '112',
-    image: '/shahi.jpg',
-    timings: 'Open 24 Hours',
-    facilities: ['Lost & Found Registration', 'Public Announcement Systems', 'RFID Tagging Desk'],
-    distance: '400 meters from Ghat Main Gate'
-  },
-
-  // --- TRANSPORT ---
-  {
-    _id: 'loc-trans-1',
-    id: 'loc-trans-1',
-    name: 'Central Kumbh Electric Shuttle Bus Terminal',
-    category: 'Transport',
-    address: 'Outer Ring Road Terminal Hub, Nashik 422004',
-    location: 'Outer Ring Road Terminal Hub, Nashik 422004',
-    description: '24/7 zero-emission electric shuttle fleet connecting outer satellite parking hubs directly to inner Ramkund and Tapovan drop points.',
-    status: 'Active',
-    contactNumber: '0253-2570009',
-    image: '/kumbh-bg1.jpg',
-    timings: 'Continuous 24/7 Shuttle Frequency',
-    facilities: ['100% Electric Fleet', 'Zero Pilgrim Fare', 'Low-Floor Accessibility', 'Dedicated Traffic Lane'],
-    distance: 'Outer Satellite Ring Road'
   }
 ];
+
+/**
+ * Universal Category Matching Engine across all Admin and Visitor Pages
+ */
+export const matchCategory = (itemCat, targetCat) => {
+  if (!targetCat || targetCat === 'All') return true;
+  if (!itemCat) return false;
+
+  const normalize = (catStr) => {
+    const s = String(catStr || '').trim().toLowerCase();
+    if (s.includes('ghat')) return 'ghat';
+    if (s.includes('temple') || s.includes('mandir')) return 'temple';
+    if (s.includes('toilet') || s.includes('sanitation') || s.includes('washroom') || s.includes('restroom') || s.includes('swachh')) return 'toilet';
+    if (s.includes('water') || s.includes('jal') || s.includes('ro')) return 'drinking water';
+    if (s.includes('food') || s.includes('annadan') || s.includes('annachhatra') || s.includes('meal') || s.includes('prasad') || s.includes('canteen')) return 'food area';
+    if (s.includes('police') || s.includes('help') || s.includes('control') || s.includes('desk') || s.includes('info')) return 'police / help centre';
+    if (s.includes('camp') || s.includes('accommodation') || s.includes('tent') || s.includes('yatri niwas') || s.includes('lodge') || s.includes('dharamshala') || s.includes('bhakta niwas') || s.includes('hotel') || s.includes('resort')) return 'accommodation';
+    if (s.includes('parking') || s.includes('park')) return 'parking';
+    if (s.includes('pharmacy') || s.includes('medical') || s.includes('chemist') || s.includes('aushadhi') || s.includes('drug')) return 'pharmacy';
+    if (s.includes('transport') || s.includes('shuttle') || s.includes('bus') || s.includes('railway') || s.includes('transit') || s.includes('auto')) return 'transport';
+    if (s.includes('shahi') || s.includes('snan')) return 'shahi snan';
+    if (s.includes('ritual') || s.includes('guide') || s.includes('tradition')) return 'ritual guide';
+    if (s.includes('akhara') || s.includes('sadhu')) return 'akharas';
+    return s;
+  };
+
+  return normalize(itemCat) === normalize(targetCat);
+};
 
 export const getMergedLocations = () => {
   const currentVer = localStorage.getItem('kumbh_data_version');
