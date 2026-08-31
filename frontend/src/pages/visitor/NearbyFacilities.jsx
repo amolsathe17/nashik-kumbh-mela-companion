@@ -6,7 +6,7 @@ import {
   Info, ExternalLink, X, Bus, HelpCircle, ChevronLeft, ChevronRight, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
-import { defaultLocations, getMergedLocations, matchCategory } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations, matchCategory, deduplicateLocationsList } from '../../data/initialLocations';
 
 const NearbyFacilities = () => {
   const tabsRef = useRef(null);
@@ -88,32 +88,17 @@ const NearbyFacilities = () => {
           !deletedIds.includes(item.id)
         );
 
-        // Strict deduplication by normalized name and ID
-        const seenNames = new Set();
-        const seenIds = new Set();
-        const uniqueFacilities = [];
-
-        for (const item of filtered) {
-          const normName = String(item.name || '').trim().toLowerCase();
-          const itemId = String(item._id || item.id || '').trim();
-
-          if (seenNames.has(normName) || (itemId && seenIds.has(itemId))) {
-            continue;
-          }
-          if (normName) seenNames.add(normName);
-          if (itemId) seenIds.add(itemId);
-
-          uniqueFacilities.push({
-            ...item,
-            address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
-            description: item.description || item.capacityNotes || item.details || item.notes || 'Verified pilgrim assistance facility equipped with essential infrastructure for Simhastha Kumbh 2026-2027.',
-            image: item.image || item.imageUrl || '/shahi-snan.jpg',
-            timings: item.timings || item.hours || 'Open 24 Hours (Continuous Service)',
-            distance: item.distance || 'Central Kumbh Corridor (5 mins walk)',
-            contactNumber: item.contactNumber || item.contactInfo || item.phone || '0253-2575555',
-            facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Operational', 'Verified Desk', 'Clean Amenities']
-          });
-        }
+        const deduplicatedRaw = deduplicateLocationsList(filtered, deletedIds);
+        const uniqueFacilities = deduplicatedRaw.map(item => ({
+          ...item,
+          address: item.address || item.location || 'Panchavati, Nashik, Maharashtra 422003',
+          description: item.description || item.capacityNotes || item.details || item.notes || 'Verified pilgrim assistance facility equipped with essential infrastructure for Simhastha Kumbh 2026-2027.',
+          image: item.image || item.imageUrl || '/shahi-snan.jpg',
+          timings: item.timings || item.hours || 'Open 24 Hours (Continuous Service)',
+          distance: item.distance || 'Central Kumbh Corridor (5 mins walk)',
+          contactNumber: item.contactNumber || item.contactInfo || item.phone || '0253-2575555',
+          facilities: (item.facilities && item.facilities.length > 0) ? item.facilities : ['24/7 Operational', 'Verified Desk', 'Clean Amenities']
+        }));
 
         // Apply custom sequence ordering set by Admin
         const orderIds = JSON.parse(localStorage.getItem('kumbh_order_facilities') || '[]');

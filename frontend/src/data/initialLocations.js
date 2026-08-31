@@ -1,5 +1,5 @@
 // Master Synchronized Baseline Dataset & Category Matching Engine for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
-export const DATA_VERSION = 'v4.0_FULL_SYNC_CATEGORIES';
+export const DATA_VERSION = 'v5.0_STRICT_45_FUZZY_SYNC';
 
 export const defaultLocations = [
   // --- GHATS (4 Main Bathing Ghats) ---
@@ -704,6 +704,38 @@ export const defaultLocations = [
   }
 ];
 
+export const getCleanFuzzyKey = (str) => {
+  if (!str) return '';
+  return String(str)
+    .toLowerCase()
+    .replace(/\s*\([^)]*\)/g, '') // remove parenthetical expressions (e.g. Marathi names)
+    .replace(/[^a-z0-9]/g, '');   // remove non-alphanumeric chars
+};
+
+export const deduplicateLocationsList = (rawList, deletedIds = []) => {
+  const seenKeys = new Set();
+  const seenIds = new Set();
+  const result = [];
+
+  for (const item of rawList) {
+    if (!item) continue;
+    const itemId = String(item._id || item.id || '').trim();
+    if (deletedIds.includes(itemId)) continue;
+
+    const fuzzyKey = getCleanFuzzyKey(item.name || item.title);
+    if ((itemId && seenIds.has(itemId)) || (fuzzyKey && seenKeys.has(fuzzyKey))) {
+      continue;
+    }
+
+    if (itemId) seenIds.add(itemId);
+    if (fuzzyKey) seenKeys.add(fuzzyKey);
+
+    result.push(item);
+  }
+
+  return result;
+};
+
 /**
  * Universal Category Matching Engine across all Admin and Visitor Pages
  */
@@ -743,11 +775,11 @@ export const getMergedLocations = () => {
       localStorage.setItem('kumbh_data_version', DATA_VERSION);
       localStorage.removeItem('kumbh_deleted_locations');
       
-      // Preserve only newly created admin cards (non-default cards)
-      const defaultIds = new Set(defaultLocations.map(d => String(d._id || d.id)));
-      const customCreatedCards = customLocs.filter(c => c && !defaultIds.has(String(c._id || c.id)));
+      // Fuzzy deduplicate and preserve non-default custom cards
+      const defaultFuzzyKeys = new Set(defaultLocations.map(d => getCleanFuzzyKey(d.name || d.title)));
+      const customCreatedCards = customLocs.filter(c => c && !defaultFuzzyKeys.has(getCleanFuzzyKey(c.name || c.title)));
 
-      customLocs = [...defaultLocations, ...customCreatedCards];
+      customLocs = deduplicateLocationsList([...defaultLocations, ...customCreatedCards]);
       localStorage.setItem('kumbh_custom_locations', JSON.stringify(customLocs));
       return customLocs;
     } catch (e) {
@@ -756,11 +788,11 @@ export const getMergedLocations = () => {
   }
 
   if (!customLocs || customLocs.length === 0) {
-    customLocs = [...defaultLocations];
+    customLocs = deduplicateLocationsList(defaultLocations);
     localStorage.setItem('kumbh_custom_locations', JSON.stringify(customLocs));
   }
 
-  return customLocs.filter(loc => loc && !deletedIds.includes(loc._id) && !deletedIds.includes(loc.id));
+  return deduplicateLocationsList(customLocs, deletedIds);
 };
 
 export default defaultLocations;

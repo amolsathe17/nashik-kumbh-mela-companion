@@ -7,7 +7,7 @@ import {
 import api from '../../services/api';
 import MediaUploader from '../../components/common/MediaUploader';
 import { deleteFromCloudinary } from '../../services/cloudinaryService';
-import { defaultLocations, getMergedLocations, matchCategory } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations, matchCategory, deduplicateLocationsList } from '../../data/initialLocations';
 
 const LocationsMgmt = () => {
   const tabsRef = useRef(null);
@@ -204,27 +204,7 @@ const LocationsMgmt = () => {
       }
       rawList = [...rawList, ...defaultLocations];
 
-      const seenNames = new Set();
-      const seenIds = new Set();
-      const combined = [];
-
-      for (const item of rawList) {
-        if (!item) continue;
-        const normName = String(item.name || item.title || '').trim().toLowerCase();
-        const itemId = String(item._id || item.id || '').trim();
-
-        if (deletedIds.includes(itemId) || deletedIds.includes(item._id) || deletedIds.includes(item.id)) {
-          continue;
-        }
-
-        if (seenNames.has(normName) || (itemId && seenIds.has(itemId))) {
-          continue;
-        }
-        if (normName) seenNames.add(normName);
-        if (itemId) seenIds.add(itemId);
-
-        combined.push(item);
-      }
+      const combined = deduplicateLocationsList(rawList, deletedIds);
 
       const finalOrdered = applyCustomOrder(combined);
       setLocations(finalOrdered);
