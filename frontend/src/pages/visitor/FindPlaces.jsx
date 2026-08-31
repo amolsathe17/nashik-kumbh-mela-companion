@@ -6,6 +6,7 @@ import {
   Info, ExternalLink, X, Building2, Droplets, Utensils, HeartPulse, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import api from '../../services/api';
+import { defaultLocations } from '../../data/initialLocations';
 
 const FindPlaces = () => {
   const tabsRef = useRef(null);
@@ -53,8 +54,8 @@ const FindPlaces = () => {
         const res = await api.get('/locations').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-        // Display strictly admin-managed cards from customItems and API
-        const allItems = [...customItems, ...apiItems];
+        // Display Admin created cards first, API items, then baseline initial locations
+        const allItems = [...customItems, ...apiItems, ...defaultLocations];
         const filtered = allItems.filter(item => 
           item && 
           item.category !== 'Medical' && 

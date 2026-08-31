@@ -6,6 +6,7 @@ import {
   Info, ExternalLink, X, Bus, HelpCircle, ChevronLeft, ChevronRight, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
+import { defaultLocations } from '../../data/initialLocations';
 
 const NearbyFacilities = () => {
   const tabsRef = useRef(null);
@@ -77,8 +78,8 @@ const NearbyFacilities = () => {
         const res = await api.get('/facilities').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-        // Display strictly admin-managed cards from customItems and API
-        const allItems = [...customItems, ...apiItems];
+        // Display Admin created cards first, API items, then baseline initial locations
+        const allItems = [...customItems, ...apiItems, ...defaultLocations];
         const filtered = allItems.filter(item => 
           item && 
           item.category !== 'Medical' && 

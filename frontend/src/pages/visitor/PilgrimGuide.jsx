@@ -6,6 +6,7 @@ import {
   AlertTriangle, PhoneCall, Bus, HelpCircle, UserCheck, X, Search, ChevronLeft, ChevronRight, Navigation, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
+import { defaultLocations } from '../../data/initialLocations';
 
 const PilgrimGuide = () => {
   const tabsRef = useRef(null);
@@ -67,8 +68,8 @@ const PilgrimGuide = () => {
       const res = await api.get('/pilgrim-guide').catch(() => null);
       let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-      // Display strictly admin-managed cards from customGuides and API
-      const rawList = [...customGuides, ...apiItems];
+      // Display Admin created cards first, API items, then baseline initial locations
+      const rawList = [...customGuides, ...apiItems, ...defaultLocations];
       const seenTitles = new Set();
       const seenIds = new Set();
       const finalItems = [];
