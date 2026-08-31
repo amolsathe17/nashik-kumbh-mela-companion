@@ -6,7 +6,7 @@ import {
   Info, ExternalLink, X, Bus, HelpCircle, ChevronLeft, ChevronRight, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
-import { defaultLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
 
 const NearbyFacilities = () => {
   const tabsRef = useRef(null);
@@ -71,7 +71,7 @@ const NearbyFacilities = () => {
           ...JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]')
         ];
         const customItems = [
-          ...JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]'),
+          ...getMergedLocations(),
           ...JSON.parse(localStorage.getItem('kumbh_custom_facilities') || '[]')
         ];
 

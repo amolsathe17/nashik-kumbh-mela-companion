@@ -7,7 +7,7 @@ import {
 import api from '../../services/api';
 import MediaUploader from '../../components/common/MediaUploader';
 import { deleteFromCloudinary } from '../../services/cloudinaryService';
-import { defaultLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
 
 const LocationsMgmt = () => {
   const tabsRef = useRef(null);
@@ -188,7 +188,7 @@ const LocationsMgmt = () => {
     try {
       setLoading(true);
       const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
-      const customLocs = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+      const customLocs = getMergedLocations();
 
       const [locRes, facRes] = await Promise.all([
         api.get('/locations').catch(() => null),

@@ -6,7 +6,7 @@ import {
   AlertTriangle, PhoneCall, Bus, HelpCircle, UserCheck, X, Search, ChevronLeft, ChevronRight, Navigation, Map as MapIcon
 } from 'lucide-react';
 import api from '../../services/api';
-import { defaultLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
 
 const PilgrimGuide = () => {
   const tabsRef = useRef(null);
@@ -61,7 +61,7 @@ const PilgrimGuide = () => {
         ...JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]')
       ];
       const customGuides = [
-        ...JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]'),
+        ...getMergedLocations(),
         ...JSON.parse(localStorage.getItem('kumbh_custom_guides') || '[]')
       ];
 

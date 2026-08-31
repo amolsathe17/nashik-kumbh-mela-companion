@@ -1,6 +1,8 @@
 // Master Initial Dataset for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
+export const DATA_VERSION = 'v2.2';
+
 export const defaultLocations = [
-  // --- GHATS ---
+  // --- GHATS (4 Main Bathing Ghats) ---
   {
     _id: 'loc-1',
     id: 'loc-1',
@@ -8,13 +10,13 @@ export const defaultLocations = [
     category: 'Ghat',
     address: 'Panchavati, Nashik, Maharashtra 422003',
     location: 'Panchavati, Nashik, Maharashtra 422003',
-    description: 'The central, most sacred bathing ghat on River Godavari where Lord Rama performed rituals. Primary site for royal Shahi Snan and evening Maha Aarti.',
+    description: 'The central, most sacred bathing ghat on River Godavari where Lord Rama performed rituals. Primary site for royal Shahi Snan and evening Goda Aarti.',
     status: 'Active',
     contactNumber: '0253-2575555',
     image: '/shahi-snan.jpg',
-    timings: 'Open 24 Hours',
+    timings: 'Open 24 Hours (Holy Dip 4:00 AM - 10:00 PM)',
     facilities: ['Safety Netting', 'Life Guards', 'Clean Changing Rooms', 'Emergency Helpdesk'],
-    distance: '2.5 km from CBS Bus Stand'
+    distance: '2.5 km from Nashik CBS Bus Stand'
   },
   {
     _id: 'loc-2',
@@ -46,8 +48,23 @@ export const defaultLocations = [
     facilities: ['Tarpan Pedestals', 'Drinking Water Station', 'Ramp Access'],
     distance: '2.8 km from City Center'
   },
+  {
+    _id: 'loc-3b',
+    id: 'loc-3b',
+    name: 'Takli Sangam Ghat (टाकळी संगम घाट)',
+    category: 'Ghat',
+    address: 'Takli, Confluence of Godavari & Kapila Rivers, Nashik',
+    location: 'Takli, Confluence of Godavari & Kapila Rivers, Nashik',
+    description: 'Holy confluence of Godavari and Kapila rivers where Samarth Ramdas Swami meditated for 12 years. Reserved for quiet pilgrim dips.',
+    status: 'Active',
+    contactNumber: '0253-2570002',
+    image: '/goda-aarti-chatg.webp',
+    timings: '6:00 AM - 8:00 PM',
+    facilities: ['Riverfront Promenade', 'Ramp Walkway', 'Lighting Posts'],
+    distance: '4.2 km from Ramkund'
+  },
 
-  // --- TEMPLES ---
+  // --- TEMPLES (6 Main Sacred Temples) ---
   {
     _id: 'loc-4',
     id: 'loc-4',
@@ -93,8 +110,53 @@ export const defaultLocations = [
     facilities: ['Guided Pilgrimage Path', 'Cooling Misting Fans', 'Souvenir Shops'],
     distance: '3.2 km from Nashik CBS'
   },
+  {
+    _id: 'loc-6b',
+    id: 'loc-6b',
+    name: 'Muktidham Marble Temple (मुक्तिधाम मंदिर - नाशिक रोड)',
+    category: 'Temple',
+    address: 'Nashik Road, Nashik, Maharashtra 422101',
+    location: 'Nashik Road, Nashik, Maharashtra 422101',
+    description: 'Famous white marble temple complex replicating all 12 Jyotirlingas with 18 chapters of Bhagavad Gita carved on its walls.',
+    status: 'Active',
+    contactNumber: '0253-2461150',
+    image: '/kumbh-bg.jpg',
+    timings: '6:00 AM - 9:00 PM',
+    facilities: ['Pilgrim Dharamshala', 'Pure Veg Canteen', 'Large Parking'],
+    distance: '1.5 km from Nashik Road Station'
+  },
+  {
+    _id: 'loc-6c',
+    id: 'loc-6c',
+    name: 'Kapaleshwar Temple (कपालेश्वर मंदिर - पंचवटी)',
+    category: 'Temple',
+    address: 'Panchavati, Opposite Ramkund, Nashik 422003',
+    location: 'Panchavati, Opposite Ramkund, Nashik 422003',
+    description: 'Ancient Shiva temple unique in India for having no Nandi bull facing the deity, as Shiva accepted Nandi as his Guru here.',
+    status: 'Active',
+    contactNumber: '0253-2575555',
+    image: '/goda-aarti-chatg.webp',
+    timings: '5:00 AM - 10:00 PM',
+    facilities: ['Ramkund View Deck', 'Pooja Counter', 'Queue Line'],
+    distance: '100 meters from Ramkund Ghat'
+  },
+  {
+    _id: 'loc-6d',
+    id: 'loc-6d',
+    name: 'Someshwar Temple & Waterfall (सोमेश्वर मंदिर एवं धबधबा)',
+    category: 'Temple',
+    address: 'Gangapur Road, Someshwar, Nashik 422013',
+    location: 'Gangapur Road, Someshwar, Nashik 422013',
+    description: 'Picturesque Lord Shiva temple situated on the banks of Godavari river near a natural waterfall, surrounded by lush green hills.',
+    status: 'Active',
+    contactNumber: '0253-2341100',
+    image: '/kumbh-bg1.jpg',
+    timings: '6:00 AM - 8:30 PM',
+    facilities: ['River Ghats', 'Boating Facility', 'Garden Walkway', 'Parking Lot'],
+    distance: '7 km West of Panchavati'
+  },
 
-  // --- SHAHI SNAN ---
+  // --- SHAHI SNAN DATES ---
   {
     _id: 'loc-shahi-1',
     id: 'loc-shahi-1',
@@ -157,6 +219,21 @@ export const defaultLocations = [
     facilities: ['Multi-tiered Lamps', 'Floating Diyas', 'Senior Citizen Seating'],
     distance: 'Ramkund Promenade'
   },
+  {
+    _id: 'loc-ritual-2',
+    id: 'loc-ritual-2',
+    name: 'Trimbakeshwar Jyotirlinga Darshan Protocol',
+    category: 'Ritual Guide',
+    address: 'Trimbakeshwar Temple Complex',
+    location: 'Trimbakeshwar Temple Complex',
+    description: 'Guidelines for visiting the 10th-century black stone temple housing the unique three-faced Lingam representing Brahma, Vishnu, and Shiva.',
+    status: 'Active',
+    contactNumber: '02594-233215',
+    image: '/dhwajarohan.webp',
+    timings: '5:00 AM - 9:00 PM',
+    facilities: ['E-pass Queuing', 'Footwear Stalls', 'Traditional Dress Code'],
+    distance: 'Trimbakeshwar Town'
+  },
 
   // --- AKHARAS ---
   {
@@ -173,6 +250,21 @@ export const defaultLocations = [
     timings: 'Open 24 Hours',
     facilities: ['Naga Sadhu Processions', 'Trishul Demonstrations', 'Satsang Halls'],
     distance: 'Tapovan & Trimbakeshwar'
+  },
+  {
+    _id: 'loc-akhara-2',
+    id: 'loc-akhara-2',
+    name: 'Vaishnavite Akharas (वैष्णव अखाड़े) - Nirmohi, Digambar & Nirvani Ani',
+    category: 'Akharas',
+    address: 'Tapovan Sadhugram & Panchavati Promenade',
+    location: 'Tapovan Sadhugram & Panchavati Promenade',
+    description: 'The three prominent Vaishnavite Ani Akharas dedicated to Lord Vishnu and Lord Rama, renowned for their grand holy processions.',
+    status: 'Active',
+    contactNumber: '0253-2575555',
+    image: '/unnamed-2025-02-03t105950ss_1738561979.jpg',
+    timings: 'Open 24 Hours',
+    facilities: ['Silver Chariots', 'Ram Katha', 'Mahaprasadam Distribution'],
+    distance: 'Tapovan Sadhugram'
   },
 
   // --- ACCOMMODATION ---
@@ -191,6 +283,36 @@ export const defaultLocations = [
     facilities: ['Free Pilgrim Tents', 'Satsang Halls', 'Security Patrol', 'Medical Booths'],
     distance: '3.5 km East of Ramkund'
   },
+  {
+    _id: 'loc-acc-2',
+    id: 'loc-acc-2',
+    name: 'Panchavati Yatri Niwas & Pilgrim Lodge (पंचवटी यात्री निवास)',
+    category: 'Accommodation',
+    address: 'Sardar Patel Road, Panchavati, Nashik 422003',
+    location: 'Sardar Patel Road, Panchavati, Nashik 422003',
+    description: 'Government registered pilgrim lodge offering clean dormitories and family rooms at subsidized rates.',
+    status: 'Active',
+    contactNumber: '0253-2514455',
+    image: '/kumbh-bg1.jpg',
+    timings: 'Check-in 24 Hours',
+    facilities: ['24/7 Hot Water', 'Luggage Lockers', 'RO Water Dispensers', 'Canteen'],
+    distance: '1.2 km from Ramkund'
+  },
+  {
+    _id: 'loc-acc-3',
+    id: 'loc-acc-3',
+    name: 'Trimbakeshwar Bhakta Niwas & Ashram Complex',
+    category: 'Accommodation',
+    address: 'Near Kushavarta Kund, Trimbakeshwar 422212',
+    location: 'Near Kushavarta Kund, Trimbakeshwar 422212',
+    description: 'Spiritual rest house complex with clean dormitory halls and family rooms near Kushavarta Kund.',
+    status: 'Active',
+    contactNumber: '02594-233215',
+    image: '/dhwajarohan.webp',
+    timings: 'Open 24 Hours',
+    facilities: ['Family Rooms', 'Attached Bathrooms', 'Subsidized Meals'],
+    distance: '500m from Kushavarta'
+  },
 
   // --- FOOD AREA ---
   {
@@ -207,6 +329,21 @@ export const defaultLocations = [
     timings: '7:00 AM - 10:30 PM',
     facilities: ['Free Mahaprasad', 'Clean Water', 'Shaded Seating'],
     distance: 'Tapovan Sadhugram'
+  },
+  {
+    _id: 'loc-15',
+    id: 'loc-15',
+    name: 'Ramkund Maha Aarti Prasadam Center',
+    category: 'Food Area',
+    address: 'Ramkund Upper Promenade, Panchavati 422003',
+    location: 'Ramkund Upper Promenade, Panchavati 422003',
+    description: 'Official prasad distribution center serving fresh traditional sweets and packed water.',
+    status: 'Active',
+    contactNumber: '0253-2570001',
+    image: '/goda-aarti-chatg.webp',
+    timings: '6:00 AM - 9:30 PM',
+    facilities: ['Packed Prasadam Boxes', 'Desi Ghee Sweets', 'Clean Counter'],
+    distance: 'At Ramkund Gate'
   },
 
   // --- DRINKING WATER ---
@@ -311,5 +448,28 @@ export const defaultLocations = [
     distance: 'Outer Satellite Ring Road'
   }
 ];
+
+export const getMergedLocations = () => {
+  const currentVer = localStorage.getItem('kumbh_data_version');
+  let customLocs = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+  const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
+
+  // If version updated, automatically sync and update customLocs with latest defaults
+  if (currentVer !== DATA_VERSION || customLocs.length === 0) {
+    try {
+      localStorage.setItem('kumbh_data_version', DATA_VERSION);
+      const combinedMap = new Map();
+      defaultLocations.forEach(loc => combinedMap.set(loc._id || loc.id, loc));
+      customLocs.forEach(loc => combinedMap.set(loc._id || loc.id, loc));
+      
+      customLocs = Array.from(combinedMap.values());
+      localStorage.setItem('kumbh_custom_locations', JSON.stringify(customLocs));
+    } catch (e) {
+      console.warn('Storage sync error:', e);
+    }
+  }
+
+  return customLocs.filter(loc => loc && !deletedIds.includes(loc._id) && !deletedIds.includes(loc.id));
+};
 
 export default defaultLocations;

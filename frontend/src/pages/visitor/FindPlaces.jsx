@@ -6,7 +6,7 @@ import {
   Info, ExternalLink, X, Building2, Droplets, Utensils, HeartPulse, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import api from '../../services/api';
-import { defaultLocations } from '../../data/initialLocations';
+import { defaultLocations, getMergedLocations } from '../../data/initialLocations';
 
 const FindPlaces = () => {
   const tabsRef = useRef(null);
@@ -49,7 +49,7 @@ const FindPlaces = () => {
     const fetchLocations = async () => {
       try {
         const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
-        const customItems = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
+        const customItems = getMergedLocations();
 
         const res = await api.get('/locations').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
