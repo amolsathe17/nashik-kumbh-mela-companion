@@ -41,11 +41,11 @@ const AdminSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
       {/* Sidebar Container */}
       <aside className={`
         fixed inset-y-0 right-0 lg:right-auto lg:left-0 z-[100] w-64 bg-[#0a0f1d] text-slate-100 flex flex-col transition-transform duration-300 transform
-        border-l lg:border-l-0 lg:border-r border-slate-800/80 shadow-2xl h-screen
+        border-l lg:border-l-0 lg:border-r border-slate-800/80 shadow-2xl h-[100dvh] h-screen max-h-screen
         ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
       `}>
         {/* Mobile Close Button Header */}
-        <div className="lg:hidden p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+        <div className="lg:hidden p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center space-x-2.5 rtl:space-x-reverse">
             <div className="w-8 h-8 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center font-bold text-sm">
               🛕
@@ -61,41 +61,52 @@ const AdminSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
           </button>
         </div>
 
-          {/* Navigation Items */}
-          <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto custom-scrollbar">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
-                  className={({ isActive }) => `
-                    flex items-center space-x-3.5 px-4 py-3 rounded-xl text-[14.5px] tracking-tight transition-all
-                    ${isActive 
-                      ? 'bg-[#d97706] text-white font-bold shadow-md shadow-amber-950/40' 
-                      : 'text-slate-300 hover:bg-slate-800/60 hover:text-white font-semibold'}
-                  `}
-                >
-                  {({ isActive }) => (
-                    <>
-                      <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-300'}`} />
-                      <span className="truncate">{item.label}</span>
-                    </>
-                  )}
-                </NavLink>
-              );
-            })}
-          </nav>
+        {/* Navigation Items */}
+        <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto custom-scrollbar">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+                className={({ isActive }) => `
+                  flex items-center space-x-3.5 px-4 py-3 rounded-xl text-[14.5px] tracking-tight transition-all
+                  ${isActive 
+                    ? 'bg-[#d97706] text-white font-bold shadow-md shadow-amber-950/40' 
+                    : 'text-slate-300 hover:bg-slate-800/60 hover:text-white font-semibold'}
+                `}
+              >
+                {({ isActive }) => (
+                  <>
+                    <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-300'}`} />
+                    <span className="truncate">{item.label}</span>
+                  </>
+                )}
+              </NavLink>
+            );
+          })}
 
-        {/* Footer Logout */}
-        <div className="p-4 border-t border-slate-800 bg-slate-950">
+          {/* Mobile Scrollable Logout Option */}
+          <div className="pt-3 mt-2 border-t border-slate-800/80">
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center space-x-3.5 px-4 py-3 rounded-xl text-[14.5px] font-bold text-red-400 hover:bg-red-600/20 hover:text-red-200 transition-all text-left"
+            >
+              <LogOut className="w-5 h-5 text-red-400 flex-shrink-0" />
+              <span>Sign Out / Logout</span>
+            </button>
+          </div>
+        </nav>
+
+        {/* Footer Logout (Pinned at bottom) */}
+        <div className="p-4 border-t border-slate-800 bg-slate-950 flex-shrink-0">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-2.5 rounded-xl bg-red-600/20 hover:bg-red-600 text-red-300 hover:text-white transition-all text-xs font-bold"
+            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white transition-all text-xs font-bold shadow-lg shadow-red-950/50"
           >
             <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
+            <span>Sign Out / Logout</span>
           </button>
         </div>
       </aside>

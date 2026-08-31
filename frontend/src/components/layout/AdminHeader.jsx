@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Search, Settings, X, ChevronRight, Menu } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { Search, Settings, X, ChevronRight, Menu, LogOut } from 'lucide-react';
 
 const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
+  const { logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -55,6 +57,20 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
 
         {/* Action Buttons Row */}
         <div className="flex items-center space-x-2 sm:space-x-3 rtl:space-x-reverse flex-shrink-0">
+          {/* Quick Logout Button */}
+          <button
+            onClick={() => {
+              if (setIsMobileOpen) setIsMobileOpen(false);
+              logout();
+              navigate('/admin/login');
+            }}
+            className="p-2 sm:p-2.5 rounded-full bg-red-600/80 hover:bg-red-600 border border-red-400/50 text-white transition-all shadow-sm flex items-center justify-center"
+            title="Sign Out / Logout"
+            aria-label="Logout"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
+
           {/* Quick Search Button */}
           <button 
             onClick={() => setIsSearchOpen(true)}
