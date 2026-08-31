@@ -65,7 +65,7 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
               navigate('/admin/login');
             }}
             className="p-2 sm:p-2.5 rounded-full bg-red-600/80 hover:bg-red-600 border border-red-400/50 text-white transition-all shadow-sm flex items-center justify-center"
-            title="Sign Out / Logout"
+            title="Logout"
             aria-label="Logout"
           >
             <LogOut className="w-4 h-4" />

@@ -94,7 +94,7 @@ const AdminSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
               className="w-full flex items-center space-x-3.5 px-4 py-3 rounded-xl text-[14.5px] font-bold text-red-400 hover:bg-red-600/20 hover:text-red-200 transition-all text-left"
             >
               <LogOut className="w-5 h-5 text-red-400 flex-shrink-0" />
-              <span>Sign Out / Logout</span>
+              <span>Logout</span>
             </button>
           </div>
         </nav>
@@ -106,7 +106,7 @@ const AdminSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
             className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white transition-all text-xs font-bold shadow-lg shadow-red-950/50"
           >
             <LogOut className="w-4 h-4" />
-            <span>Sign Out / Logout</span>
+            <span>Logout</span>
           </button>
         </div>
       </aside>
