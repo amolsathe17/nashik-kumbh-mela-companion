@@ -1,5 +1,5 @@
-// Master Initial Dataset for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
-export const DATA_VERSION = 'v2.2';
+// Master Synchronized Baseline Dataset for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
+export const DATA_VERSION = 'v3.0_FULL_SYNC';
 
 export const defaultLocations = [
   // --- GHATS (4 Main Bathing Ghats) ---
@@ -10,7 +10,7 @@ export const defaultLocations = [
     category: 'Ghat',
     address: 'Panchavati, Nashik, Maharashtra 422003',
     location: 'Panchavati, Nashik, Maharashtra 422003',
-    description: 'The central, most sacred bathing ghat on River Godavari where Lord Rama performed rituals. Primary site for royal Shahi Snan and evening Goda Aarti.',
+    description: 'The central, most sacred bathing ghat on River Godavari where Lord Rama performed rituals. Primary site for royal Shahi Snan and evening Maha Aarti.',
     status: 'Active',
     contactNumber: '0253-2575555',
     image: '/shahi-snan.jpg',
@@ -454,19 +454,27 @@ export const getMergedLocations = () => {
   let customLocs = JSON.parse(localStorage.getItem('kumbh_custom_locations') || '[]');
   const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
 
-  // If version updated, automatically sync and update customLocs with latest defaults
-  if (currentVer !== DATA_VERSION || customLocs.length === 0) {
+  // Force-reset storage when DATA_VERSION changes to guarantee 100% sync between Local & Online
+  if (currentVer !== DATA_VERSION) {
     try {
       localStorage.setItem('kumbh_data_version', DATA_VERSION);
-      const combinedMap = new Map();
-      defaultLocations.forEach(loc => combinedMap.set(loc._id || loc.id, loc));
-      customLocs.forEach(loc => combinedMap.set(loc._id || loc.id, loc));
+      localStorage.removeItem('kumbh_deleted_locations');
       
-      customLocs = Array.from(combinedMap.values());
+      // Preserve only newly created admin cards (non-default cards)
+      const defaultIds = new Set(defaultLocations.map(d => String(d._id || d.id)));
+      const customCreatedCards = customLocs.filter(c => c && !defaultIds.has(String(c._id || c.id)));
+
+      customLocs = [...defaultLocations, ...customCreatedCards];
       localStorage.setItem('kumbh_custom_locations', JSON.stringify(customLocs));
+      return customLocs;
     } catch (e) {
       console.warn('Storage sync error:', e);
     }
+  }
+
+  if (!customLocs || customLocs.length === 0) {
+    customLocs = [...defaultLocations];
+    localStorage.setItem('kumbh_custom_locations', JSON.stringify(customLocs));
   }
 
   return customLocs.filter(loc => loc && !deletedIds.includes(loc._id) && !deletedIds.includes(loc.id));
