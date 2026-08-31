@@ -5,6 +5,7 @@ import {
   Navigation, Clock, Phone, Building2, Image as ImageIcon, X, Filter, Edit3, ArrowUp, ArrowDown, Copy, Upload, AlertTriangle, CheckCircle2, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import api from '../../services/api';
+import MediaUploader from '../../components/common/MediaUploader';
 
 const LocationsMgmt = () => {
   const tabsRef = useRef(null);
@@ -708,7 +709,16 @@ const LocationsMgmt = () => {
         combined.push(item);
       }
 
-      setLocations(applyCustomOrder(combined));
+      const finalOrdered = applyCustomOrder(combined);
+      setLocations(finalOrdered);
+
+      if (!localStorage.getItem('kumbh_custom_locations')) {
+        try {
+          localStorage.setItem('kumbh_custom_locations', JSON.stringify(finalOrdered));
+        } catch (e) {
+          console.warn('Quota warning:', e);
+        }
+      }
     } catch (err) {
       console.error('Failed to fetch locations:', err);
     } finally {
@@ -1156,60 +1166,11 @@ const LocationsMgmt = () => {
                 </div>
 
                 <div>
-                  <label className="block font-semibold text-slate-700 text-xs mb-1.5">Location Card Image (Upload File or Enter URL)</label>
-                  
-                  {form.image ? (
-                    <div className="relative rounded-2xl overflow-hidden border border-slate-200 shadow-sm group mb-2 bg-slate-900">
-                      <img 
-                        src={form.image} 
-                        alt="Card Preview" 
-                        className="w-full h-40 object-cover" 
-                      />
-                      <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                        <label className="cursor-pointer px-3.5 py-2 bg-white text-slate-900 text-xs font-bold rounded-xl shadow hover:bg-slate-100 transition-colors flex items-center gap-1.5">
-                          <Upload className="w-4 h-4 text-amber-600" />
-                          <span>Change Image</span>
-                          <input 
-                            type="file" 
-                            accept="image/*" 
-                            className="hidden" 
-                            onChange={handleImageUpload} 
-                          />
-                        </label>
-                        <button
-                          type="button"
-                          onClick={() => setForm({ ...form, image: '' })}
-                          className="px-3.5 py-2 bg-red-600 text-white text-xs font-bold rounded-xl shadow hover:bg-red-700 transition-colors flex items-center gap-1.5"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                          <span>Remove</span>
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <label className="border-2 border-dashed border-slate-300 hover:border-amber-500 bg-slate-50 hover:bg-amber-50/40 rounded-2xl p-5 flex flex-col items-center justify-center cursor-pointer transition-all space-y-2 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center">
-                        <Upload className="w-5 h-5" />
-                      </div>
-                      <div className="text-center">
-                        <p className="text-xs font-bold text-slate-800">Click to Upload Image File from Device</p>
-                        <p className="text-[10px] text-slate-500 font-medium">PNG, JPG, WEBP formats supported (Will display on cards for all users)</p>
-                      </div>
-                      <input 
-                        type="file" 
-                        accept="image/*" 
-                        className="hidden" 
-                        onChange={handleImageUpload} 
-                      />
-                    </label>
-                  )}
-
-                  <input
-                    type="text"
+                  <MediaUploader
                     value={form.image}
-                    onChange={(e) => setForm({ ...form, image: e.target.value })}
-                    placeholder="Or paste custom image URL (e.g. /shahi-snan.jpg or https://...)"
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-mono text-[11px] outline-none"
+                    onChange={(url) => setForm({ ...form, image: url })}
+                    label="Location Card Photo or Video (Cloudinary Upload)"
+                    folder="kumbh_mela/locations"
                   />
                 </div>
 

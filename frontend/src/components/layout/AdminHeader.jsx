@@ -80,14 +80,17 @@ const AdminHeader = ({ isMobileOpen, setIsMobileOpen }) => {
 
           {/* Mobile Hamburger Toggle Menu Button (Visible on < lg screens) */}
           <button
-            onClick={() => setIsMobileOpen && setIsMobileOpen(!isMobileOpen)}
-            className="lg:hidden p-2 sm:p-2.5 rounded-full bg-amber-950/60 hover:bg-amber-950/80 border border-amber-400/50 text-amber-100 shadow-md transition-all active:scale-95 flex items-center justify-center"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (setIsMobileOpen) setIsMobileOpen(!isMobileOpen);
+            }}
+            className="lg:hidden p-2 sm:p-2.5 rounded-xl bg-amber-950/70 hover:bg-amber-950/90 border border-amber-400/60 text-amber-100 shadow-md transition-all active:scale-95 flex items-center justify-center flex-shrink-0"
             aria-label="Toggle Navigation Menu"
           >
             {isMobileOpen ? (
-              <X className="w-5 h-5 text-amber-200" />
+              <X className="w-5.5 h-5.5 text-amber-200" />
             ) : (
-              <Menu className="w-5 h-5 text-amber-100" />
+              <Menu className="w-5.5 h-5.5 text-amber-100" />
             )}
           </button>
         </div>

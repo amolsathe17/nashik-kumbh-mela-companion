@@ -61,6 +61,7 @@ app.use('/api/travel', require('./routes/travelRoutes'));
 app.use('/api/facilities', require('./routes/facilitiesRoutes'));
 app.use('/api/assistance', require('./routes/assistanceRoutes'));
 app.use('/api/programmes', require('./routes/programmesRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
 
 // 404 Route Handler
 app.use((req, res) => {

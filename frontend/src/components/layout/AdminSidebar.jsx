@@ -34,26 +34,32 @@ const AdminSidebar = ({ isMobileOpen, setIsMobileOpen }) => {
       {isMobileOpen && (
         <div 
           onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
-          className="lg:hidden fixed inset-0 z-[100] bg-slate-950/70 backdrop-blur-md transition-opacity animate-fade-in"
+          className="lg:hidden fixed inset-0 z-[90] bg-slate-950/75 backdrop-blur-sm transition-opacity animate-fade-in"
         />
       )}
 
-        {/* Sidebar Container */}
-        <aside className={`
-          fixed inset-y-0 right-0 lg:right-auto lg:left-0 z-50 w-64 bg-[#0a0f1d] text-slate-100 flex flex-col transition-transform duration-300 transform
-          border-l lg:border-l-0 lg:border-r border-slate-800/80 shadow-2xl h-screen
-          ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
-        `}>
-          {/* Mobile Close Button Header */}
-          <div className="lg:hidden p-3 bg-slate-950 border-b border-slate-800 flex justify-end">
-            <button
-              onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
-              className="p-1.5 rounded-xl bg-slate-800 text-amber-200 hover:bg-slate-700 transition-colors"
-              aria-label="Close Navigation Drawer"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      {/* Sidebar Container */}
+      <aside className={`
+        fixed inset-y-0 right-0 lg:right-auto lg:left-0 z-[100] w-64 bg-[#0a0f1d] text-slate-100 flex flex-col transition-transform duration-300 transform
+        border-l lg:border-l-0 lg:border-r border-slate-800/80 shadow-2xl h-screen
+        ${isMobileOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+      `}>
+        {/* Mobile Close Button Header */}
+        <div className="lg:hidden p-4 bg-slate-950 border-b border-slate-800 flex items-center justify-between">
+          <div className="flex items-center space-x-2.5 rtl:space-x-reverse">
+            <div className="w-8 h-8 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center font-bold text-sm">
+              🛕
+            </div>
+            <span className="font-bold text-sm text-white tracking-wide">Kumbh Admin Menu</span>
           </div>
+          <button
+            onClick={() => setIsMobileOpen && setIsMobileOpen(false)}
+            className="p-1.5 rounded-xl bg-slate-800 text-amber-200 hover:bg-slate-700 transition-colors"
+            aria-label="Close Navigation Drawer"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
           {/* Navigation Items */}
           <nav className="flex-1 px-3 py-4 space-y-1.5 overflow-y-auto custom-scrollbar">

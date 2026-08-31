@@ -111,62 +111,62 @@ const Overview = () => {
         {/* LEFT & CENTER 8-COLUMNS SECTION */}
         <div className="lg:col-span-8 space-y-6">
           
-          {/* ROW 1: 3 METRIC CARDS (Fully Clickable) */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {/* ROW 1: 3 METRIC CARDS (Fully Clickable - Responsive Grid) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
             
-            {/* Card 1: Devices with Notifications */}
+            {/* Card 1: Devices with Notifications (Full width on mobile) */}
             <div 
               onClick={() => navigate('/admin/reports')}
-              className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-3 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all"
+              className="col-span-2 sm:col-span-1 bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-sm space-y-2 sm:space-y-3 cursor-pointer hover:border-blue-400 hover:shadow-md transition-all"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">App Active Devices</span>
-                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-500 truncate">App Active Devices</span>
+                <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
                   <Bell className="w-4 h-4" />
                 </div>
               </div>
-              <div className="flex items-baseline space-x-2 rtl:space-x-reverse">
-                <span className="text-3xl font-bold text-slate-900">{stats.devicesWithNotif.toLocaleString()}</span>
-                <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+              <div className="flex flex-wrap items-baseline gap-2">
+                <span className="text-2xl sm:text-3xl font-bold text-slate-900">{stats.devicesWithNotif.toLocaleString()}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
                   <ArrowUpRight className="w-3 h-3" /> +8.4% today
                 </span>
               </div>
             </div>
 
-            {/* Card 2: Active Notices & Alerts */}
+            {/* Card 2: Active Notices & Alerts (Left column on mobile) */}
             <div 
               onClick={() => navigate('/admin/announcements')}
-              className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-3 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all"
+              className="col-span-1 bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-sm space-y-2 sm:space-y-3 cursor-pointer hover:border-amber-400 hover:shadow-md transition-all"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">Active Notices</span>
-                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-500 truncate">Active Notices</span>
+                <div className="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0">
                   <AlertTriangle className="w-4 h-4" />
                 </div>
               </div>
-              <div className="flex items-baseline space-x-2 rtl:space-x-reverse">
-                <span className="text-3xl font-bold text-slate-900">{stats.activeAnnouncements}</span>
-                <span className="text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  <CheckCircle className="w-3 h-3 text-amber-600" /> Live on App
+              <div className="flex flex-wrap items-baseline gap-1.5 sm:gap-2">
+                <span className="text-2xl sm:text-3xl font-bold text-slate-900">{stats.activeAnnouncements}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                  <CheckCircle className="w-3 h-3 text-amber-600" /> Live
                 </span>
               </div>
             </div>
 
-            {/* Card 3: Pending Pilgrim Requests */}
+            {/* Card 3: Pending Pilgrim Requests (Right side of Active Notices card on mobile) */}
             <div 
               onClick={() => navigate('/admin/assistance')}
-              className="bg-white rounded-3xl p-5 border border-slate-200/80 shadow-sm space-y-3 cursor-pointer hover:border-rose-400 hover:shadow-md transition-all"
+              className="col-span-1 bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/80 shadow-sm space-y-2 sm:space-y-3 cursor-pointer hover:border-rose-400 hover:shadow-md transition-all"
             >
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-slate-500">Pending Requests</span>
-                <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
+                <span className="text-[11px] sm:text-xs font-bold text-slate-500 truncate">Pending Requests</span>
+                <div className="w-8 h-8 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center flex-shrink-0">
                   <HeartHandshake className="w-4 h-4" />
                 </div>
               </div>
-              <div className="flex items-baseline space-x-2 rtl:space-x-reverse">
-                <span className="text-3xl font-bold text-slate-900">{stats.pendingAssistance}</span>
-                <span className="text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
-                  <Clock className="w-3 h-3" /> Needs Response
+              <div className="flex flex-wrap items-baseline gap-1.5 sm:gap-2">
+                <span className="text-2xl sm:text-3xl font-bold text-slate-900">{stats.pendingAssistance}</span>
+                <span className="text-[10px] sm:text-[11px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full flex items-center gap-0.5">
+                  <Clock className="w-3 h-3" /> Response
                 </span>
               </div>
             </div>

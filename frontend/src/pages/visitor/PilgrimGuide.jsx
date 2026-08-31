@@ -189,8 +189,95 @@ const PilgrimGuide = () => {
       const res = await api.get('/pilgrim-guide').catch(() => null);
       let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-      // If customGuides exists in localStorage, display strictly admin-managed cards
-      const rawList = customGuides.length > 0 ? [...customGuides, ...apiItems] : [...apiItems, ...defaultGuideData];
+      const defaultLocationsMaster = [
+        {
+          id: 'loc-shahi-1',
+          _id: 'loc-shahi-1',
+          category: 'Shahi Snan',
+          title: 'First Amrit Shahi Snan (प्रथम अमृत शाही स्नान)',
+          name: 'First Amrit Shahi Snan (प्रथम अमृत शाही स्नान)',
+          subtitle: '02 August 2027 • Starts 4:00 AM',
+          image: '/shahi-snan.jpg',
+          location: 'Ramkund Ghat & Godavari Promenade',
+          description: 'The first grand royal bath date of the Simhastha Kumbh. Thousands of Nagas and Mahant Sadhus process with silver palanquins and trumpets to take the celestial dip.',
+          highlights: ['Royal Procession Path', 'Vedic Chanting', 'Strict Security Cordon']
+        },
+        {
+          id: 'loc-shahi-2',
+          _id: 'loc-shahi-2',
+          category: 'Shahi Snan',
+          title: 'Second Main Amrit Shahi Snan (द्वितीय अमृत शाही स्नान)',
+          name: 'Second Main Amrit Shahi Snan (द्वितीय अमृत शाही स्नान)',
+          subtitle: '31 August 2027 • All Day',
+          image: '/unnamed-2025-02-03t105950ss_1738561979.jpg',
+          location: 'Ramkund Ghats & Kushavarta Kund',
+          description: 'The central and largest Shahi Snan date expected to draw millions of pilgrims to Ramkund ghats and Trimbakeshwar Jyotirlinga river banks.',
+          highlights: ['Peak Holy Immersion', 'Floral Decorations', 'Medical & Lost-Person Booths']
+        },
+        {
+          id: 'loc-ritual-0',
+          _id: 'loc-ritual-0',
+          category: 'Ritual Guide',
+          title: 'Dhwajarohan (ध्वजारोहण) - Official Commencement',
+          name: 'Dhwajarohan (ध्वजारोहण) - Official Commencement',
+          subtitle: '31 October 2026 • Sunrise',
+          image: '/dhwajarohan.webp',
+          location: 'Ramkund Ghat & Kushavarta Kund',
+          description: 'The 21-month long Simhastha Kumbh Mela officially commences with the sacred flag hoisting ceremony performed simultaneously by sadhus and administrators.',
+          highlights: ['Vedic Flag Hoisting', 'Akhara Camp Opening', 'Astronomic Alignment']
+        },
+        {
+          id: 'loc-ritual-1',
+          _id: 'loc-ritual-1',
+          category: 'Ritual Guide',
+          title: 'Godavari Maha Aarti & Deep Daan (गोदावरी महाआरती)',
+          name: 'Godavari Maha Aarti & Deep Daan (गोदावरी महाआरती)',
+          subtitle: 'Every Evening at Sunset (6:30 PM)',
+          image: '/goda-aarti-chatg.webp',
+          location: 'Ramkund Riverfront Promenade',
+          description: 'Experience the mesmerizing evening Godavari Aarti where Vedic priests wave large multi-tiered brass oil lamps, accompanied by temple bells and floating flower diyas.',
+          highlights: ['Multi-tiered Lamps', 'Floating Diyas', 'Senior Citizen Seating']
+        },
+        {
+          id: 'loc-ritual-2',
+          _id: 'loc-ritual-2',
+          category: 'Ritual Guide',
+          title: 'Trimbakeshwar Jyotirlinga Darshan Protocol',
+          name: 'Trimbakeshwar Jyotirlinga Darshan Protocol',
+          subtitle: '5:00 AM - 9:00 PM • Trimbak Town',
+          image: '/dhwajarohan.webp',
+          location: 'Trimbakeshwar Temple Complex',
+          description: 'Guidelines for visiting the 10th-century black stone temple housing the unique three-faced Lingam representing Brahma, Vishnu, and Shiva.',
+          highlights: ['E-pass Queuing', 'Footwear Stalls', 'Traditional Dress Code']
+        },
+        {
+          id: 'loc-akhara-1',
+          _id: 'loc-akhara-1',
+          category: 'Akharas',
+          title: 'Shaivite Akharas (शैव अखाड़े) - Juna, Niranjani & Mahanirvani',
+          name: 'Shaivite Akharas (शैव अखाड़े) - Juna, Niranjani & Mahanirvani',
+          subtitle: 'Trimbakeshwar & Tapovan Sector 1',
+          image: '/shahi.jpg',
+          location: 'Trimbakeshwar & Tapovan Sector 1',
+          description: 'The ancient Shaivite monastic orders led by Naga Sadhus who renounce worldly life and meditate on Lord Shiva.',
+          highlights: ['Naga Sadhu Processions', 'Trishul Demonstrations', 'Satsang Halls']
+        },
+        {
+          id: 'loc-akhara-2',
+          _id: 'loc-akhara-2',
+          category: 'Akharas',
+          title: 'Vaishnavite Akharas (वैष्णव अखाड़े) - Nirmohi, Digambar & Nirvani Ani',
+          name: 'Vaishnavite Akharas (वैष्णव अखाड़े) - Nirmohi, Digambar & Nirvani Ani',
+          subtitle: 'Panchavati & Tapovan Sadhugram',
+          image: '/unnamed-2025-02-03t105950ss_1738561979.jpg',
+          location: 'Tapovan Sadhugram & Panchavati Promenade',
+          description: 'The three prominent Vaishnavite Ani Akharas dedicated to Lord Vishnu and Lord Rama, renowned for their grand holy processions.',
+          highlights: ['Silver Chariots', 'Ram Katha', 'Mahaprasadam Distribution']
+        }
+      ];
+
+      // Display strictly admin-managed cards when customGuides exists in localStorage
+      const rawList = customGuides.length > 0 ? [...customGuides, ...apiItems] : [...apiItems, ...defaultLocationsMaster, ...defaultGuideData];
       const seenTitles = new Set();
       const seenIds = new Set();
       const finalItems = [];
@@ -199,7 +286,7 @@ const PilgrimGuide = () => {
         if (!item) continue;
         const itemId = String(item._id || item.id || '').trim();
         let itemTitle = item.title || item.name || 'Pilgrim Guide';
-        let itemCategory = item.category || 'Shahi Snan';
+        let itemCategory = item.category || 'Ritual Guide';
 
         let normTitle = itemTitle.trim().toLowerCase();
 
@@ -210,7 +297,7 @@ const PilgrimGuide = () => {
           normTitle = itemTitle.toLowerCase();
         }
 
-        if (normTitle.includes('dhwajarohan') && itemCategory === 'Shahi Snan') {
+        if (normTitle.includes('dhwajarohan')) {
           itemCategory = 'Ritual Guide';
         }
 
@@ -461,12 +548,16 @@ const PilgrimGuide = () => {
               <div className="flex-1 flex flex-col justify-between">
                 <div>
                   <div className="relative h-48 bg-slate-900 overflow-hidden">
-                    <img 
-                      src={guide.image || '/shahi-snan.jpg'} 
-                      alt={guide.title}
-                      onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
-                      className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
-                    />
+                    {String(guide.image).includes('/video/') || String(guide.image).endsWith('.mp4') || String(guide.image).endsWith('.webm') || String(guide.image).endsWith('.mov') ? (
+                      <video src={guide.image} controls className="w-full h-full object-cover" />
+                    ) : (
+                      <img 
+                        src={guide.image || '/shahi-snan.jpg'} 
+                        alt={guide.title}
+                        onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
+                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
+                      />
+                    )}
                     <div className="absolute top-3 left-3 bg-rose-700 text-white text-[10px] font-bold uppercase px-3 py-1 rounded-full shadow">
                       {guide.category}
                     </div>

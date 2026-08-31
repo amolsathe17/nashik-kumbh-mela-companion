@@ -230,7 +230,7 @@ const FindPlaces = () => {
         const res = await api.get('/locations').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];
 
-        // If customItems exists in localStorage, display strictly admin-managed cards
+        // Display strictly admin-managed cards when customItems exists, else fallback to defaultLocations
         const allItems = customItems.length > 0 ? [...customItems, ...apiItems] : [...apiItems, ...defaultLocations];
         const filtered = allItems.filter(item => 
           item && 
@@ -519,14 +519,18 @@ const FindPlaces = () => {
               >
                 <div className="flex-1 flex flex-col justify-between">
                   <div>
-                    {/* Card Header Image */}
+                    {/* Card Header Image / Video */}
                     <div className="relative h-44 overflow-hidden bg-slate-900">
-                      <img 
-                        src={displayImage} 
-                        alt={t(loc.name)} 
-                        onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
-                        className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
-                      />
+                      {String(displayImage).includes('/video/') || String(displayImage).endsWith('.mp4') || String(displayImage).endsWith('.webm') || String(displayImage).endsWith('.mov') ? (
+                        <video src={displayImage} controls className="w-full h-full object-cover" />
+                      ) : (
+                        <img 
+                          src={displayImage} 
+                          alt={t(loc.name)} 
+                          onError={(e) => { e.target.src = '/shahi-snan.jpg'; }}
+                          className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500 opacity-90"
+                        />
+                      )}
                       <div className="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-300 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-amber-400/40 flex items-center space-x-1">
                         <span>{getCategoryEmoji(loc.category)}</span>
                         <span>{categoryLabel}</span>
