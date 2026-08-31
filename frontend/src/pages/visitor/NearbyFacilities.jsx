@@ -70,10 +70,7 @@ const NearbyFacilities = () => {
           ...JSON.parse(localStorage.getItem('kumbh_deleted_facilities') || '[]'),
           ...JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]')
         ];
-        const customItems = [
-          ...getMergedLocations(),
-          ...JSON.parse(localStorage.getItem('kumbh_custom_facilities') || '[]')
-        ];
+        const customItems = getMergedLocations();
 
         const res = await api.get('/facilities').catch(() => null);
         let apiItems = (res?.data?.success && Array.isArray(res.data.data)) ? res.data.data : [];

@@ -1,5 +1,5 @@
 // Master Synchronized Baseline Dataset & Category Matching Engine for Nashik-Trimbakeshwar Kumbh Mela 2026-2027
-export const DATA_VERSION = 'v5.0_STRICT_45_FUZZY_SYNC';
+export const DATA_VERSION = 'v6.0_PURE_STORAGE_RESET';
 
 export const defaultLocations = [
   // --- GHATS (4 Main Bathing Ghats) ---
@@ -774,6 +774,10 @@ export const getMergedLocations = () => {
     try {
       localStorage.setItem('kumbh_data_version', DATA_VERSION);
       localStorage.removeItem('kumbh_deleted_locations');
+      localStorage.removeItem('kumbh_custom_facilities');
+      localStorage.removeItem('kumbh_custom_guides');
+      localStorage.removeItem('kumbh_deleted_facilities');
+      localStorage.removeItem('kumbh_deleted_guides');
       
       // Fuzzy deduplicate and preserve non-default custom cards
       const defaultFuzzyKeys = new Set(defaultLocations.map(d => getCleanFuzzyKey(d.name || d.title)));
