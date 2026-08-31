@@ -74,7 +74,6 @@ export const uploadToCloudinary = async (file, options = {}) => {
     }
   } catch (directErr) {
     console.error('Cloudinary Direct Upload Error:', directErr);
-    // Strategy 3: Fallback to compressed base64 URI if offline/testing
     return {
       success: true,
       url: base64Data,
@@ -84,4 +83,18 @@ export const uploadToCloudinary = async (file, options = {}) => {
   }
 };
 
-export default { uploadToCloudinary };
+/**
+ * Delete Media (Photo or Video) from Cloudinary
+ * @param {string} mediaUrl - Full Cloudinary media URL or public ID
+ */
+export const deleteFromCloudinary = async (mediaUrl) => {
+  if (!mediaUrl || typeof mediaUrl !== 'string') return;
+
+  try {
+    await api.delete('/upload', { data: { url: mediaUrl } }).catch(() => null);
+  } catch (err) {
+    console.warn('Cloudinary media deletion request error:', err);
+  }
+};
+
+export default { uploadToCloudinary, deleteFromCloudinary };

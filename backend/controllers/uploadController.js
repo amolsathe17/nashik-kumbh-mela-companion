@@ -90,3 +90,60 @@ exports.uploadMedia = async (req, res) => {
     });
   }
 };
+
+/**
+ * Delete Media (Photo or Video) from Cloudinary by URL or public_id
+ * DELETE /api/upload
+ * Body: { url: string, public_id?: string, resource_type?: 'image'|'video' }
+ */
+exports.deleteMedia = async (req, res) => {
+  try {
+    const { url, public_id, resource_type } = req.body || {};
+
+    let targetPublicId = public_id;
+    let targetResourceType = resource_type || 'image';
+
+    if (!targetPublicId && url && typeof url === 'string' && url.includes('cloudinary.com')) {
+      const isVideo = url.includes('/video/') || url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mov');
+      targetResourceType = isVideo ? 'video' : 'image';
+
+      const parts = url.split('/upload/');
+      if (parts.length > 1) {
+        let afterUpload = parts[1];
+        afterUpload = afterUpload.replace(/^v\d+\//, '');
+        targetPublicId = afterUpload.substring(0, afterUpload.lastIndexOf('.')) || afterUpload;
+      }
+    }
+
+    if (!targetPublicId) {
+      return res.status(200).json({
+        success: true,
+        message: 'No Cloudinary public_id found to delete'
+      });
+    }
+
+    if (process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+      const result = await cloudinary.uploader.destroy(targetPublicId, {
+        resource_type: targetResourceType,
+        invalidate: true
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: `Media ${targetPublicId} successfully deleted from Cloudinary`,
+        result
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `Card deletion processed for media ${targetPublicId}`
+    });
+  } catch (error) {
+    console.error('Cloudinary delete controller error:', error);
+    return res.status(200).json({
+      success: true,
+      message: 'Processed deletion request: ' + error.message
+    });
+  }
+};

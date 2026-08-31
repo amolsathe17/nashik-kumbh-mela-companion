@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import api from '../../services/api';
 import MediaUploader from '../../components/common/MediaUploader';
+import { deleteFromCloudinary } from '../../services/cloudinaryService';
 
 const LocationsMgmt = () => {
   const tabsRef = useRef(null);
@@ -799,11 +800,19 @@ const LocationsMgmt = () => {
     const { id, name } = deleteConfirmItem;
 
     try {
+      // 1. Delete associated media (photo or video) from Cloudinary
+      const targetCard = locations.find(item => (item._id || item.id) === id || item.name === name);
+      if (targetCard && (targetCard.image || targetCard.imageUrl)) {
+        await deleteFromCloudinary(targetCard.image || targetCard.imageUrl);
+      }
+
+      // 2. Delete card record from backend API database
       if (id) {
         await api.delete(`/locations/${id}`).catch(() => null);
         await api.delete(`/facilities/${id}`).catch(() => null);
       }
 
+      // 3. Purge card record from all local storage data stores
       const deletedIds = JSON.parse(localStorage.getItem('kumbh_deleted_locations') || '[]');
       if (id && !deletedIds.includes(id)) {
         deletedIds.push(id);
@@ -814,9 +823,11 @@ const LocationsMgmt = () => {
       const updatedCustom = customLocs.filter(item => item._id !== id && item.id !== id && item.name !== name);
       localStorage.setItem('kumbh_custom_locations', JSON.stringify(updatedCustom));
 
+      // 4. Update UI state instantly
       setLocations(prev => prev.filter(item => item._id !== id && item.id !== id && item.name !== name));
       fetchLocations();
     } catch (err) {
+      console.error('Error deleting location card:', err);
       alert('Error deleting location card');
     } finally {
       setDeleteConfirmItem(null);
